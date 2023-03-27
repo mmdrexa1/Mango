@@ -180,13 +180,13 @@ extension MGConfiguration.Model {
         var configuration: [String: Any] = [:]
         configuration["inbounds"] = [try self.buildInbound(inboundPort: inboundPort)]
         var route = MGRouteModel.current
-        configuration["routing"] = try route.build()
+        route.rules = route.rules.filter(\.__enabled__)
+        configuration["routing"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(route))
         configuration["outbounds"] = [
             try self.buildProxyOutbound(),
             try self.buildDirectOutbound(),
             try self.buildBlockOutbound()
         ]
-        NSLog(String(data: try JSONSerialization.data(withJSONObject: try route.build(), options: .sortedKeys), encoding: .utf8) ?? "---")
         return try JSONSerialization.data(withJSONObject: configuration, options: .prettyPrinted)
     }
     
@@ -295,44 +295,5 @@ extension MGConfiguration.Model {
             "tag": "block",
             "protocol": "blackhole"
         ]
-    }
-}
-
-extension MGSniffingModel {
-    
-    func build() throws -> Any {
-        var sniffing: [String: Any] = [:]
-        sniffing["enabled"] = self.enabled
-//        sniffing["destOverride"] = {
-//            var destOverride: [String] = []
-//            if self.httpEnabled {
-//                destOverride.append("http")
-//            }
-//            if self.tlsEnabled {
-//                destOverride.append("tls")
-//            }
-//            if self.quicEnabled {
-//                destOverride.append("quic")
-//            }
-//            if self.fakednsEnabled {
-//                destOverride.append("fakedns")
-//            }
-//            if destOverride.count == 4 {
-//                destOverride = ["fakedns+others"]
-//            }
-//            return destOverride
-//        }()
-        sniffing["metadataOnly"] = self.metadataOnly
-        sniffing["domainsExcluded"] = self.excludedDomains
-        sniffing["routeOnly"] = self.routeOnly
-        return sniffing
-    }
-}
-
-extension MGRouteModel {
-    
-    mutating func build() throws -> Any {
-        self.rules = self.rules.filter(\.__enabled__)
-        return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(self))
     }
 }
