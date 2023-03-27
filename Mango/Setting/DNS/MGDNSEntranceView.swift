@@ -6,7 +6,7 @@ struct MGDNSEntranceView: View {
     
     var body: some View {
         NavigationLink {
-            
+            MGDNSSettingView(dnsViewModel: dnsViewModel)
         } label: {
             Label("DNS", systemImage: "network")
         }

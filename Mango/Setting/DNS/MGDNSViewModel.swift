@@ -19,7 +19,12 @@ final class MGDNSViewModel: ObservableObject {
         self.__osLocalDNS__ = model.__osLocalDNS__
         self.__enable__ = model.__enable__
         self.hosts = model.hosts ?? [:]
-        self.servers = model.servers ?? []
+        self.servers = [
+            MGDNSModel.Server(),
+            MGDNSModel.Server(),
+            MGDNSModel.Server(),
+            MGDNSModel.Server()
+        ]
         self.clientIp = model.clientIp ?? ""
         self.queryStrategy = model.queryStrategy
         self.disableCache = model.disableCache
