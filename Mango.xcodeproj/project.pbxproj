@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		7000C6DE295D5F690005626E /* MGConnectedDurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7000C6DD295D5F690005626E /* MGConnectedDurationView.swift */; };
 		7000C6E4295D635F0005626E /* MGControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7000C6E3295D635F0005626E /* MGControlView.swift */; };
+		702A08A629D182CF00B0BBF8 /* MGDNSSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */; };
+		702A08A829D1830900B0BBF8 /* MGDNSModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A729D1830900B0BBF8 /* MGDNSModel.swift */; };
+		702A08AA29D1831300B0BBF8 /* MGDNSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A929D1831300B0BBF8 /* MGDNSViewModel.swift */; };
 		702D908A299B58A400B83324 /* MGNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702D9089299B58A400B83324 /* MGNotification.swift */; };
 		702D9091299FA40600B83324 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C9EDAC29502C6500B6995B /* NetworkExtension.framework */; };
 		702D9099299FA40600B83324 /* XrayTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 702D9090299FA40600B83324 /* XrayTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -123,6 +126,9 @@
 /* Begin PBXFileReference section */
 		7000C6DD295D5F690005626E /* MGConnectedDurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGConnectedDurationView.swift; sourceTree = "<group>"; };
 		7000C6E3295D635F0005626E /* MGControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGControlView.swift; sourceTree = "<group>"; };
+		702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDNSSettingView.swift; sourceTree = "<group>"; };
+		702A08A729D1830900B0BBF8 /* MGDNSModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDNSModel.swift; sourceTree = "<group>"; };
+		702A08A929D1831300B0BBF8 /* MGDNSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDNSViewModel.swift; sourceTree = "<group>"; };
 		702D9088299B54FD00B83324 /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		702D9089299B58A400B83324 /* MGNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGNotification.swift; sourceTree = "<group>"; };
 		702D9090299FA40600B83324 /* XrayTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = XrayTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -419,7 +425,10 @@
 		70F82CDE29CC05740072B334 /* DNS */ = {
 			isa = PBXGroup;
 			children = (
+				702A08A729D1830900B0BBF8 /* MGDNSModel.swift */,
+				702A08A929D1831300B0BBF8 /* MGDNSViewModel.swift */,
 				70F82CDF29CC059C0072B334 /* MGDNSEntranceView.swift */,
+				702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */,
 			);
 			path = DNS;
 			sourceTree = "<group>";
@@ -563,6 +572,7 @@
 				70DE0D7329A62C4E00B3E343 /* MGHomeView.swift in Sources */,
 				70F82CB629C2E6B40072B334 /* MGContentView.swift in Sources */,
 				70C9EDD82951587D00B6995B /* MGResetView.swift in Sources */,
+				702A08A629D182CF00B0BBF8 /* MGDNSSettingView.swift in Sources */,
 				70F82CDC29CAC2D50072B334 /* MGCreateOrUpdateConfigurationViewModel.swift in Sources */,
 				70B89C1E29C17C29003DA577 /* MGSniffingEntranceView.swift in Sources */,
 				70F82CD429C978CF0072B334 /* MGConfigurationSecurityView.swift in Sources */,
@@ -577,6 +587,7 @@
 				70F82CD229C978B30072B334 /* MGConfigurationTransportView.swift in Sources */,
 				70F82CE829CC10390072B334 /* MGRouteSettingView.swift in Sources */,
 				70DE0D7829A6306100B3E343 /* MGSettingsView.swift in Sources */,
+				702A08AA29D1831300B0BBF8 /* MGDNSViewModel.swift in Sources */,
 				70DE0D6E29A6155C00B3E343 /* MGPresentedButton.swift in Sources */,
 				70B89C3629C1A9C6003DA577 /* MGNetworkViewModel.swift in Sources */,
 				70B89C2029C17EE2003DA577 /* MGSniffingModel.swift in Sources */,
@@ -584,6 +595,7 @@
 				708B380629B0AA4200E24312 /* MGAssetViewModel.swift in Sources */,
 				70F82CCE29C978850072B334 /* MGConfigurationVLESSView.swift in Sources */,
 				706DB6C329B9E04B002F22C7 /* MGConfigurationLoadView.swift in Sources */,
+				702A08A829D1830900B0BBF8 /* MGDNSModel.swift in Sources */,
 				7000C6E4295D635F0005626E /* MGControlView.swift in Sources */,
 				70B89C3829C1AA94003DA577 /* MGNetworkEntranceView.swift in Sources */,
 				706DB6C729BAC4C7002F22C7 /* MGConfigurationListView.swift in Sources */,
