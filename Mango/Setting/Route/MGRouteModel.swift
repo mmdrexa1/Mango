@@ -29,9 +29,23 @@ public struct MGRouteModel: Codable, Equatable {
         }
     }
     
+    public enum Inbound: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+        public var id: Self { self }
+        case socks  = "socks-in"
+        case dns    = "dns-in"
+        public var description: String {
+            switch self {
+            case .socks:
+                return "Socks"
+            case .dns:
+                return "DNS"
+            }
+        }
+    }
+    
     public enum Outbound: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
         public var id: Self { self }
-        case direct, proxy, block
+        case direct, proxy, block, dns
         public var description: String {
             switch self {
             case .direct:
@@ -40,6 +54,8 @@ public struct MGRouteModel: Codable, Equatable {
                 return "Proxy"
             case .block:
                 return "Block"
+            case .dns:
+                return "DNS"
             }
         }
     }
@@ -57,7 +73,7 @@ public struct MGRouteModel: Codable, Equatable {
         public var network: String?
         public var source: [String]?
         public var user: [String]?
-        public var inboundTag: [String]?
+        public var inboundTag: [Inbound]?
         public var `protocol`: [String]?
         public var attrs: String?
         public var outboundTag: Outbound = .direct

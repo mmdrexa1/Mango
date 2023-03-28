@@ -210,6 +210,30 @@ struct MGRouteRuleSettingView: View {
                         }))
                     }
                 }
+                LabeledContent("Inbound") {
+                    MGToggleButton(title: MGRouteModel.Inbound.socks.description, isOn: Binding(get: {
+                        let reval = rule.inboundTag ?? []
+                        return reval.contains(MGRouteModel.Inbound.socks)
+                    }, set: { newValue in
+                        var reval = rule.inboundTag ?? []
+                        reval.removeAll(where: { $0 == .socks })
+                        if newValue {
+                            reval.append(.socks)
+                        }
+                        rule.inboundTag = reval.isEmpty ? nil : reval
+                    }))
+                    MGToggleButton(title: MGRouteModel.Inbound.dns.description, isOn: Binding(get: {
+                        let reval = rule.inboundTag ?? []
+                        return reval.contains(.dns)
+                    }, set: { newValue in
+                        var reval = rule.inboundTag ?? []
+                        reval.removeAll(where: { $0 == .dns })
+                        if newValue {
+                            reval.append(.dns)
+                        }
+                        rule.inboundTag = reval.isEmpty ? nil : reval
+                    }))
+                }
                 Picker("Outbound", selection: $rule.outboundTag) {
                     ForEach(MGRouteModel.Outbound.allCases) { outbound in
                         Text(outbound.description)
