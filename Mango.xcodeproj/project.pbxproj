@@ -14,6 +14,7 @@
 		702A08AA29D1831300B0BBF8 /* MGDNSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A929D1831300B0BBF8 /* MGDNSViewModel.swift */; };
 		702A08AC29D1A1E600B0BBF8 /* MGStringListEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */; };
 		702A08AE29D287E700B0BBF8 /* MGDisclosureGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08AD29D287E700B0BBF8 /* MGDisclosureGroup.swift */; };
+		702A08AF29D2A27A00B0BBF8 /* MGDNSModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A729D1830900B0BBF8 /* MGDNSModel.swift */; };
 		702D908A299B58A400B83324 /* MGNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702D9089299B58A400B83324 /* MGNotification.swift */; };
 		702D9091299FA40600B83324 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C9EDAC29502C6500B6995B /* NetworkExtension.framework */; };
 		702D9099299FA40600B83324 /* XrayTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 702D9090299FA40600B83324 /* XrayTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -557,6 +558,7 @@
 				70F82CEE29CD7E3D0072B334 /* MGRouteModel.swift in Sources */,
 				70B89C2129C17EE2003DA577 /* MGSniffingModel.swift in Sources */,
 				70B89C3429C1A918003DA577 /* MGNetworkModel.swift in Sources */,
+				702A08AF29D2A27A00B0BBF8 /* MGDNSModel.swift in Sources */,
 				706A6D6829C6AEAA00523A07 /* MGConfiguration.swift in Sources */,
 				70B89C2A29C19D49003DA577 /* MGLogModel.swift in Sources */,
 				708B386129B81DDB00E24312 /* MGNotification.swift in Sources */,
