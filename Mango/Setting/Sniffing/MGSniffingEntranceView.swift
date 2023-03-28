@@ -16,3 +16,17 @@ struct MGSniffingEntranceView: View {
         }
     }
 }
+
+
+struct MGInboundEntranceView: View {
+        
+    @StateObject private var inboundViewModel = MGInboundViewModel()
+    
+    var body: some View {
+        NavigationLink {
+            MGInboundView(inboundViewModel: inboundViewModel)
+        } label: {
+            Label("入站", systemImage: "square.and.arrow.down")
+        }
+    }
+}

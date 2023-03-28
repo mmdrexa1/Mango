@@ -2,11 +2,11 @@ import Foundation
 
 extension MGConfiguration {
     
-    private static let inboundStoreKey = "XRAY_INBOUND_DATA"
+    public static let inboundStoreKey = "XRAY_INBOUND_DATA"
     
     public struct Inbound: Codable, Equatable {
         
-        public struct DestinationOverride: RawRepresentable, Codable, Equatable {
+        public struct DestinationOverride: RawRepresentable, Codable, Hashable, CustomStringConvertible, CaseIterable {
             
             public let rawValue: String
             
@@ -18,19 +18,31 @@ extension MGConfiguration {
             public static let tls       = DestinationOverride(rawValue: "tls")
             public static let quic      = DestinationOverride(rawValue: "quic")
             public static let fakedns   = DestinationOverride(rawValue: "fakedns")
+            
+            public var description: String {
+                switch self {
+                case .http:
+                    return "HTTP"
+                case .tls:
+                    return "TLS"
+                case .quic:
+                    return "QUIC"
+                case .fakedns:
+                    return "FakeDNS"
+                default:
+                    return self.rawValue
+                }
+            }
+            
+            public static let allCases: [DestinationOverride] = [.http, .tls, .quic, .fakedns]
         }
         
         public struct Sniffing: Codable, Equatable {
             public var enabled: Bool
-            public var destOverride: [DestinationOverride]
+            public var destOverride: Set<DestinationOverride>
             public var metadataOnly: Bool
             public var routeOnly: Bool
             public var excludedDomains: [String]
-        }
-        
-        public enum Tag: String, Codable, Equatable {
-            case socks  = "socks-in"
-            case dns    = "dns-in"
         }
         
         private struct Settings: Codable, Equatable {
@@ -41,7 +53,7 @@ extension MGConfiguration {
         private var listen = "[::1]"
         private var `protocol` = "socks"
         private var settings = Settings()
-        private var tag = Tag.socks
+        private var tag = "socks-in"
         
         public var port: Int = 8080
         public var sniffing: Sniffing = Sniffing(

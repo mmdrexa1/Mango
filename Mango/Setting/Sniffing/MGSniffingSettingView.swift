@@ -119,3 +119,74 @@ struct MGSniffingSettingView: View {
         .environment(\.editMode, .constant(.active))
     }
 }
+
+
+struct MGInboundView: View {
+    
+    @EnvironmentObject private var packetTunnelManager: MGPacketTunnelManager
+    
+    @ObservedObject private var inboundViewModel: MGInboundViewModel
+    
+    init(inboundViewModel: MGInboundViewModel) {
+        self._inboundViewModel = ObservedObject(initialValue: inboundViewModel)
+    }
+    
+    var body: some View {
+        Form {
+            Section {
+                LabeledContent("端口") {
+                    TextField("入站端口", text: Binding(get: {
+                        "\(inboundViewModel.model.port)"
+                    }, set: { value in
+                        if let int = Int(value) {
+                            inboundViewModel.model.port = int
+                        } else {
+                            inboundViewModel.model.port = 0
+                        }
+                    }))
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(.numberPad)
+                }
+            } header: {
+                Text("SOSCK5")
+            }
+            Section {
+                Toggle("状态", isOn: $inboundViewModel.model.sniffing.enabled)
+                MGDisclosureGroup {
+                    HStack {
+                        ForEach(MGConfiguration.Inbound.DestinationOverride.allCases, id: \.rawValue) { `override` in
+                            MGToggleButton(title: `override`.description, isOn: Binding(get: {
+                                inboundViewModel.model.sniffing.destOverride.contains(`override`)
+                            }, set: { value in
+                                if value {
+                                    inboundViewModel.model.sniffing.destOverride.insert(`override`)
+                                } else {
+                                    inboundViewModel.model.sniffing.destOverride.remove(`override`)
+                                }
+                            }))
+                        }
+                    }
+                    .padding(.vertical, 4)
+                } label: {
+                    Text("流量类型")
+                }
+                MGDisclosureGroup {
+                    MGStringListEditor(strings: $inboundViewModel.model.sniffing.excludedDomains, placeholder: nil)
+                        .moveDisabled(true)
+                } label: {
+                    LabeledContent("排除域名", value: "\(inboundViewModel.model.sniffing.excludedDomains.count)")
+                }
+                Toggle("仅使用元数据", isOn: $inboundViewModel.model.sniffing.metadataOnly)
+                Toggle("仅用于路由", isOn: $inboundViewModel.model.sniffing.routeOnly)
+            } header: {
+                Text("流量嗅探")
+            }
+        }
+        .onDisappear {
+            inboundViewModel.save()
+        }
+        .navigationTitle(Text("入站"))
+        .navigationBarTitleDisplayMode(.large)
+        .environment(\.editMode, .constant(.active))
+    }
+}

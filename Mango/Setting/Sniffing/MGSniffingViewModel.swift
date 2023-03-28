@@ -79,3 +79,25 @@ final class MGSniffingViewModel: ObservableObject {
         }
     }
 }
+
+
+final class MGInboundViewModel: ObservableObject {
+    
+    @Published var model: MGConfiguration.Inbound
+    
+    init() {
+        self.model = MGConfiguration.Inbound.current
+    }
+    
+    func save(updated: () -> Void = {}) {
+        do {
+            guard self.model != MGConfiguration.Inbound.current else {
+                return
+            }
+            UserDefaults.shared.set(try JSONEncoder().encode(self.model), forKey: MGConfiguration.inboundStoreKey)
+            updated()
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+}

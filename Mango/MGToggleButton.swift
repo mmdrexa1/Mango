@@ -4,12 +4,31 @@ struct MGToggleButton: View {
     
     @Environment(\.colorScheme) private var colorScheme
     
-    let title: String
-    let isOn: Binding<Bool>
+    @State private var localState: Bool = false
+    
+    init(title: String, isOn: Binding<Bool>) {
+        self.title = title
+        self.isOn = isOn
+        self._localState = State(initialValue: isOn.wrappedValue)
+    }
+    
+    private let title: String
+    private let isOn: Binding<Bool>
+    
     var body: some View {
-        Toggle(title, isOn: isOn)
-            .background(RoundedRectangle(cornerRadius: 6).fill(isOn.wrappedValue ? .clear : self.backgroundColor))
-            .toggleStyle(.button)
+        Text("  \(title)  ")
+            .foregroundColor(.accentColor)
+            .padding(.vertical, 8)
+            .background(self.localState ? .accentColor.opacity(0.2) : self.backgroundColor)
+            .cornerRadius(6)
+            .onTapGesture {
+                isOn.wrappedValue.toggle()
+            }
+            .onChange(of: isOn.wrappedValue) { newValue in
+                withAnimation(.easeIn(duration: 0.05)) {
+                    self.localState = newValue
+                }
+            }
     }
     
     private var backgroundColor: Color {
