@@ -26,8 +26,8 @@ public struct MGDNSModel: Codable, Equatable {
         
         public var address: String = ""
         public var port: Int = 0
-        public var domains: [String] = ["a", "c", "c"]
-        public var expectIPs: [String] = ["da", "d", "e"]
+        public var domains: [String] = []
+        public var expectIPs: [String] = []
         public var skipFallback: Bool = false
         public var clientIP: String?
         
@@ -40,9 +40,7 @@ public struct MGDNSModel: Codable, Equatable {
             case clientIP
         }
         
-        init() {
-            self.__object__ = .random()
-        }
+        init() {}
         
         public init(from decoder: Decoder) throws {
             do {
@@ -78,20 +76,103 @@ public struct MGDNSModel: Codable, Equatable {
         }
     }
     
-    public var __osLocalDNS__: [String] = ["1.1.1.1"]
-    public var __enable__: Bool = false
+    public struct Host: Codable, Equatable, Identifiable {
+        public var id: UUID = UUID()
+        public var key: String = ""
+        public var values: [String] = []
+    }
     
-    public var hosts: [String: [String]]?
+    public var __osLocalDNS__: [String]
+    public var __enable__: Bool
+    
+    public var hosts: [Host]?
     public var servers: [Server]?
     public var clientIp: String?
-    public var queryStrategy: QueryStrategy = .useIP
-    public var disableCache: Bool = false
-    public var disableFallback: Bool = false
-    public var disableFallbackIfMatch: Bool = false
-    public var tag: String = "dns-in"
+    public var queryStrategy: QueryStrategy
+    public var disableCache: Bool
+    public var disableFallback: Bool
+    public var disableFallbackIfMatch: Bool
+    public var tag: String
+    
+    
+    private enum CodingKeys: String, CodingKey {
+        case __osLocalDNS__
+        case __enable__
+        case hosts
+        case servers
+        case clientIp
+        case queryStrategy
+        case disableCache
+        case disableFallback
+        case disableFallbackIfMatch
+        case tag
+    }
+    
+    public init(
+        __osLocalDNS__: [String] = ["1.1.1.1"],
+        __enable__: Bool = false,
+        hosts: [Host]? = nil,
+        servers: [Server]? = nil,
+        clientIp: String? = nil,
+        queryStrategy: QueryStrategy = .useIP,
+        disableCache: Bool = false,
+        disableFallback: Bool = false,
+        disableFallbackIfMatch: Bool = false
+    ) {
+        self.__osLocalDNS__ = __osLocalDNS__
+        self.__enable__ = __enable__
+        self.hosts = hosts
+        self.servers = servers
+        self.clientIp = clientIp
+        self.queryStrategy = queryStrategy
+        self.disableCache = disableCache
+        self.disableFallback = disableFallback
+        self.disableFallbackIfMatch = disableFallbackIfMatch
+        self.tag = "dns-in"
+    }
+        
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.__osLocalDNS__ = try container.decode([String].self, forKey: .__osLocalDNS__)
+        self.__enable__ = try container.decode(Bool.self, forKey: .__enable__)
+        let mapping = try container.decode(Optional<[String: [String]]>.self, forKey: .hosts)
+        self.hosts = mapping.flatMap({ mapping in
+            mapping.reduce(into: [Host]()) { result, pair in
+                result.append(Host(id: UUID(), key: pair.key, values: pair.value))
+            }
+        })
+        self.servers = try container.decode(Optional<[Server]>.self, forKey: .servers)
+        self.clientIp = try container.decode(Optional<String>.self, forKey: .clientIp)
+        self.queryStrategy = try container.decode(QueryStrategy.self, forKey: .queryStrategy)
+        self.disableCache = try container.decode(Bool.self, forKey: .disableCache)
+        self.disableFallback = try container.decode(Bool.self, forKey: .disableFallback)
+        self.disableFallbackIfMatch = try container.decode(Bool.self, forKey: .disableFallbackIfMatch)
+        self.tag = try container.decode(String.self, forKey: .tag)
+
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.__osLocalDNS__, forKey: .__osLocalDNS__)
+        try container.encode(self.__enable__, forKey: .__enable__)
+        let mapping = self.hosts.flatMap { hosts in
+            hosts.reduce(into: [String: [String]]()) { result, host in
+                result[host.key] = host.values
+            }
+        }
+        try container.encode(mapping, forKey: .hosts)
+        try container.encode(self.servers, forKey: .servers)
+        try container.encode(self.clientIp, forKey: .clientIp)
+        try container.encode(self.queryStrategy, forKey: .queryStrategy)
+        try container.encode(self.disableCache, forKey: .disableCache)
+        try container.encode(self.disableFallback, forKey: .disableFallback)
+        try container.encode(self.disableFallbackIfMatch, forKey: .disableFallbackIfMatch)
+        try container.encode(self.tag, forKey: .tag)
+
+    }
     
     public static let `default` = MGDNSModel()
-    
+
     public static var current: MGDNSModel {
         do {
             guard let data = UserDefaults.shared.data(forKey: MGConstant.dns) else {

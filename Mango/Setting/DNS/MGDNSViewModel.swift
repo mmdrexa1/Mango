@@ -5,7 +5,7 @@ final class MGDNSViewModel: ObservableObject {
     @Published var __osLocalDNS__: [String] = ["1.1.1.1"]
     @Published var __enable__: Bool = false
     
-    @Published var hosts: [String: [String]]
+    @Published var hosts: [MGDNSModel.Host]
     @Published var servers: [MGDNSModel.Server]
     @Published var clientIp: String
     @Published var queryStrategy: MGDNSModel.QueryStrategy = .useIP
@@ -18,13 +18,8 @@ final class MGDNSViewModel: ObservableObject {
         let model = MGDNSModel.current
         self.__osLocalDNS__ = model.__osLocalDNS__
         self.__enable__ = model.__enable__
-        self.hosts = model.hosts ?? [:]
-        self.servers = [
-            MGDNSModel.Server(),
-            MGDNSModel.Server(),
-            MGDNSModel.Server(),
-            MGDNSModel.Server()
-        ]
+        self.hosts = model.hosts ?? []
+        self.servers = model.servers ?? []
         self.clientIp = model.clientIp ?? ""
         self.queryStrategy = model.queryStrategy
         self.disableCache = model.disableCache
