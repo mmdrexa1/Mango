@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MGDNSSettingView: View {
     
-    @EnvironmentObject  private var packetTunnelManager:    MGPacketTunnelManager
+    @EnvironmentObject  private var packetTunnelManager: MGPacketTunnelManager
     @ObservedObject private var dnsViewModel: MGDNSViewModel
     
     @State private var localDNS: String = ""
@@ -14,44 +14,16 @@ struct MGDNSSettingView: View {
     var body: some View {
         Form {
             Section {
-                ForEach(dnsViewModel.__osLocalDNS__, id: \.self) { dns in
-                    Text(dns)
-                }
-                .onDelete { offsets in
-                    dnsViewModel.__osLocalDNS__.remove(atOffsets: offsets)
-                }
-                HStack(spacing: 18) {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                        .foregroundColor(.green)
-                        .offset(CGSize(width: 2, height: 0))
-                    TextField("", text: $localDNS)
-                        .onSubmit {
-                            let temp = self.localDNS.trimmingCharacters(in: .whitespacesAndNewlines)
-                            DispatchQueue.main.async {
-                                self.localDNS = ""
-                            }
-                            guard !temp.isEmpty else {
-                                return
-                            }
-                            guard !self.dnsViewModel.__osLocalDNS__.contains(where: { $0 == temp }) else {
-                                return
-                            }
-                            self.dnsViewModel.__osLocalDNS__.append(temp)
-                        }
-                        .multilineTextAlignment(.leading)
-                }
+                MGStringListEditor(strings: $dnsViewModel.__osLocalDNS__, placeholder: nil)
             } header: {
                 Text("SYSTEM")
             }
             Section {
-                DisclosureGroup {
-                    
+                MGDisclosureGroup {
                 } label: {
                     LabeledContent("Hosts", value: "\(dnsViewModel.hosts.count)")
                 }
-                DisclosureGroup {
+                MGDisclosureGroup {
                     ForEach($dnsViewModel.servers) { server in
                         MGDNSServerItemView(server: server)
                     }
@@ -61,9 +33,16 @@ struct MGDNSSettingView: View {
                     .onDelete { offsets in
                         dnsViewModel.servers.remove(atOffsets: offsets)
                     }
+                    Button("Add") {
+                        withAnimation {
+                            dnsViewModel.servers.append(MGDNSModel.Server())
+                        }
+                    }
+                    .listRowInsets(EdgeInsets(top: 0, leading: 52, bottom: 0, trailing: 16))
                 } label: {
                     LabeledContent("Servers", value: "\(dnsViewModel.servers.count)")
                 }
+                
                 LabeledContent {
                     TextField("", text: $dnsViewModel.clientIp)
                 } label: {
@@ -90,7 +69,7 @@ struct MGDNSSettingView: View {
         .lineLimit(1)
         .multilineTextAlignment(.trailing)
         .environment(\.editMode, .constant(.active))
-        .navigationTitle(Text("DNS 设置"))
+        .navigationTitle(Text("DNS"))
         .navigationBarTitleDisplayMode(.large)
     }
 }
@@ -121,81 +100,63 @@ struct MGDNSServerView: View {
     @Binding var server: MGDNSModel.Server
         
     var body: some View {
-        EmptyView()
-    }
-}
-
-struct MGDNSServerEditView: View {
-    
-    @Binding var server: MGDNSModel.Server
-    
-    var body: some View {
-        if server.__object__ {
-            DisclosureGroup(server.address) {
-                LabeledContent("Address") {
-                    TextField("", text: $server.address)
+        NavigationStack {
+            Form {
+                if server.__object__ {
+                    Section {
+                        LabeledContent("Address") {
+                            TextField("", text: $server.address)
+                        }
+                        LabeledContent("Port") {
+                            TextField("", value: $server.port, format: .number)
+                        }
+                        MGDisclosureGroup {
+                            MGStringListEditor(strings: $server.domains, placeholder: nil)
+                        } label: {
+                            LabeledContent("Domain", value: "\(server.domains.count)")
+                        }
+                        MGDisclosureGroup {
+                            MGStringListEditor(strings: $server.expectIPs, placeholder: nil)
+                        } label: {
+                            LabeledContent("Expect IP", value: "\(server.expectIPs.count)")
+                        }
+                        Toggle("Skip Fallback", isOn: $server.skipFallback)
+                        LabeledContent("Client IP") {
+                            TextField("", text: Binding(get: {
+                                server.clientIP ?? ""
+                            }, set: { newValue in
+                                let reval = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                                server.clientIP = reval.isEmpty ? nil : reval
+                            }))
+                        }
+                    } header: {
+                        Text("Object")
+                    }
+                    .multilineTextAlignment(.trailing)
+                } else {
+                    Section {
+                        TextField("", text: $server.address)
+                    } header: {
+                        Text("String")
+                    }
+                    .multilineTextAlignment(.leading)
                 }
-                .deleteDisabled(true)
-                .moveDisabled(true)
-                
-                LabeledContent("Port") {
-                    TextField("", value: $server.port, format: .number)
-                }
-                .deleteDisabled(true)
-                .moveDisabled(true)
-                
-                DisclosureGroup("Domain") {
-                    ForEach(server.domains, id: \.self) { domain in
-                        Text(domain)
-                            .deleteDisabled(false)
-                            .moveDisabled(false)
-                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    }
-                    .onMove { from, to in
-                        server.domains.move(fromOffsets: from, toOffset: to)
-                    }
-                    .onDelete { offsets in
-                        server.domains.remove(atOffsets: offsets)
-                    }
-                }
-                .deleteDisabled(true)
-                .moveDisabled(true)
-
-                DisclosureGroup("Expect IP") {
-                    ForEach(server.expectIPs, id: \.self) { ip in
-                        Text(ip)
-                            .deleteDisabled(false)
-                            .moveDisabled(false)
-                    }
-                    .onMove { from, to in
-                        server.expectIPs.move(fromOffsets: from, toOffset: to)
-                    }
-                    .onDelete { offsets in
-                        server.expectIPs.remove(atOffsets: offsets)
-                    }
-                }
-                .deleteDisabled(true)
-                .moveDisabled(true)
-
-                Toggle("Skip Fallback", isOn: $server.skipFallback)
-                    .deleteDisabled(true)
-                    .moveDisabled(true)
-
-                LabeledContent("Client IP") {
-                    TextField("", text: Binding(get: {
-                        server.clientIP ?? ""
-                    }, set: { newValue in
-                        let reval = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                        server.clientIP = reval.isEmpty ? nil : reval
-                    }))
-                }
-                .deleteDisabled(true)
-                .moveDisabled(true)
             }
-            .multilineTextAlignment(.trailing)
-        } else {
-            TextField("", text: $server.address)
-                .multilineTextAlignment(.leading)
+            .environment(\.editMode, .constant(.active))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Picker(selection: $server.__object__) {
+                        ForEach([false, true], id: \.self) { bool in
+                            Text(bool ? "OBJECT" : "STRING")
+                        }
+                    } label: {
+                        EmptyView()
+                    }
+                    .pickerStyle(.segmented)
+                    .fixedSize()
+                }
+            }
         }
     }
 }

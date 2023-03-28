@@ -105,43 +105,43 @@ struct MGRouteRuleSettingView: View {
                         Text(strategy.description)
                     }
                 }
-                DisclosureGroup {
-                    MGRouteRuleStringListEditView(elements: Binding(get: {
+                MGDisclosureGroup {
+                    MGStringListEditor(strings: Binding(get: {
                         rule.domain ?? []
                     }, set: { newValue in
                         rule.domain = newValue.isEmpty ? nil : newValue
-                    }))
+                    }), placeholder: nil)
                 } label: {
                     LabeledContent("Domain", value: "\(rule.domain?.count ?? 0)")
                 }
-                DisclosureGroup {
-                    MGRouteRuleStringListEditView(elements: Binding(get: {
+                MGDisclosureGroup {
+                    MGStringListEditor(strings: Binding(get: {
                         rule.ip ?? []
                     }, set: { newValue in
                         rule.ip = newValue.isEmpty ? nil : newValue
-                    }))
+                    }), placeholder: nil)
                 } label: {
                     LabeledContent("IP", value: "\(rule.ip?.count ?? 0)")
                 }
-                DisclosureGroup {
-                    MGRouteRuleStringListEditView(elements:  Binding {
+                MGDisclosureGroup {
+                    MGStringListEditor(strings:  Binding {
                         let reval = rule.port ?? ""
                         return reval.components(separatedBy: ",").filter { !$0.isEmpty }
                     } set: { newValue in
                         let reval = newValue.joined(separator: ",")
                         rule.port = reval.isEmpty ? nil : reval
-                    })
+                    }, placeholder: nil)
                 } label: {
                     LabeledContent("Port", value: rule.port ?? "")
                 }
-                DisclosureGroup {
-                    MGRouteRuleStringListEditView(elements:  Binding {
+                MGDisclosureGroup {
+                    MGStringListEditor(strings:  Binding {
                         let reval = rule.sourcePort ?? ""
                         return reval.components(separatedBy: ",").filter { !$0.isEmpty }
                     } set: { newValue in
                         let reval = newValue.joined(separator: ",")
                         rule.sourcePort = reval.isEmpty ? nil : reval
-                    })
+                    }, placeholder: nil)
                 } label: {
                     LabeledContent("Source Port", value: rule.sourcePort ?? "")
                 }
@@ -237,47 +237,5 @@ struct MGRouteRuleSettingView: View {
         .environment(\.editMode, .constant(.active))
         .navigationTitle(Text(rule.__name__))
         .navigationBarTitleDisplayMode(.large)
-    }
-}
-
-struct MGRouteRuleStringListEditView: View {
-    
-    @Binding var elements: [String]
-    
-    @State private var value: String = ""
-    
-    var body: some View {
-        Group {
-            ForEach(elements, id: \.self) { element in
-                Text(element)
-            }
-            .onMove { from, to in
-                elements.move(fromOffsets: from, toOffset: to)
-            }
-            .onDelete { offseets in
-                elements.remove(atOffsets: offseets)
-            }
-            
-            HStack(spacing: 18) {
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .frame(width: 18, height: 18)
-                    .foregroundColor(.green)
-                    .offset(CGSize(width: -2, height: 0))
-                TextField("Add", text: $value)
-                    .onSubmit {
-                        let reavl = value.trimmingCharacters(in: .whitespacesAndNewlines)
-                        if !reavl.isEmpty && !elements.contains(reavl) {
-                            elements.append(reavl)
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                            value = ""
-                        }
-                    }
-                    .multilineTextAlignment(.leading)
-            }
-            .padding(.trailing, 16)
-        }
-        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }

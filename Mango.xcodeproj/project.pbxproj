@@ -12,6 +12,8 @@
 		702A08A629D182CF00B0BBF8 /* MGDNSSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */; };
 		702A08A829D1830900B0BBF8 /* MGDNSModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A729D1830900B0BBF8 /* MGDNSModel.swift */; };
 		702A08AA29D1831300B0BBF8 /* MGDNSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A929D1831300B0BBF8 /* MGDNSViewModel.swift */; };
+		702A08AC29D1A1E600B0BBF8 /* MGStringListEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */; };
+		702A08AE29D287E700B0BBF8 /* MGDisclosureGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08AD29D287E700B0BBF8 /* MGDisclosureGroup.swift */; };
 		702D908A299B58A400B83324 /* MGNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702D9089299B58A400B83324 /* MGNotification.swift */; };
 		702D9091299FA40600B83324 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70C9EDAC29502C6500B6995B /* NetworkExtension.framework */; };
 		702D9099299FA40600B83324 /* XrayTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 702D9090299FA40600B83324 /* XrayTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -129,6 +131,8 @@
 		702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDNSSettingView.swift; sourceTree = "<group>"; };
 		702A08A729D1830900B0BBF8 /* MGDNSModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDNSModel.swift; sourceTree = "<group>"; };
 		702A08A929D1831300B0BBF8 /* MGDNSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDNSViewModel.swift; sourceTree = "<group>"; };
+		702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGStringListEditor.swift; sourceTree = "<group>"; };
+		702A08AD29D287E700B0BBF8 /* MGDisclosureGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDisclosureGroup.swift; sourceTree = "<group>"; };
 		702D9088299B54FD00B83324 /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		702D9089299B58A400B83324 /* MGNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGNotification.swift; sourceTree = "<group>"; };
 		702D9090299FA40600B83324 /* XrayTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = XrayTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -333,6 +337,8 @@
 				70F82CD929CA94270072B334 /* MGToggleButton.swift */,
 				70DE0D6F29A62A5800B3E343 /* MGPacketTunnelManager.swift */,
 				706A6D8329CCB20F00523A07 /* MGConfigurationParser.swift */,
+				702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */,
+				702A08AD29D287E700B0BBF8 /* MGDisclosureGroup.swift */,
 				70DE0D7129A62C4100B3E343 /* Home */,
 				706DB6B729B9DFAB002F22C7 /* Subscribe */,
 				70DE0D7629A6300100B3E343 /* Setting */,
@@ -569,6 +575,7 @@
 				70F82CE229CC05BA0072B334 /* MGRouteEntranceView.swift in Sources */,
 				70B89C2E29C19F7D003DA577 /* MGLogEntranceView.swift in Sources */,
 				70F82CCC29C978650072B334 /* MGCreateOrUpdateConfigurationView.swift in Sources */,
+				702A08AE29D287E700B0BBF8 /* MGDisclosureGroup.swift in Sources */,
 				70DE0D7329A62C4E00B3E343 /* MGHomeView.swift in Sources */,
 				70F82CB629C2E6B40072B334 /* MGContentView.swift in Sources */,
 				70C9EDD82951587D00B6995B /* MGResetView.swift in Sources */,
@@ -599,6 +606,7 @@
 				7000C6E4295D635F0005626E /* MGControlView.swift in Sources */,
 				70B89C3829C1AA94003DA577 /* MGNetworkEntranceView.swift in Sources */,
 				706DB6C729BAC4C7002F22C7 /* MGConfigurationListView.swift in Sources */,
+				702A08AC29D1A1E600B0BBF8 /* MGStringListEditor.swift in Sources */,
 				70CEB89329A0C7BA003436C2 /* MGConstant.swift in Sources */,
 				70B89C2429C1984A003DA577 /* MGDataSizeFormatter.swift in Sources */,
 				706DB6C129B9E006002F22C7 /* MGConfigurationLoadViewModel.swift in Sources */,
