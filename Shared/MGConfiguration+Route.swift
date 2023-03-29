@@ -123,6 +123,11 @@ extension MGConfiguration {
                 self.ip = try container.decodeIfPresent([String].self, forKey: MGConfiguration.Route.Rule.CodingKeys.ip)
                 self.port = try container.decodeIfPresent(String.self, forKey: MGConfiguration.Route.Rule.CodingKeys.port)
                 self.sourcePort = try container.decodeIfPresent(String.self, forKey: MGConfiguration.Route.Rule.CodingKeys.sourcePort)
+                if let networkString = try container.decodeIfPresent(String.self, forKey: .network) {
+                    self.network = Set(networkString.components(separatedBy: ",").compactMap(Network.init(rawValue:)))
+                } else {
+                    self.network = nil
+                }
                 self.network = try container.decodeIfPresent(Set<MGConfiguration.Route.Network>.self, forKey: MGConfiguration.Route.Rule.CodingKeys.network)
                 self.source = try container.decodeIfPresent([String].self, forKey: MGConfiguration.Route.Rule.CodingKeys.source)
                 self.user = try container.decodeIfPresent([String].self, forKey: MGConfiguration.Route.Rule.CodingKeys.user)
@@ -164,7 +169,20 @@ extension MGConfiguration {
                 try container.encodeIfPresent(self.ip, forKey: MGConfiguration.Route.Rule.CodingKeys.ip)
                 try container.encodeIfPresent(self.port, forKey: MGConfiguration.Route.Rule.CodingKeys.port)
                 try container.encodeIfPresent(self.sourcePort, forKey: MGConfiguration.Route.Rule.CodingKeys.sourcePort)
-                try container.encodeIfPresent(self.network, forKey: MGConfiguration.Route.Rule.CodingKeys.network)
+                let networkString: String? = {
+                    guard let network = network, !network.isEmpty else {
+                        return nil
+                    }
+                    var reval: [Network] = []
+                    if network.contains(.tcp) {
+                        reval.append(.tcp)
+                    }
+                    if network.contains(.udp) {
+                        reval.append(.udp)
+                    }
+                    return reval.map(\.rawValue).joined(separator: ",")
+                }()
+                try container.encodeIfPresent(networkString, forKey: MGConfiguration.Route.Rule.CodingKeys.network)
                 try container.encodeIfPresent(self.source, forKey: MGConfiguration.Route.Rule.CodingKeys.source)
                 try container.encodeIfPresent(self.user, forKey: MGConfiguration.Route.Rule.CodingKeys.user)
                 try container.encodeIfPresent(self.inboundTag, forKey: MGConfiguration.Route.Rule.CodingKeys.inboundTag)
