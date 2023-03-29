@@ -16,19 +16,25 @@ struct MGToggleButton: View {
     private let isOn: Binding<Bool>
     
     var body: some View {
-        Text("  \(title)  ")
-            .foregroundColor(.accentColor)
-            .padding(.vertical, 8)
-            .background(self.localState ? .accentColor.opacity(0.2) : self.backgroundColor)
-            .cornerRadius(6)
-            .onTapGesture {
-                isOn.wrappedValue.toggle()
+        HStack(spacing: 0) {
+            Text("-")
+                .foregroundColor(.clear)
+            Text(title)
+            Text("-")
+                .foregroundColor(.clear)
+        }
+        .foregroundColor(.accentColor)
+        .padding(.vertical, 8)
+        .background(self.localState ? .accentColor.opacity(0.2) : self.backgroundColor)
+        .cornerRadius(6)
+        .onTapGesture {
+            isOn.wrappedValue.toggle()
+        }
+        .onChange(of: isOn.wrappedValue) { newValue in
+            withAnimation(.easeIn(duration: 0.1)) {
+                self.localState = newValue
             }
-            .onChange(of: isOn.wrappedValue) { newValue in
-                withAnimation(.easeIn(duration: 0.1)) {
-                    self.localState = newValue
-                }
-            }
+        }
     }
     
     private var backgroundColor: Color {
