@@ -2,9 +2,7 @@ import Foundation
 
 extension MGConfiguration {
     
-    public static let inboundStoreKey = "XRAY_INBOUND_DATA"
-    
-    public struct Inbound: Codable, Equatable {
+    public struct Inbound: Codable, Equatable, MGConfigurationPersistentModel {
         
         public struct DestinationOverride: RawRepresentable, Codable, Hashable, CustomStringConvertible, CaseIterable {
             
@@ -64,17 +62,8 @@ extension MGConfiguration {
             excludedDomains: []
         )
         
-        public static let `default` = Inbound()
+        public static let storeKey = "XRAY_INBOUND_DATA"
         
-        public static var current: Inbound {
-            do {
-                guard let data = UserDefaults.shared.data(forKey: MGConfiguration.inboundStoreKey) else {
-                    return .default
-                }
-                return try JSONDecoder().decode(MGConfiguration.Inbound.self, from: data)
-            } catch {
-                return .default
-            }
-        }
+        public static let defaultValue = MGConfiguration.Inbound()
     }
 }

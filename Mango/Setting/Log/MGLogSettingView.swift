@@ -2,64 +2,54 @@ import SwiftUI
 
 struct MGLogSettingView: View {
     
-    @EnvironmentObject  private var packetTunnelManager: MGPacketTunnelManager
-    @ObservedObject private var logViewModel: MGLogViewModel
+    @ObservedObject private var logViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Log>
     
-    init(logViewModel: MGLogViewModel) {
+    init(logViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Log>) {
         self._logViewModel = ObservedObject(initialValue: logViewModel)
     }
     
     var body: some View {
         Form {
             Section {
-                Picker(selection: $logViewModel.errorLogSeverity) {
-                    ForEach(MGLogModel.Severity.allCases) { severity in
-                        Text(severity.displayTitle)
+                Picker(selection: $logViewModel.model.errorLogSeverity) {
+                    ForEach(MGConfiguration.Log.Severity.allCases) { severity in
+                        Text(severity.description)
                     }
                 } label: {
-                    Text("错误日志")
+                    Text("Level")
                 }
+            } header: {
+                Text("Error")
             }
             Section {
-                Toggle("访问日志", isOn: $logViewModel.accessLogEnabled)
-                Toggle("DNS 查询日志", isOn: $logViewModel.dnsLogEnabled)
+                Toggle("Access Log", isOn: $logViewModel.model.accessLogEnabled)
+                Toggle("DNS Log", isOn: $logViewModel.model.dnsLogEnabled)
+            } header: {
+                Text("Other")
             }
         }
-        .navigationTitle(Text("日志"))
+        .navigationTitle(Text("Log"))
         .navigationBarTitleDisplayMode(.large)
         .onDisappear {
-            self.logViewModel.save {
-                guard let status = packetTunnelManager.status, status == .connected else {
-                    return
-                }
-                packetTunnelManager.stop()
-                Task(priority: .userInitiated) {
-                    do {
-                        try await Task.sleep(for: .milliseconds(500))
-                        try await packetTunnelManager.start()
-                    } catch {
-                        debugPrint(error.localizedDescription)
-                    }
-                }
-            }
+            self.logViewModel.save()
         }
     }
 }
 
-extension MGLogModel.Severity {
+extension MGConfiguration.Log.Severity: CustomStringConvertible {
     
-    var displayTitle: String {
+    public var description: String {
         switch self {
         case .none:
-            return "关闭"
+            return "None"
         case .error:
-            return "错误"
+            return "Error"
         case .warning:
-            return "警告"
+            return "Warning"
         case .info:
-            return "信息"
+            return "Info"
         case .debug:
-            return "调试"
+            return "Debug"
         }
     }
 }

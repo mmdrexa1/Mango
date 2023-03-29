@@ -13,7 +13,6 @@ struct MGSettingsView: View {
                 Section {
                     MGLogEntranceView()
                     MGInboundEntranceView()
-                    MGSniffingEntranceView()
                     MGDNSEntranceView()
                     MGRouteEntranceView()
                     MGAssetEntranceView()

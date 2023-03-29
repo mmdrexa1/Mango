@@ -2,13 +2,13 @@ import SwiftUI
 
 struct MGLogEntranceView: View {
         
-    @StateObject private var logViewModel = MGLogViewModel()
+    @StateObject private var logViewModel = MGConfigurationPersistentViewModel<MGConfiguration.Log>()
     
     var body: some View {
         NavigationLink {
             MGLogSettingView(logViewModel: logViewModel)
         } label: {
-            Label("日志", systemImage: "doc.text.below.ecg")
+            Label("Log", systemImage: "doc.text.below.ecg")
         }
     }
 }

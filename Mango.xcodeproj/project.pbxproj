@@ -29,20 +29,14 @@
 		706DB6C729BAC4C7002F22C7 /* MGConfigurationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706DB6C629BAC4C7002F22C7 /* MGConfigurationListView.swift */; };
 		706DB6C929BACC14002F22C7 /* MGConfigurationListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706DB6C829BACC14002F22C7 /* MGConfigurationListManager.swift */; };
 		706DB6CB29BAE954002F22C7 /* MGConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706DB6CA29BAE954002F22C7 /* MGConfigurationView.swift */; };
-		708B380329B0937600E24312 /* MGSniffingSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708B380229B0937600E24312 /* MGSniffingSettingView.swift */; };
+		708B380329B0937600E24312 /* MGInboundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708B380229B0937600E24312 /* MGInboundView.swift */; };
 		708B380629B0AA4200E24312 /* MGAssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708B380529B0AA4200E24312 /* MGAssetViewModel.swift */; };
 		708B380829B0AA6200E24312 /* MGAssetSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708B380729B0AA6200E24312 /* MGAssetSettingView.swift */; };
 		708B385B29B81CEB00E24312 /* Tun2SocksKit in Frameworks */ = {isa = PBXBuildFile; productRef = 708B385A29B81CEB00E24312 /* Tun2SocksKit */; };
 		708B386129B81DDB00E24312 /* MGNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702D9089299B58A400B83324 /* MGNotification.swift */; };
-		70B89C1B29C17C06003DA577 /* MGSniffingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C1A29C17C06003DA577 /* MGSniffingViewModel.swift */; };
-		70B89C1E29C17C29003DA577 /* MGSniffingEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C1D29C17C29003DA577 /* MGSniffingEntranceView.swift */; };
-		70B89C2029C17EE2003DA577 /* MGSniffingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C1F29C17EE2003DA577 /* MGSniffingModel.swift */; };
-		70B89C2129C17EE2003DA577 /* MGSniffingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C1F29C17EE2003DA577 /* MGSniffingModel.swift */; };
+		70B89C1E29C17C29003DA577 /* MGInboundEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C1D29C17C29003DA577 /* MGInboundEntranceView.swift */; };
 		70B89C2429C1984A003DA577 /* MGDataSizeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2329C1984A003DA577 /* MGDataSizeFormatter.swift */; };
 		70B89C2629C198E3003DA577 /* MGAssetEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2529C198E3003DA577 /* MGAssetEntranceView.swift */; };
-		70B89C2929C19D49003DA577 /* MGLogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2829C19D49003DA577 /* MGLogModel.swift */; };
-		70B89C2A29C19D49003DA577 /* MGLogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2829C19D49003DA577 /* MGLogModel.swift */; };
-		70B89C2C29C19E9C003DA577 /* MGLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2B29C19E9C003DA577 /* MGLogViewModel.swift */; };
 		70B89C2E29C19F7D003DA577 /* MGLogEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2D29C19F7D003DA577 /* MGLogEntranceView.swift */; };
 		70B89C3029C19FF3003DA577 /* MGLogSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2F29C19FF3003DA577 /* MGLogSettingView.swift */; };
 		70B89C3329C1A918003DA577 /* MGNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C3229C1A918003DA577 /* MGNetworkModel.swift */; };
@@ -54,6 +48,12 @@
 		70B947B329613354006F6A38 /* MGAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B947B229613354006F6A38 /* MGAppDelegate.swift */; };
 		70C4E58929D2FDE300D1A52D /* MGConfiguration+Inbound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E58829D2FDE300D1A52D /* MGConfiguration+Inbound.swift */; };
 		70C4E58A29D2FDE300D1A52D /* MGConfiguration+Inbound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E58829D2FDE300D1A52D /* MGConfiguration+Inbound.swift */; };
+		70C4E58C29D3D18800D1A52D /* MGConfiguration+Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E58B29D3D18800D1A52D /* MGConfiguration+Log.swift */; };
+		70C4E58D29D3D18800D1A52D /* MGConfiguration+Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E58B29D3D18800D1A52D /* MGConfiguration+Log.swift */; };
+		70C4E58F29D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E58E29D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift */; };
+		70C4E59029D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E58E29D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift */; };
+		70C4E59229D3D55700D1A52D /* MGConfigurationPersistentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E59129D3D55700D1A52D /* MGConfigurationPersistentModel.swift */; };
+		70C4E59329D3D55700D1A52D /* MGConfigurationPersistentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E59129D3D55700D1A52D /* MGConfigurationPersistentModel.swift */; };
 		70C9ED9D29501D5C00B6995B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70C9ED9C29501D5C00B6995B /* Assets.xcassets */; };
 		70C9EDA029501D5C00B6995B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70C9ED9F29501D5C00B6995B /* Preview Assets.xcassets */; };
 		70C9EDD82951587D00B6995B /* MGResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C9EDD72951587D00B6995B /* MGResetView.swift */; };
@@ -152,16 +152,12 @@
 		706DB6CA29BAE954002F22C7 /* MGConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGConfigurationView.swift; sourceTree = "<group>"; };
 		7084FC242963FB8A00065DAF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		7084FC252963FDE300065DAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		708B380229B0937600E24312 /* MGSniffingSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGSniffingSettingView.swift; sourceTree = "<group>"; };
+		708B380229B0937600E24312 /* MGInboundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGInboundView.swift; sourceTree = "<group>"; };
 		708B380529B0AA4200E24312 /* MGAssetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGAssetViewModel.swift; sourceTree = "<group>"; };
 		708B380729B0AA6200E24312 /* MGAssetSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGAssetSettingView.swift; sourceTree = "<group>"; };
-		70B89C1A29C17C06003DA577 /* MGSniffingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGSniffingViewModel.swift; sourceTree = "<group>"; };
-		70B89C1D29C17C29003DA577 /* MGSniffingEntranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGSniffingEntranceView.swift; sourceTree = "<group>"; };
-		70B89C1F29C17EE2003DA577 /* MGSniffingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGSniffingModel.swift; sourceTree = "<group>"; };
+		70B89C1D29C17C29003DA577 /* MGInboundEntranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGInboundEntranceView.swift; sourceTree = "<group>"; };
 		70B89C2329C1984A003DA577 /* MGDataSizeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDataSizeFormatter.swift; sourceTree = "<group>"; };
 		70B89C2529C198E3003DA577 /* MGAssetEntranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGAssetEntranceView.swift; sourceTree = "<group>"; };
-		70B89C2829C19D49003DA577 /* MGLogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLogModel.swift; sourceTree = "<group>"; };
-		70B89C2B29C19E9C003DA577 /* MGLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLogViewModel.swift; sourceTree = "<group>"; };
 		70B89C2D29C19F7D003DA577 /* MGLogEntranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLogEntranceView.swift; sourceTree = "<group>"; };
 		70B89C2F29C19FF3003DA577 /* MGLogSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLogSettingView.swift; sourceTree = "<group>"; };
 		70B89C3229C1A918003DA577 /* MGNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGNetworkModel.swift; sourceTree = "<group>"; };
@@ -171,6 +167,9 @@
 		70B89C3D29C1C117003DA577 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = usr/lib/libresolv.9.tbd; sourceTree = SDKROOT; };
 		70B947B229613354006F6A38 /* MGAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGAppDelegate.swift; sourceTree = "<group>"; };
 		70C4E58829D2FDE300D1A52D /* MGConfiguration+Inbound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGConfiguration+Inbound.swift"; sourceTree = "<group>"; };
+		70C4E58B29D3D18800D1A52D /* MGConfiguration+Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGConfiguration+Log.swift"; sourceTree = "<group>"; };
+		70C4E58E29D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGConfigurationPersistentViewModel.swift; sourceTree = "<group>"; };
+		70C4E59129D3D55700D1A52D /* MGConfigurationPersistentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGConfigurationPersistentModel.swift; sourceTree = "<group>"; };
 		70C9ED9529501D5B00B6995B /* Mango.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mango.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70C9ED9C29501D5C00B6995B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		70C9ED9F29501D5C00B6995B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -264,15 +263,13 @@
 			path = List;
 			sourceTree = "<group>";
 		};
-		70B89C1929C17BEC003DA577 /* Sniffing */ = {
+		70B89C1929C17BEC003DA577 /* Inbound */ = {
 			isa = PBXGroup;
 			children = (
-				70B89C1F29C17EE2003DA577 /* MGSniffingModel.swift */,
-				70B89C1A29C17C06003DA577 /* MGSniffingViewModel.swift */,
-				70B89C1D29C17C29003DA577 /* MGSniffingEntranceView.swift */,
-				708B380229B0937600E24312 /* MGSniffingSettingView.swift */,
+				70B89C1D29C17C29003DA577 /* MGInboundEntranceView.swift */,
+				708B380229B0937600E24312 /* MGInboundView.swift */,
 			);
-			path = Sniffing;
+			path = Inbound;
 			sourceTree = "<group>";
 		};
 		70B89C2229C195FB003DA577 /* Asset */ = {
@@ -288,8 +285,6 @@
 		70B89C2729C19D27003DA577 /* Log */ = {
 			isa = PBXGroup;
 			children = (
-				70B89C2829C19D49003DA577 /* MGLogModel.swift */,
-				70B89C2B29C19E9C003DA577 /* MGLogViewModel.swift */,
 				70B89C2D29C19F7D003DA577 /* MGLogEntranceView.swift */,
 				70B89C2F29C19FF3003DA577 /* MGLogSettingView.swift */,
 			);
@@ -376,6 +371,9 @@
 				70CEB89229A0C7BA003436C2 /* MGConstant.swift */,
 				702D9089299B58A400B83324 /* MGNotification.swift */,
 				706DB6BC29B9DFE3002F22C7 /* MGConfiguration.swift */,
+				70C4E59129D3D55700D1A52D /* MGConfigurationPersistentModel.swift */,
+				70C4E58E29D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift */,
+				70C4E58B29D3D18800D1A52D /* MGConfiguration+Log.swift */,
 				70C4E58829D2FDE300D1A52D /* MGConfiguration+Inbound.swift */,
 			);
 			path = Shared;
@@ -399,7 +397,7 @@
 				70C9EDD72951587D00B6995B /* MGResetView.swift */,
 				70B89C3129C1A8F9003DA577 /* Network */,
 				70B89C2729C19D27003DA577 /* Log */,
-				70B89C1929C17BEC003DA577 /* Sniffing */,
+				70B89C1929C17BEC003DA577 /* Inbound */,
 				70F82CDE29CC05740072B334 /* DNS */,
 				70F82CDD29CC056E0072B334 /* Route */,
 				70B89C2229C195FB003DA577 /* Asset */,
@@ -557,16 +555,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70C4E59029D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift in Sources */,
 				7069E01F29ADEAA30012C435 /* PacketTunnelProvider.swift in Sources */,
 				70CEB89929A30C79003436C2 /* MGConstant.swift in Sources */,
 				70F82CEE29CD7E3D0072B334 /* MGRouteModel.swift in Sources */,
-				70B89C2129C17EE2003DA577 /* MGSniffingModel.swift in Sources */,
 				70B89C3429C1A918003DA577 /* MGNetworkModel.swift in Sources */,
 				702A08AF29D2A27A00B0BBF8 /* MGDNSModel.swift in Sources */,
 				70C4E58A29D2FDE300D1A52D /* MGConfiguration+Inbound.swift in Sources */,
 				706A6D6829C6AEAA00523A07 /* MGConfiguration.swift in Sources */,
-				70B89C2A29C19D49003DA577 /* MGLogModel.swift in Sources */,
 				708B386129B81DDB00E24312 /* MGNotification.swift in Sources */,
+				70C4E59329D3D55700D1A52D /* MGConfigurationPersistentModel.swift in Sources */,
+				70C4E58D29D3D18800D1A52D /* MGConfiguration+Log.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,14 +587,12 @@
 				70C9EDD82951587D00B6995B /* MGResetView.swift in Sources */,
 				702A08A629D182CF00B0BBF8 /* MGDNSSettingView.swift in Sources */,
 				70F82CDC29CAC2D50072B334 /* MGCreateOrUpdateConfigurationViewModel.swift in Sources */,
-				70B89C1E29C17C29003DA577 /* MGSniffingEntranceView.swift in Sources */,
+				70B89C1E29C17C29003DA577 /* MGInboundEntranceView.swift in Sources */,
 				70F82CD429C978CF0072B334 /* MGConfigurationSecurityView.swift in Sources */,
 				706DB6CB29BAE954002F22C7 /* MGConfigurationView.swift in Sources */,
 				70F82CDA29CA94270072B334 /* MGToggleButton.swift in Sources */,
-				70B89C2929C19D49003DA577 /* MGLogModel.swift in Sources */,
 				70F82CE429CC10070072B334 /* MGRouteModel.swift in Sources */,
 				70F82CD029C9789F0072B334 /* MGConfigurationVMessView.swift in Sources */,
-				70B89C2C29C19E9C003DA577 /* MGLogViewModel.swift in Sources */,
 				70B89C2629C198E3003DA577 /* MGAssetEntranceView.swift in Sources */,
 				706DB6BD29B9DFE3002F22C7 /* MGConfiguration.swift in Sources */,
 				70F82CD229C978B30072B334 /* MGConfigurationTransportView.swift in Sources */,
@@ -604,8 +601,8 @@
 				702A08AA29D1831300B0BBF8 /* MGDNSViewModel.swift in Sources */,
 				70DE0D6E29A6155C00B3E343 /* MGPresentedButton.swift in Sources */,
 				70B89C3629C1A9C6003DA577 /* MGNetworkViewModel.swift in Sources */,
-				70B89C2029C17EE2003DA577 /* MGSniffingModel.swift in Sources */,
 				70F82CD829C990FF0072B334 /* MGConfigurationTrojanView.swift in Sources */,
+				70C4E58C29D3D18800D1A52D /* MGConfiguration+Log.swift in Sources */,
 				708B380629B0AA4200E24312 /* MGAssetViewModel.swift in Sources */,
 				70F82CCE29C978850072B334 /* MGConfigurationVLESSView.swift in Sources */,
 				706DB6C329B9E04B002F22C7 /* MGConfigurationLoadView.swift in Sources */,
@@ -613,6 +610,7 @@
 				70C4E58929D2FDE300D1A52D /* MGConfiguration+Inbound.swift in Sources */,
 				7000C6E4295D635F0005626E /* MGControlView.swift in Sources */,
 				70B89C3829C1AA94003DA577 /* MGNetworkEntranceView.swift in Sources */,
+				70C4E58F29D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift in Sources */,
 				706DB6C729BAC4C7002F22C7 /* MGConfigurationListView.swift in Sources */,
 				702A08AC29D1A1E600B0BBF8 /* MGStringListEditor.swift in Sources */,
 				70CEB89329A0C7BA003436C2 /* MGConstant.swift in Sources */,
@@ -625,12 +623,12 @@
 				70DE0D6829A6114B00B3E343 /* MGApp.swift in Sources */,
 				706A6D8429CCB20F00523A07 /* MGConfigurationParser.swift in Sources */,
 				70B947B329613354006F6A38 /* MGAppDelegate.swift in Sources */,
-				708B380329B0937600E24312 /* MGSniffingSettingView.swift in Sources */,
+				70C4E59229D3D55700D1A52D /* MGConfigurationPersistentModel.swift in Sources */,
+				708B380329B0937600E24312 /* MGInboundView.swift in Sources */,
 				70DE0D7029A62A5800B3E343 /* MGPacketTunnelManager.swift in Sources */,
 				70B89C3A29C1AB18003DA577 /* MGNetworkSettingView.swift in Sources */,
 				70F82CED29CD75BB0072B334 /* MGQRCodeScannerView.swift in Sources */,
 				708B380829B0AA6200E24312 /* MGAssetSettingView.swift in Sources */,
-				70B89C1B29C17C06003DA577 /* MGSniffingViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

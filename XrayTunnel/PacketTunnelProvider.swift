@@ -55,7 +55,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
         guard FileManager.default.createFile(atPath: configurationFilePath, contents: data) else {
             throw NSError.newError("Xray 配置文件写入失败")
         }
-        let log = MGLogModel.current
+        let log = MGConfiguration.Log.currentValue()
         XraySetupLogger(self, log.accessLogEnabled, log.dnsLogEnabled, log.errorLogSeverity.rawValue)
         XraySetenv("XRAY_LOCATION_CONFIG", MGConstant.cachesDirectory.path(percentEncoded: false), nil)
         XraySetenv("XRAY_LOCATION_ASSET", MGConstant.assetDirectory.path(percentEncoded: false), nil)
@@ -141,7 +141,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
     }
     
     func onGeneralMessage(_ severity: Int, message: String?) {
-        let level = MGLogModel.Severity(rawValue: severity) ?? .none
+        let level = MGConfiguration.Log.Severity(rawValue: severity) ?? .none
         guard let message = message, !message.isEmpty else {
             return
         }
@@ -178,7 +178,11 @@ extension MGConfiguration.Model {
     
     func buildConfigurationData(inboundPort: Int) throws -> Data {
         var configuration: [String: Any] = [:]
-        configuration["inbounds"] = [try self.buildInbound(inboundPort: inboundPort)]
+        var inbound = MGConfiguration.Inbound.currentValue()
+        if inbound.sniffing.destOverride.count == 4 {
+            inbound.sniffing.destOverride = [MGConfiguration.Inbound.DestinationOverride(rawValue: "fakedns+others")]
+        }
+        configuration["inbounds"] = [try JSONSerialization.jsonObject(with: try JSONEncoder().encode(inbound))]
         var route = MGRouteModel.current
         route.rules = route.rules.filter(\.__enabled__)
         configuration["routing"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(route))
@@ -192,20 +196,6 @@ extension MGConfiguration.Model {
             try self.buildBlockOutbound()
         ]
         return try JSONSerialization.data(withJSONObject: configuration, options: .prettyPrinted)
-    }
-    
-    private func buildInbound(inboundPort: Int) throws -> Any {
-        var inbound: [String: Any] = [:]
-        inbound["listen"] = "[::1]"
-        inbound["protocol"] = "socks"
-        inbound["settings"] = [
-            "udp": true,
-            "auth": "noauth"
-        ]
-        inbound["tag"] = "socks-in"
-        inbound["port"] = inboundPort
-        inbound["sniffing"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(MGSniffingModel.current))
-        return inbound
     }
     
     private func buildProxyOutbound() throws -> Any {

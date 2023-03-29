@@ -25,7 +25,7 @@ struct MGToggleButton: View {
                 isOn.wrappedValue.toggle()
             }
             .onChange(of: isOn.wrappedValue) { newValue in
-                withAnimation(.easeIn(duration: 0.05)) {
+                withAnimation(.easeIn(duration: 0.1)) {
                     self.localState = newValue
                 }
             }

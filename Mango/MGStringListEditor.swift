@@ -18,27 +18,21 @@ struct MGStringListEditor: View {
         .onDelete { offsets in
             self.strings.remove(atOffsets: offsets)
         }
-        HStack(spacing: 18) {
-            Image(systemName: "plus.circle.fill")
-                .resizable()
-                .frame(width: 18, height: 18)
-                .foregroundColor(.green)
-                .offset(CGSize(width: 1, height: 0))
-            TextField("", text: $value)
-                .onSubmit {
-                    let temp = self.value.trimmingCharacters(in: .whitespacesAndNewlines)
-                    DispatchQueue.main.async {
-                        self.value = ""
-                    }
-                    guard !temp.isEmpty else {
-                        return
-                    }
-                    guard !self.strings.contains(where: { $0 == temp }) else {
-                        return
-                    }
-                    self.strings.append(temp)
+        TextField(placeholder ?? "Input new element here", text: $value)
+            .onSubmit {
+                let temp = self.value.trimmingCharacters(in: .whitespacesAndNewlines)
+                DispatchQueue.main.async {
+                    self.value = ""
                 }
-                .multilineTextAlignment(.leading)
-        }
+                guard !temp.isEmpty else {
+                    return
+                }
+                guard !self.strings.contains(where: { $0 == temp }) else {
+                    return
+                }
+                self.strings.append(temp)
+            }
+            .multilineTextAlignment(.leading)
+            .listRowInsets(EdgeInsets(top: 0, leading: 52, bottom: 0, trailing: 16))
     }
 }
