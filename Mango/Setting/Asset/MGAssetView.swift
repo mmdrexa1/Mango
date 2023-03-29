@@ -49,9 +49,9 @@ struct MGAssetView: View {
         .fileImporter(isPresented: $assetViewModel.isFileImporterPresented, allowedContentTypes: [.dat], allowsMultipleSelection: true) { result in
             do {
                 try assetViewModel.importLocalFiles(urls: try result.get())
-                MGNotification.send(title: "", subtitle: "", body: "资源导入成功")
+                MGNotification.send(title: "", subtitle: "", body: "Asset imported successfully")
             } catch {
-                MGNotification.send(title: "", subtitle: "", body: "资源导入失败, 原因: \(error.localizedDescription)")
+                MGNotification.send(title: "", subtitle: "", body: "Asset imported failed, Reason: \(error.localizedDescription)")
             }
         }
         .toolbar {
