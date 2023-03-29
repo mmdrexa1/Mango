@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MGDNSEntranceView: View {
     
-    @StateObject private var dnsViewModel = MGDNSViewModel()
+    @StateObject private var dnsViewModel = MGConfigurationPersistentViewModel<MGConfiguration.DNS>()
     
     var body: some View {
         NavigationLink {

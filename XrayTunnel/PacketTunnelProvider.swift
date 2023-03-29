@@ -34,7 +34,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
             }
             return settings
         }()
-        settings.dnsSettings = NEDNSSettings(servers: MGDNSModel.current.__osLocalDNS__)
+        settings.dnsSettings = NEDNSSettings(servers: MGConfiguration.DNS.currentValue().__osLocalDNS__)
         try await self.setTunnelNetworkSettings(settings)
         do {
             try self.startXray(inboundPort: netowrk.inboundPort)
@@ -186,7 +186,7 @@ extension MGConfiguration.Model {
         var route = MGConfiguration.Route.currentValue()
         route.rules = route.rules.filter(\.__enabled__)
         configuration["routing"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(route))
-        let dns = MGDNSModel.current
+        let dns = MGConfiguration.DNS.currentValue()
         if dns.__enable__ {
             configuration["dns"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(dns))
         }

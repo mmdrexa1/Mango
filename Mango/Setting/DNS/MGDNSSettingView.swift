@@ -2,70 +2,91 @@ import SwiftUI
 
 struct MGDNSSettingView: View {
     
-    @EnvironmentObject  private var packetTunnelManager: MGPacketTunnelManager
-    @ObservedObject private var dnsViewModel: MGDNSViewModel
+    @ObservedObject private var dnsViewModel: MGConfigurationPersistentViewModel<MGConfiguration.DNS>
     
     @State private var localDNS: String = ""
     
-    init(dnsViewModel: MGDNSViewModel) {
+    init(dnsViewModel: MGConfigurationPersistentViewModel<MGConfiguration.DNS>) {
         self._dnsViewModel = ObservedObject(initialValue: dnsViewModel)
     }
     
     var body: some View {
         Form {
             Section {
-                MGStringListEditor(strings: $dnsViewModel.__osLocalDNS__, placeholder: nil)
+                MGStringListEditor(strings: $dnsViewModel.model.__osLocalDNS__, placeholder: nil)
             } header: {
                 Text("SYSTEM")
             }
             Section {
                 MGDisclosureGroup {
-                    ForEach($dnsViewModel.hosts) { host in
+                    ForEach(Binding(get: {
+                        dnsViewModel.model.hosts ?? []
+                    }, set: { value in
+                        dnsViewModel.model.hosts = value
+                    })) { host in
                         MGDNSHostItemView(host: host)
                     }
                     .onMove { from, to in
-                        dnsViewModel.hosts.move(fromOffsets: from, toOffset: to)
+                        dnsViewModel.model.hosts?.move(fromOffsets: from, toOffset: to)
                     }
                     .onDelete { offsets in
-                        dnsViewModel.hosts.remove(atOffsets: offsets)
+                        dnsViewModel.model.hosts?.remove(atOffsets: offsets)
                     }
                     Button("Add") {
                         withAnimation {
-                            dnsViewModel.hosts.append(MGDNSModel.Host())
+                            if dnsViewModel.model.hosts == nil {
+                                dnsViewModel.model.hosts = [MGConfiguration.DNS.Host()]
+
+                            } else {
+                                dnsViewModel.model.hosts?.append(MGConfiguration.DNS.Host())
+                            }
                         }
                     }
                     .listRowInsets(EdgeInsets(top: 0, leading: 52, bottom: 0, trailing: 16))
                 } label: {
-                    LabeledContent("Hosts", value: "\(dnsViewModel.hosts.count)")
+                    LabeledContent("Hosts", value: "\(dnsViewModel.model.hosts?.count ?? 0)")
                 }
                 MGDisclosureGroup {
-                    ForEach($dnsViewModel.servers) { server in
+                    ForEach(Binding(get: {
+                        dnsViewModel.model.servers ?? []
+                    }, set: { value in
+                        dnsViewModel.model.servers = value
+                    })) { server in
                         MGDNSServerItemView(server: server)
                     }
                     .onMove { from, to in
-                        dnsViewModel.servers.move(fromOffsets: from, toOffset: to)
+                        dnsViewModel.model.servers?.move(fromOffsets: from, toOffset: to)
                     }
                     .onDelete { offsets in
-                        dnsViewModel.servers.remove(atOffsets: offsets)
+                        dnsViewModel.model.servers?.remove(atOffsets: offsets)
                     }
                     Button("Add") {
                         withAnimation {
-                            dnsViewModel.servers.append(MGDNSModel.Server())
+                            if dnsViewModel.model.servers == nil {
+                                dnsViewModel.model.servers = [MGConfiguration.DNS.Server()]
+
+                            } else {
+                                dnsViewModel.model.servers?.append(MGConfiguration.DNS.Server())
+                            }
                         }
                     }
                     .listRowInsets(EdgeInsets(top: 0, leading: 52, bottom: 0, trailing: 16))
                 } label: {
-                    LabeledContent("Servers", value: "\(dnsViewModel.servers.count)")
+                    LabeledContent("Servers", value: "\(dnsViewModel.model.servers?.count ?? 0)")
                 }
-                
                 LabeledContent {
-                    TextField("", text: $dnsViewModel.clientIp)
+                    TextField("", text: Binding(get: {
+                        dnsViewModel.model.clientIp ?? ""
+                    }, set: { value in
+                        let reval = value.trimmingCharacters(in: .whitespacesAndNewlines)
+                        dnsViewModel.model.clientIp = reval.isEmpty ? nil : reval
+                    }))
                 } label: {
                     Text("Client IP")
                 }
                 LabeledContent {
-                    Picker("Query Strategy", selection: $dnsViewModel.queryStrategy) {
-                        ForEach(MGDNSModel.QueryStrategy.allCases) { strategy in
+                    Picker("Query Strategy", selection: $dnsViewModel.model.queryStrategy) {
+                        ForEach(MGConfiguration.DNS.QueryStrategy.allCases) { strategy in
                             Text(strategy.description)
                         }
                     }
@@ -74,9 +95,9 @@ struct MGDNSSettingView: View {
                 } label: {
                     Text("Query Strategy")
                 }
-                Toggle("Cache", isOn: $dnsViewModel.disableCache)
-                Toggle("Fallback", isOn: $dnsViewModel.disableFallback)
-                Toggle("Fallback If Match", isOn: $dnsViewModel.disableFallbackIfMatch)
+                Toggle("Cache", isOn: $dnsViewModel.model.disableCache)
+                Toggle("Fallback", isOn: $dnsViewModel.model.disableFallback)
+                Toggle("Fallback If Match", isOn: $dnsViewModel.model.disableFallbackIfMatch)
             } header: {
                 Text("XRAY")
             }
@@ -91,7 +112,7 @@ struct MGDNSSettingView: View {
 
 struct MGDNSHostItemView: View {
     
-    @Binding var host: MGDNSModel.Host
+    @Binding var host: MGConfiguration.DNS.Host
     
     @State private var isPresented: Bool = false
     
@@ -112,7 +133,7 @@ struct MGDNSHostItemView: View {
 
 struct MGDNSHostView: View {
     
-    @Binding var host: MGDNSModel.Host
+    @Binding var host: MGConfiguration.DNS.Host
         
     var body: some View {
         NavigationStack {
@@ -140,7 +161,7 @@ struct MGDNSHostView: View {
 
 struct MGDNSServerItemView: View {
     
-    @Binding var server: MGDNSModel.Server
+    @Binding var server: MGConfiguration.DNS.Server
     
     @State private var isPresented: Bool = false
     
@@ -161,7 +182,7 @@ struct MGDNSServerItemView: View {
 
 struct MGDNSServerView: View {
     
-    @Binding var server: MGDNSModel.Server
+    @Binding var server: MGConfiguration.DNS.Server
         
     var body: some View {
         NavigationStack {
