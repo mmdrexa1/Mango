@@ -13,9 +13,9 @@ struct MGDNSSettingView: View {
     var body: some View {
         Form {
             Section {
-                MGStringListEditor(strings: $dnsViewModel.model.__osLocalDNS__, placeholder: nil)
+                Toggle("Enaled", isOn: $dnsViewModel.model.__enabled__)
             } header: {
-                Text("SYSTEM")
+                Text("State")
             }
             Section {
                 MGDisclosureGroup {
@@ -99,7 +99,7 @@ struct MGDNSSettingView: View {
                 Toggle("Fallback", isOn: $dnsViewModel.model.disableFallback)
                 Toggle("Fallback If Match", isOn: $dnsViewModel.model.disableFallbackIfMatch)
             } header: {
-                Text("XRAY")
+                Text("Settings")
             }
         }
         .lineLimit(1)

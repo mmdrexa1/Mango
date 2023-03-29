@@ -80,8 +80,7 @@ extension MGConfiguration {
             public var values: [String] = []
         }
         
-        public var __osLocalDNS__: [String]
-        public var __enable__: Bool
+        public var __enabled__: Bool
         
         public var hosts: [Host]?
         public var servers: [Server]?
@@ -94,8 +93,7 @@ extension MGConfiguration {
         
         
         private enum CodingKeys: String, CodingKey {
-            case __osLocalDNS__
-            case __enable__
+            case __enabled__
             case hosts
             case servers
             case clientIp
@@ -107,8 +105,7 @@ extension MGConfiguration {
         }
         
         public init(
-            __osLocalDNS__: [String] = ["1.1.1.1"],
-            __enable__: Bool = false,
+            __enabled__: Bool = false,
             hosts: [Host]? = nil,
             servers: [Server]? = nil,
             clientIp: String? = nil,
@@ -117,8 +114,7 @@ extension MGConfiguration {
             disableFallback: Bool = false,
             disableFallbackIfMatch: Bool = false
         ) {
-            self.__osLocalDNS__ = __osLocalDNS__
-            self.__enable__ = __enable__
+            self.__enabled__ = __enabled__
             self.hosts = hosts
             self.servers = servers
             self.clientIp = clientIp
@@ -131,8 +127,7 @@ extension MGConfiguration {
         
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            self.__osLocalDNS__ = try container.decode([String].self, forKey: .__osLocalDNS__)
-            self.__enable__ = try container.decode(Bool.self, forKey: .__enable__)
+            self.__enabled__ = try container.decode(Bool.self, forKey: .__enabled__)
             let mapping = try container.decode(Optional<[String: [String]]>.self, forKey: .hosts)
             self.hosts = mapping.flatMap({ mapping in
                 mapping.reduce(into: [Host]()) { result, pair in
@@ -151,8 +146,7 @@ extension MGConfiguration {
         
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(self.__osLocalDNS__, forKey: .__osLocalDNS__)
-            try container.encode(self.__enable__, forKey: .__enable__)
+            try container.encode(self.__enabled__, forKey: .__enabled__)
             let mapping = self.hosts.flatMap { hosts in
                 hosts.reduce(into: [String: [String]]()) { result, host in
                     result[host.key] = host.values
