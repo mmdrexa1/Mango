@@ -190,11 +190,19 @@ extension MGConfiguration.Model {
         if dns.__enabled__ {
             configuration["dns"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(dns))
         }
-        configuration["outbounds"] = [
-            try self.buildProxyOutbound(),
-            try self.buildDirectOutbound(),
-            try self.buildBlockOutbound()
-        ]
+        let outbound = MGConfiguration.Outbound.currentValue()
+        configuration["outbounds"] = try outbound.order.map { tag in
+            switch tag {
+            case .proxy:
+                return try self.buildProxyOutbound()
+            case .direct:
+                return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.freedom))
+            case .block:
+                return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.blackhole))
+            case .dns:
+                return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.dns))
+            }
+        }
         return try JSONSerialization.data(withJSONObject: configuration, options: .prettyPrinted)
     }
     
@@ -275,19 +283,5 @@ extension MGConfiguration.Model {
         }
         proxy["streamSettings"] = streamSettings
         return proxy
-    }
-    
-    private func buildDirectOutbound() throws -> Any {
-        return [
-            "tag": "direct",
-            "protocol": "freedom"
-        ]
-    }
-    
-    private func buildBlockOutbound() throws -> Any {
-        return [
-            "tag": "block",
-            "protocol": "blackhole"
-        ]
     }
 }
