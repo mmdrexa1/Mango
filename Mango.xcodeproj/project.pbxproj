@@ -59,6 +59,8 @@
 		70C4E5CB29D42D4A00D1A52D /* MGAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5C829D42D4A00D1A52D /* MGAssetView.swift */; };
 		70C4E5CC29D42D4A00D1A52D /* MGAssetEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5C929D42D4A00D1A52D /* MGAssetEntranceView.swift */; };
 		70C4E5CD29D42D4A00D1A52D /* MGAssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5CA29D42D4A00D1A52D /* MGAssetViewModel.swift */; };
+		70C4E5CF29D433DD00D1A52D /* MGConfiguration+Outbound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5CE29D433DD00D1A52D /* MGConfiguration+Outbound.swift */; };
+		70C4E5D029D433E100D1A52D /* MGConfiguration+Outbound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5CE29D433DD00D1A52D /* MGConfiguration+Outbound.swift */; };
 		70C9ED9D29501D5C00B6995B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70C9ED9C29501D5C00B6995B /* Assets.xcassets */; };
 		70C9EDA029501D5C00B6995B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70C9ED9F29501D5C00B6995B /* Preview Assets.xcassets */; };
 		70C9EDD82951587D00B6995B /* MGVPNResettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C9EDD72951587D00B6995B /* MGVPNResettingView.swift */; };
@@ -176,6 +178,7 @@
 		70C4E5C829D42D4A00D1A52D /* MGAssetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MGAssetView.swift; sourceTree = "<group>"; };
 		70C4E5C929D42D4A00D1A52D /* MGAssetEntranceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MGAssetEntranceView.swift; sourceTree = "<group>"; };
 		70C4E5CA29D42D4A00D1A52D /* MGAssetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MGAssetViewModel.swift; sourceTree = "<group>"; };
+		70C4E5CE29D433DD00D1A52D /* MGConfiguration+Outbound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGConfiguration+Outbound.swift"; sourceTree = "<group>"; };
 		70C9ED9529501D5B00B6995B /* Mango.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mango.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70C9ED9C29501D5C00B6995B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		70C9ED9F29501D5C00B6995B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -399,6 +402,7 @@
 				70C4E58829D2FDE300D1A52D /* MGConfiguration+Inbound.swift */,
 				70C4E5B729D3F74F00D1A52D /* MGConfiguration+DNS.swift */,
 				70C4E59429D3DBBC00D1A52D /* MGConfiguration+Route.swift */,
+				70C4E5CE29D433DD00D1A52D /* MGConfiguration+Outbound.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -582,6 +586,7 @@
 				7069E01F29ADEAA30012C435 /* PacketTunnelProvider.swift in Sources */,
 				70CEB89929A30C79003436C2 /* MGConstant.swift in Sources */,
 				70B89C3429C1A918003DA577 /* MGNetworkModel.swift in Sources */,
+				70C4E5D029D433E100D1A52D /* MGConfiguration+Outbound.swift in Sources */,
 				70C4E58A29D2FDE300D1A52D /* MGConfiguration+Inbound.swift in Sources */,
 				706A6D6829C6AEAA00523A07 /* MGConfiguration.swift in Sources */,
 				70C4E59629D3DBBC00D1A52D /* MGConfiguration+Route.swift in Sources */,
@@ -642,6 +647,7 @@
 				70C4E5CD29D42D4A00D1A52D /* MGAssetViewModel.swift in Sources */,
 				7000C6DE295D5F690005626E /* MGConnectedDurationView.swift in Sources */,
 				70B89C3029C19FF3003DA577 /* MGLogSettingView.swift in Sources */,
+				70C4E5CF29D433DD00D1A52D /* MGConfiguration+Outbound.swift in Sources */,
 				70C4E5B829D3F74F00D1A52D /* MGConfiguration+DNS.swift in Sources */,
 				70F82CE029CC059C0072B334 /* MGDNSEntranceView.swift in Sources */,
 				70DE0D6829A6114B00B3E343 /* MGApp.swift in Sources */,
