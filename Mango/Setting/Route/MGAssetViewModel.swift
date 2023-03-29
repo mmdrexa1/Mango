@@ -18,6 +18,7 @@ class MGAssetViewModel: ObservableObject {
     }
     
     @Published var items: [Item] = []
+    @Published var isFileImporterPresented: Bool = false
     
     init() {}
     
