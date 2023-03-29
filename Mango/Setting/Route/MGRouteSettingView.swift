@@ -2,31 +2,30 @@ import SwiftUI
 
 struct MGRouteSettingView: View {
     
-    @EnvironmentObject  private var packetTunnelManager:    MGPacketTunnelManager
-    @ObservedObject     private var routeViewModel:         MGRouteViewModel
+    @ObservedObject private var routeViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Route>
     
-    init(routeViewModel: MGRouteViewModel) {
+    init(routeViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Route>) {
         self._routeViewModel = ObservedObject(initialValue: routeViewModel)
     }
     
     var body: some View {
         Form {
             Section {
-                Picker("解析策略", selection: $routeViewModel.domainStrategy) {
-                    ForEach(MGRouteModel.DomainStrategy.allCases) { strategy in
+                Picker("Strategy", selection: $routeViewModel.model.domainStrategy) {
+                    ForEach(MGConfiguration.Route.DomainStrategy.allCases) { strategy in
                         Text(strategy.description)
                     }
                 }
-                Picker("匹配算法", selection: $routeViewModel.domainMatcher) {
-                    ForEach(MGRouteModel.DomainMatcher.allCases) { strategy in
+                Picker("Matcher", selection: $routeViewModel.model.domainMatcher) {
+                    ForEach(MGConfiguration.Route.DomainMatcher.allCases) { strategy in
                         Text(strategy.description)
                     }
                 }
             } header: {
-                Text("域名")
+                Text("Domain")
             }
             Section {
-                ForEach($routeViewModel.rules) { rule in
+                ForEach($routeViewModel.model.rules) { rule in
                     NavigationLink {
                         MGRouteRuleSettingView(rule: rule)
                     } label: {
@@ -47,61 +46,48 @@ struct MGRouteSettingView: View {
                     }
                 }
                 .onMove { from, to in
-                    routeViewModel.rules.move(fromOffsets: from, toOffset: to)
+                    routeViewModel.model.rules.move(fromOffsets: from, toOffset: to)
                 }
                 .onDelete { offsets in
-                    routeViewModel.rules.remove(atOffsets: offsets)
+                    routeViewModel.model.rules.remove(atOffsets: offsets)
                 }
-                Button("添加规则") {
+                Button("Add New Rule") {
                     withAnimation {
-                        var rule = MGRouteModel.Rule()
+                        var rule = MGConfiguration.Route.Rule()
                         rule.__name__ = rule.__defaultName__
-                        routeViewModel.rules.append(rule)
+                        routeViewModel.model.rules.append(rule)
                     }
                 }
             } header: {
                 HStack {
-                    Text("规则")
+                    Text("Rules")
                     Spacer()
                     EditButton()
                         .font(.callout)
                         .buttonStyle(.plain)
                         .foregroundColor(.accentColor)
-                        .disabled(routeViewModel.rules.isEmpty)
+                        .disabled(routeViewModel.model.rules.isEmpty)
                 }
             }
         }
         .onDisappear {
-            self.routeViewModel.save {
-                guard let status = packetTunnelManager.status, status == .connected else {
-                    return
-                }
-                packetTunnelManager.stop()
-                Task(priority: .userInitiated) {
-                    do {
-                        try await Task.sleep(for: .milliseconds(500))
-                        try await packetTunnelManager.start()
-                    } catch {
-                        debugPrint(error.localizedDescription)
-                    }
-                }
-            }
+            self.routeViewModel.save()
         }
         .lineLimit(1)
-        .navigationTitle(Text("路由设置"))
+        .navigationTitle(Text("Route"))
         .navigationBarTitleDisplayMode(.large)
     }
 }
 
 struct MGRouteRuleSettingView: View {
     
-    @Binding var rule: MGRouteModel.Rule
+    @Binding var rule: MGConfiguration.Route.Rule
     
     var body: some View {
         Form {
             Section {
                 Picker("Matcher", selection: $rule.domainMatcher) {
-                    ForEach(MGRouteModel.DomainMatcher.allCases) { strategy in
+                    ForEach(MGConfiguration.Route.DomainMatcher.allCases) { strategy in
                         Text(strategy.description)
                     }
                 }
@@ -147,95 +133,57 @@ struct MGRouteRuleSettingView: View {
                 }
                 LabeledContent("Network") {
                     HStack {
-                        MGToggleButton(title: "TCP", isOn: Binding(get: {
-                            let reval = rule.network ?? ""
-                            return reval.components(separatedBy: ",").contains("tcp")
-                        }, set: { newValue in
-                            let reval = rule.network ?? ""
-                            var components = reval.components(separatedBy: ",")
-                            components.removeAll(where: { $0 == "tcp" })
-                            if newValue {
-                                components.insert("tcp", at: 0)
-                            }
-                            rule.network = components.isEmpty ? nil : String(components.joined(separator: ","))
-                        }))
-                        MGToggleButton(title: "UDP", isOn: Binding(get: {
-                            let reval = rule.network ?? ""
-                            return reval.components(separatedBy: ",").contains("udp")
-                        }, set: { newValue in
-                            let reval = rule.network ?? ""
-                            var components = reval.components(separatedBy: ",")
-                            components.removeAll(where: { $0 == "udp" })
-                            if newValue {
-                                components.insert("udp", at: 0)
-                            }
-                            rule.network = components.isEmpty ? nil : String(components.joined(separator: ","))
-                        }))
+                        ForEach(MGConfiguration.Route.Network.allCases) { network in
+                            MGToggleButton(title: network.description, isOn: Binding(get: {
+                                return rule.network.flatMap { $0.contains(network) } ?? false
+                            }, set: { value in
+                                var reval = rule.network ?? []
+                                if value {
+                                    reval.insert(network)
+                                } else {
+                                    reval.remove(network)
+                                }
+                                rule.network = reval.isEmpty ? nil : reval
+                            }))
+                        }
                     }
                 }
                 LabeledContent("Protocol") {
                     HStack {
-                        MGToggleButton(title: "HTTP", isOn: Binding(get: {
-                            let reval = rule.protocol ?? []
-                            return reval.contains("http")
-                        }, set: { newValue in
-                            var reval = rule.protocol ?? []
-                            reval.removeAll(where: { $0 == "http" })
-                            if newValue {
-                                reval.append("http")
-                            }
-                            rule.protocol = reval.isEmpty ? nil : reval
-                        }))
-                        MGToggleButton(title: "TLS", isOn: Binding(get: {
-                            let reval = rule.protocol ?? []
-                            return reval.contains("tls")
-                        }, set: { newValue in
-                            var reval = rule.protocol ?? []
-                            reval.removeAll(where: { $0 == "tls" })
-                            if newValue {
-                                reval.append("tls")
-                            }
-                            rule.protocol = reval.isEmpty ? nil : reval
-                        }))
-                        MGToggleButton(title: "Bittorrent", isOn: Binding(get: {
-                            let reval = rule.protocol ?? []
-                            return reval.contains("bittorrent")
-                        }, set: { newValue in
-                            var reval = rule.protocol ?? []
-                            reval.removeAll(where: { $0 == "bittorrent" })
-                            if newValue {
-                                reval.append("bittorrent")
-                            }
-                            rule.protocol = reval.isEmpty ? nil : reval
-                        }))
+                        ForEach(MGConfiguration.Route.Protocol_.allCases) { protocol_ in
+                            MGToggleButton(title: protocol_.description, isOn: Binding(get: {
+                                return rule.protocol.flatMap { $0.contains(protocol_) } ?? false
+                            }, set: { value in
+                                var reval = rule.protocol ?? []
+                                if value {
+                                    reval.insert(protocol_)
+                                } else {
+                                    reval.remove(protocol_)
+                                }
+                                rule.protocol = reval.isEmpty ? nil : reval
+                            }))
+                        }
                     }
                 }
                 LabeledContent("Inbound") {
-                    MGToggleButton(title: MGRouteModel.Inbound.socks.description, isOn: Binding(get: {
-                        let reval = rule.inboundTag ?? []
-                        return reval.contains(MGRouteModel.Inbound.socks)
-                    }, set: { newValue in
-                        var reval = rule.inboundTag ?? []
-                        reval.removeAll(where: { $0 == .socks })
-                        if newValue {
-                            reval.append(.socks)
+                    HStack {
+                        ForEach(MGConfiguration.Route.Inbound.allCases) { inbound in
+                            MGToggleButton(title: inbound.description, isOn: Binding(get: {
+                                return rule.inboundTag.flatMap { $0.contains(inbound) } ?? false
+                            }, set: { value in
+                                var reval = rule.inboundTag ?? []
+                                if value {
+                                    reval.insert(inbound)
+                                } else {
+                                    reval.remove(inbound)
+                                }
+                                rule.inboundTag = reval.isEmpty ? nil : reval
+                            }))
                         }
-                        rule.inboundTag = reval.isEmpty ? nil : reval
-                    }))
-                    MGToggleButton(title: MGRouteModel.Inbound.dns.description, isOn: Binding(get: {
-                        let reval = rule.inboundTag ?? []
-                        return reval.contains(.dns)
-                    }, set: { newValue in
-                        var reval = rule.inboundTag ?? []
-                        reval.removeAll(where: { $0 == .dns })
-                        if newValue {
-                            reval.append(.dns)
-                        }
-                        rule.inboundTag = reval.isEmpty ? nil : reval
-                    }))
+                    }
                 }
                 Picker("Outbound", selection: $rule.outboundTag) {
-                    ForEach(MGRouteModel.Outbound.allCases) { outbound in
+                    ForEach(MGConfiguration.Route.Outbound.allCases) { outbound in
                         Text(outbound.description)
                     }
                 }

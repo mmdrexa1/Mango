@@ -35,21 +35,3 @@ struct MGLogSettingView: View {
         }
     }
 }
-
-extension MGConfiguration.Log.Severity: CustomStringConvertible {
-    
-    public var description: String {
-        switch self {
-        case .none:
-            return "None"
-        case .error:
-            return "Error"
-        case .warning:
-            return "Warning"
-        case .info:
-            return "Info"
-        case .debug:
-            return "Debug"
-        }
-    }
-}

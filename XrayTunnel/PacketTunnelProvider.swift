@@ -183,7 +183,7 @@ extension MGConfiguration.Model {
             inbound.sniffing.destOverride = [MGConfiguration.Inbound.DestinationOverride(rawValue: "fakedns+others")]
         }
         configuration["inbounds"] = [try JSONSerialization.jsonObject(with: try JSONEncoder().encode(inbound))]
-        var route = MGRouteModel.current
+        var route = MGConfiguration.Route.currentValue()
         route.rules = route.rules.filter(\.__enabled__)
         configuration["routing"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(route))
         let dns = MGDNSModel.current
