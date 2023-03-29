@@ -6,15 +6,15 @@ extension MGConfiguration {
         
         public enum Tag: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
             public var id: Self { self }
-            case direct, proxy, block, dns
+            case proxy, freedom, blackhole, dns
             public var description: String {
                 switch self {
-                case .direct:
-                    return "Direct"
                 case .proxy:
                     return "Proxy"
-                case .block:
-                    return "Block"
+                case .freedom:
+                    return "Freedom"
+                case .blackhole:
+                    return "Blackhole"
                 case .dns:
                     return "DNS"
                 }
@@ -24,21 +24,21 @@ extension MGConfiguration {
         public struct DNSSettings: Codable, Equatable {
             public enum Network: String, Codable, Identifiable, CustomStringConvertible, CaseIterable {
                 public var id: Self { self }
-                case tcp, udp, none
+                case tcp, udp, inherit
                 public var description: String {
                     switch self {
                     case .tcp:
                         return "TCP"
                     case .udp:
                         return "UDP"
-                    case .none:
-                        return "None"
+                    case .inherit:
+                        return "Inherit"
                     }
                 }
                 
                 public init(from decoder: Decoder) throws {
                     let coantiner = try decoder.singleValueContainer()
-                    self = Network(rawValue: try coantiner.decode(String.self)) ?? .none
+                    self = Network(rawValue: try coantiner.decode(String.self)) ?? .inherit
                 }
                 
                 public func encode(to encoder: Encoder) throws {
@@ -50,7 +50,7 @@ extension MGConfiguration {
                     }
                 }
             }
-            public var network: Network = .none
+            public var network: Network = .inherit
             public var address: String?
             public var port: Int?
         }
@@ -106,9 +106,9 @@ extension MGConfiguration {
         public typealias Blackhole  = __Outbound__<BlackholeSettings>
         
         public var dns          = DNS(protocol: "dns", settings: DNSSettings(), tag: .dns)
-        public var freedom      = Freedom(protocol: "freedom", settings: FreedomSettings(), tag: .direct)
-        public var blackhole    = Blackhole(protocol: "blackhole", settings: BlackholeSettings(), tag: .block)
-        public var order        = [Tag.proxy, Tag.direct, Tag.block, Tag.dns]
+        public var freedom      = Freedom(protocol: "freedom", settings: FreedomSettings(), tag: .freedom)
+        public var blackhole    = Blackhole(protocol: "blackhole", settings: BlackholeSettings(), tag: .blackhole)
+        public var order: [Tag] = [.proxy, .freedom, .blackhole, .dns]
 
         public static let storeKey = "XRAY_OUTBOUND_DATA"
         

@@ -10,7 +10,7 @@ struct MGOutboundView: View {
     
     var body: some View {
         Form {
-            Section("Direct") {
+            Section("Freedom") {
                 LabeledContent("Domain Strategy") {
                     Picker("", selection: $outboundViewModel.model.freedom.settings.domainStrategy) {
                         ForEach(MGConfiguration.Outbound.FreedomSettings.DomainStrategy.allCases) { ds in
@@ -29,7 +29,7 @@ struct MGOutboundView: View {
                     }))
                 }
             }
-            Section("Block") {
+            Section("Blackhole") {
                 LabeledContent("Response Type") {
                     Picker("", selection: $outboundViewModel.model.blackhole.settings.response.type) {
                         ForEach(MGConfiguration.Outbound.BlackholeSettings.ResponseType.allCases) { rt in
@@ -70,7 +70,11 @@ struct MGOutboundView: View {
             }
             Section("Order") {
                 ForEach(outboundViewModel.model.order) { tag in
-                    Text(tag.description)
+                    if tag == .dns {
+                        EmptyView()
+                    } else {
+                        Text(tag.description)
+                    }
                 }
                 .onMove { from, to in
                     outboundViewModel.model.order.move(fromOffsets: from, toOffset: to)

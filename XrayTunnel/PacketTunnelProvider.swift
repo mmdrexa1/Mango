@@ -193,9 +193,9 @@ extension MGConfiguration.Model {
             switch tag {
             case .proxy:
                 return try self.buildProxyOutbound()
-            case .direct:
+            case .freedom:
                 return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.freedom))
-            case .block:
+            case .blackhole:
                 return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.blackhole))
             case .dns:
                 return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.dns))
