@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MGResetView: View {
+struct MGVPNResettingView: View {
     
     @EnvironmentObject private var packetTunnelManager: MGPacketTunnelManager
 

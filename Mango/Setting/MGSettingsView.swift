@@ -35,7 +35,7 @@ struct MGSettingsView: View {
                     Text("版本")
                 }
                 Section {
-                    MGResetView()
+                    MGVPNResettingView()
                 }
             }
             .navigationTitle(Text("设置"))

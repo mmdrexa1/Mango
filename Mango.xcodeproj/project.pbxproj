@@ -55,7 +55,7 @@
 		70C4E5B929D3F74F00D1A52D /* MGConfiguration+DNS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5B729D3F74F00D1A52D /* MGConfiguration+DNS.swift */; };
 		70C9ED9D29501D5C00B6995B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70C9ED9C29501D5C00B6995B /* Assets.xcassets */; };
 		70C9EDA029501D5C00B6995B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70C9ED9F29501D5C00B6995B /* Preview Assets.xcassets */; };
-		70C9EDD82951587D00B6995B /* MGResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C9EDD72951587D00B6995B /* MGResetView.swift */; };
+		70C9EDD82951587D00B6995B /* MGVPNResettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C9EDD72951587D00B6995B /* MGVPNResettingView.swift */; };
 		70CEB89329A0C7BA003436C2 /* MGConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CEB89229A0C7BA003436C2 /* MGConstant.swift */; };
 		70CEB89929A30C79003436C2 /* MGConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CEB89229A0C7BA003436C2 /* MGConstant.swift */; };
 		70DE0D6829A6114B00B3E343 /* MGApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DE0D6729A6114B00B3E343 /* MGApp.swift */; };
@@ -169,7 +169,7 @@
 		70C9ED9F29501D5C00B6995B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		70C9EDAC29502C6500B6995B /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		70C9EDBF2950303900B6995B /* Mango.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mango.entitlements; sourceTree = "<group>"; };
-		70C9EDD72951587D00B6995B /* MGResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGResetView.swift; sourceTree = "<group>"; };
+		70C9EDD72951587D00B6995B /* MGVPNResettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGVPNResettingView.swift; sourceTree = "<group>"; };
 		70CEB89229A0C7BA003436C2 /* MGConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGConstant.swift; sourceTree = "<group>"; };
 		70DE0D6729A6114B00B3E343 /* MGApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGApp.swift; sourceTree = "<group>"; };
 		70DE0D6D29A6155C00B3E343 /* MGPresentedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGPresentedButton.swift; sourceTree = "<group>"; };
@@ -378,7 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				70DE0D7729A6306100B3E343 /* MGSettingsView.swift */,
-				70C9EDD72951587D00B6995B /* MGResetView.swift */,
+				70C9EDD72951587D00B6995B /* MGVPNResettingView.swift */,
 				70B89C3129C1A8F9003DA577 /* Network */,
 				70B89C2729C19D27003DA577 /* Log */,
 				70B89C1929C17BEC003DA577 /* Inbound */,
@@ -565,7 +565,7 @@
 				702A08AE29D287E700B0BBF8 /* MGDisclosureGroup.swift in Sources */,
 				70DE0D7329A62C4E00B3E343 /* MGHomeView.swift in Sources */,
 				70F82CB629C2E6B40072B334 /* MGContentView.swift in Sources */,
-				70C9EDD82951587D00B6995B /* MGResetView.swift in Sources */,
+				70C9EDD82951587D00B6995B /* MGVPNResettingView.swift in Sources */,
 				702A08A629D182CF00B0BBF8 /* MGDNSSettingView.swift in Sources */,
 				70F82CDC29CAC2D50072B334 /* MGCreateOrUpdateConfigurationViewModel.swift in Sources */,
 				70B89C1E29C17C29003DA577 /* MGInboundEntranceView.swift in Sources */,
