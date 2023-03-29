@@ -12,11 +12,12 @@ struct MGSettingsView: View {
                 }
                 Section {
                     MGLogEntranceView()
-                    MGInboundEntranceView()
                     MGDNSEntranceView()
                     MGRouteEntranceView()
+                    MGInboundEntranceView()
                     MGOutboundEntranceView()
                     MGStatisticsEntranceView()
+                    MGAssetEntranceView()
                 } header: {
                     Text("内核")
                 }
