@@ -46,16 +46,10 @@ extension Bundle {
 }
 
 extension UTType {
-    
-    public static let toml  : UTType = UTType(filenameExtension: "toml")!
-    
-    public static let mmdb  : UTType = UTType(filenameExtension: "mmdb")!
-    
-    public static let dat   : UTType = UTType(filenameExtension: "dat")!
+    public static let dat: UTType = UTType(filenameExtension: "dat")!
 }
 
 extension UserDefaults {
-    
     public static let shared: UserDefaults = UserDefaults(suiteName: MGConstant.suiteName)!
 }
 
