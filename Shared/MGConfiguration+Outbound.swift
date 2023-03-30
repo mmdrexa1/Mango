@@ -241,13 +241,13 @@ extension MGConfiguration {
                     }
                 }
             }
-            public struct TLS: Codable, Equatable {
+            public struct TLSSettings: Codable, Equatable {
                 public var serverName: String = ""
                 public var allowInsecure: Bool = false
                 public var alpn: Set<ALPN> = Set(ALPN.allCases)
                 public var fingerprint: Fingerprint = .chrome
             }
-            public struct Reality: Codable, Equatable {
+            public struct RealitySettings: Codable, Equatable {
                 public var show: Bool = false
                 public var fingerprint: Fingerprint = .chrome
                 public var serverName: String = ""
@@ -255,13 +255,13 @@ extension MGConfiguration {
                 public var shortId: String = ""
                 public var spiderX: String = ""
             }
-            public struct TCP: Codable, Equatable {
+            public struct TCPSettings: Codable, Equatable {
                 public struct Header: Codable, Equatable {
                     public var type: HeaderType = .none
                 }
                 public var header = Header()
             }
-            public struct KCP: Codable, Equatable {
+            public struct KCPSettings: Codable, Equatable {
                 public struct Header: Codable, Equatable {
                     public var type: HeaderType = .none
                 }
@@ -275,15 +275,15 @@ extension MGConfiguration {
                 public var header = Header()
                 public var seed: String = ""
             }
-            public struct WS: Codable, Equatable {
+            public struct WSSettings: Codable, Equatable {
                 public var path: String = "/"
                 public var headers: [String: String] = [:]
             }
-            public struct HTTP: Codable, Equatable {
+            public struct HTTPSettings: Codable, Equatable {
                 public var host: [String] = []
                 public var path: String = "/"
             }
-            public struct QUIC: Codable, Equatable {
+            public struct QUICSettings: Codable, Equatable {
                 public struct Header: Codable, Equatable {
                     public var type: HeaderType = .none
                 }
@@ -291,20 +291,20 @@ extension MGConfiguration {
                 public var key: String = ""
                 public var header = Header()
             }
-            public struct GRPC: Codable, Equatable {
+            public struct GRPCSettings: Codable, Equatable {
                 public var serviceName: String = ""
                 public var multiMode: Bool = false
             }
             public var security = Security.none
-            public var tlsSettings = TLS()
-            public var realitySettings = Reality()
+            public var tlsSettings = TLSSettings()
+            public var realitySettings = RealitySettings()
             public var transport = Transport.tcp
-            public var tcpSettings = TCP()
-            public var kcpSettings = KCP()
-            public var wsSettings = WS()
-            public var httpSettings = HTTP()
-            public var quicSettings = QUIC()
-            public var grpcSettings = GRPC()
+            public var tcpSettings = TCPSettings()
+            public var kcpSettings = KCPSettings()
+            public var wsSettings = WSSettings()
+            public var httpSettings = HTTPSettings()
+            public var quicSettings = QUICSettings()
+            public var grpcSettings = GRPCSettings()
             private enum CodingKeys: String, CodingKey {
                 case security
                 case tlsSettings
@@ -325,24 +325,24 @@ extension MGConfiguration {
                 case .none:
                     break
                 case .tls:
-                    self.tlsSettings = try container.decode(TLS.self, forKey: .tlsSettings)
+                    self.tlsSettings = try container.decode(TLSSettings.self, forKey: .tlsSettings)
                 case .reality:
-                    self.realitySettings = try container.decode(Reality.self, forKey: .realitySettings)
+                    self.realitySettings = try container.decode(RealitySettings.self, forKey: .realitySettings)
                 }
                 self.transport = try container.decode(Transport.self, forKey: .transport)
                 switch self.transport {
                 case .tcp:
-                    self.tcpSettings = try container.decode(TCP.self, forKey: .tcpSettings)
+                    self.tcpSettings = try container.decode(TCPSettings.self, forKey: .tcpSettings)
                 case .kcp:
-                    self.kcpSettings = try container.decode(KCP.self, forKey: .kcpSettings)
+                    self.kcpSettings = try container.decode(KCPSettings.self, forKey: .kcpSettings)
                 case .ws:
-                    self.wsSettings = try container.decode(WS.self, forKey: .wsSettings)
+                    self.wsSettings = try container.decode(WSSettings.self, forKey: .wsSettings)
                 case .http:
-                    self.httpSettings = try container.decode(HTTP.self, forKey: .httpSettings)
+                    self.httpSettings = try container.decode(HTTPSettings.self, forKey: .httpSettings)
                 case .quic:
-                    self.quicSettings = try container.decode(QUIC.self, forKey: .quicSettings)
+                    self.quicSettings = try container.decode(QUICSettings.self, forKey: .quicSettings)
                 case .grpc:
-                    self.grpcSettings = try container.decode(GRPC.self, forKey: .grpcSettings)
+                    self.grpcSettings = try container.decode(GRPCSettings.self, forKey: .grpcSettings)
                 }
             }
             public func encode(to encoder: Encoder) throws {

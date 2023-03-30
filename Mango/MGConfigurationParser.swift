@@ -152,17 +152,17 @@ extension MGConfiguration.Outbound.Shadowsocks: MGConfigurationParserProtocol {
     }
 }
 
-extension MGConfiguration.Outbound.StreamSettings.TCP: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.StreamSettings.TCPSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        return MGConfiguration.Outbound.StreamSettings.TCP()
+        return MGConfiguration.Outbound.StreamSettings.TCPSettings()
     }
 }
 
-extension MGConfiguration.Outbound.StreamSettings.KCP: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.StreamSettings.KCPSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var kcp = MGConfiguration.Outbound.StreamSettings.KCP()
+        var kcp = MGConfiguration.Outbound.StreamSettings.KCPSettings()
         if let value = components.queryMapping["headerType"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType 不能为空")
@@ -189,10 +189,10 @@ extension MGConfiguration.Outbound.StreamSettings.KCP: MGConfigurationParserProt
     }
 }
 
-extension MGConfiguration.Outbound.StreamSettings.WS: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.StreamSettings.WSSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var ws = MGConfiguration.Outbound.StreamSettings.WS()
+        var ws = MGConfiguration.Outbound.StreamSettings.WSSettings()
         if let value = components.queryMapping["host"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) host 不能为空")
@@ -215,10 +215,10 @@ extension MGConfiguration.Outbound.StreamSettings.WS: MGConfigurationParserProto
     }
 }
 
-extension MGConfiguration.Outbound.StreamSettings.HTTP: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.StreamSettings.HTTPSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var http = MGConfiguration.Outbound.StreamSettings.HTTP()
+        var http = MGConfiguration.Outbound.StreamSettings.HTTPSettings()
         if let value = components.queryMapping["host"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) host 不能为空")
@@ -241,10 +241,10 @@ extension MGConfiguration.Outbound.StreamSettings.HTTP: MGConfigurationParserPro
     }
 }
 
-extension MGConfiguration.Outbound.StreamSettings.QUIC: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.StreamSettings.QUICSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var quic = MGConfiguration.Outbound.StreamSettings.QUIC()
+        var quic = MGConfiguration.Outbound.StreamSettings.QUICSettings()
         if let value = components.queryMapping["quicSecurity"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) quicSecurity 不能为空")
@@ -287,10 +287,10 @@ extension MGConfiguration.Outbound.StreamSettings.QUIC: MGConfigurationParserPro
     }
 }
 
-extension MGConfiguration.Outbound.StreamSettings.GRPC: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.StreamSettings.GRPCSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var grpc = MGConfiguration.Outbound.StreamSettings.GRPC()
+        var grpc = MGConfiguration.Outbound.StreamSettings.GRPCSettings()
         if let value = components.queryMapping["serviceName"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) serviceName 不能为空")
@@ -313,10 +313,10 @@ extension MGConfiguration.Outbound.StreamSettings.GRPC: MGConfigurationParserPro
     }
 }
 
-extension MGConfiguration.Outbound.StreamSettings.TLS: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.StreamSettings.TLSSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var tls = MGConfiguration.Outbound.StreamSettings.TLS()
+        var tls = MGConfiguration.Outbound.StreamSettings.TLSSettings()
         if let value = components.queryMapping["sni"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) TLS sni 不能为空")
@@ -352,10 +352,10 @@ extension MGConfiguration.Outbound.StreamSettings.TLS: MGConfigurationParserProt
     }
 }
 
-extension MGConfiguration.Outbound.StreamSettings.Reality: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.StreamSettings.RealitySettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var reality = MGConfiguration.Outbound.StreamSettings.Reality()
+        var reality = MGConfiguration.Outbound.StreamSettings.RealitySettings()
         if let value = components.queryMapping["pbk"], !value.isEmpty {
             reality.publicKey = value
         } else {
@@ -408,26 +408,26 @@ extension MGConfiguration.Outbound {
         self.streamSettings.transport = components.transport
         switch self.streamSettings.transport {
         case .tcp:
-            self.streamSettings.tcpSettings = try MGConfiguration.Outbound.StreamSettings.TCP.parse(with: components)
+            self.streamSettings.tcpSettings = try MGConfiguration.Outbound.StreamSettings.TCPSettings.parse(with: components)
         case .kcp:
-            self.streamSettings.kcpSettings = try MGConfiguration.Outbound.StreamSettings.KCP.parse(with: components)
+            self.streamSettings.kcpSettings = try MGConfiguration.Outbound.StreamSettings.KCPSettings.parse(with: components)
         case .ws:
-            self.streamSettings.wsSettings = try MGConfiguration.Outbound.StreamSettings.WS.parse(with: components)
+            self.streamSettings.wsSettings = try MGConfiguration.Outbound.StreamSettings.WSSettings.parse(with: components)
         case .http:
-            self.streamSettings.httpSettings = try MGConfiguration.Outbound.StreamSettings.HTTP.parse(with: components)
+            self.streamSettings.httpSettings = try MGConfiguration.Outbound.StreamSettings.HTTPSettings.parse(with: components)
         case .quic:
-            self.streamSettings.quicSettings = try MGConfiguration.Outbound.StreamSettings.QUIC.parse(with: components)
+            self.streamSettings.quicSettings = try MGConfiguration.Outbound.StreamSettings.QUICSettings.parse(with: components)
         case .grpc:
-            self.streamSettings.grpcSettings = try MGConfiguration.Outbound.StreamSettings.GRPC.parse(with: components)
+            self.streamSettings.grpcSettings = try MGConfiguration.Outbound.StreamSettings.GRPCSettings.parse(with: components)
         }
         self.streamSettings.security = components.security
         switch self.streamSettings.security {
         case .none:
             break
         case .tls:
-            self.streamSettings.tlsSettings = try MGConfiguration.Outbound.StreamSettings.TLS.parse(with: components)
+            self.streamSettings.tlsSettings = try MGConfiguration.Outbound.StreamSettings.TLSSettings.parse(with: components)
         case .reality:
-            self.streamSettings.realitySettings = try MGConfiguration.Outbound.StreamSettings.Reality.parse(with: components)
+            self.streamSettings.realitySettings = try MGConfiguration.Outbound.StreamSettings.RealitySettings.parse(with: components)
         }
     }
 }
