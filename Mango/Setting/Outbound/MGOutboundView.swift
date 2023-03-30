@@ -12,8 +12,8 @@ struct MGOutboundView: View {
         Form {
             Section("Freedom") {
                 LabeledContent("Domain Strategy") {
-                    Picker("", selection: $outboundViewModel.model.freedom.settings.domainStrategy) {
-                        ForEach(MGConfiguration.Outbounds.FreedomSettings.DomainStrategy.allCases) { ds in
+                    Picker("", selection: $outboundViewModel.model.freedom.freedom.domainStrategy) {
+                        ForEach(MGConfiguration.Outbound.Freedom.DomainStrategy.allCases) { ds in
                             Text(ds.description)
                         }
                     }
@@ -22,17 +22,17 @@ struct MGOutboundView: View {
                 }
                 LabeledContent("Redirect") {
                     TextField("", text: Binding(get: {
-                        outboundViewModel.model.freedom.settings.redirect ?? ""
+                        outboundViewModel.model.freedom.freedom.redirect ?? ""
                     }, set: { value in
                         let reval = value.trimmingCharacters(in: .whitespacesAndNewlines)
-                        outboundViewModel.model.freedom.settings.redirect = reval.isEmpty ? nil : reval
+                        outboundViewModel.model.freedom.freedom.redirect = reval.isEmpty ? nil : reval
                     }))
                 }
             }
             Section("Blackhole") {
                 LabeledContent("Response Type") {
-                    Picker("", selection: $outboundViewModel.model.blackhole.settings.response.type) {
-                        ForEach(MGConfiguration.Outbounds.BlackholeSettings.ResponseType.allCases) { rt in
+                    Picker("", selection: $outboundViewModel.model.blackhole.blackhole.response.type) {
+                        ForEach(MGConfiguration.Outbound.Blackhole.ResponseType.allCases) { rt in
                             Text(rt.description)
                         }
                     }
@@ -42,8 +42,8 @@ struct MGOutboundView: View {
             }
             Section("DNS") {
                 LabeledContent("Network") {
-                    Picker("", selection: $outboundViewModel.model.dns.settings.network) {
-                        ForEach(MGConfiguration.Outbounds.DNSSettings.Network.allCases) { nw in
+                    Picker("", selection: $outboundViewModel.model.dns.dns.network) {
+                        ForEach(MGConfiguration.Outbound.DNS.Network.allCases) { nw in
                             Text(nw.description)
                         }
                     }
@@ -52,18 +52,18 @@ struct MGOutboundView: View {
                 }
                 LabeledContent("Address") {
                     TextField("", text: Binding(get: {
-                        outboundViewModel.model.dns.settings.address ?? ""
+                        outboundViewModel.model.dns.dns.address ?? ""
                     }, set: { value in
                         let reval = value.trimmingCharacters(in: .whitespacesAndNewlines)
-                        outboundViewModel.model.dns.settings.address = reval.isEmpty ? nil : reval
+                        outboundViewModel.model.dns.dns.address = reval.isEmpty ? nil : reval
                     }))
                 }
                 LabeledContent("Port") {
                     TextField("", text: Binding(get: {
-                        outboundViewModel.model.dns.settings.port.flatMap({ "\($0)" }) ?? ""
+                        outboundViewModel.model.dns.dns.port.flatMap({ "\($0)" }) ?? ""
                     }, set: { value in
                         let reval = value.trimmingCharacters(in: .whitespacesAndNewlines)
-                        outboundViewModel.model.dns.settings.port = Int(reval)
+                        outboundViewModel.model.dns.dns.port = Int(reval)
                     }))
                     .keyboardType(.numberPad)
                 }

@@ -32,9 +32,9 @@ struct MGSecurityView: View {
                                 },
                                 set: { value in
                                     if value {
-                                        vm.model.streamSettings.tlsSettings.alpn.append(alpn)
+                                        vm.model.streamSettings.tlsSettings.alpn.insert(alpn)
                                     } else {
-                                        vm.model.streamSettings.tlsSettings.alpn.removeAll(where: { $0 == alpn })
+                                        vm.model.streamSettings.tlsSettings.alpn.remove(alpn)
                                     }
                                 }
                             )

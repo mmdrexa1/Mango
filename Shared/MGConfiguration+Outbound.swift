@@ -244,7 +244,7 @@ extension MGConfiguration {
             public struct TLS: Codable, Equatable {
                 public var serverName: String = ""
                 public var allowInsecure: Bool = false
-                public var alpn: [ALPN] = ALPN.allCases
+                public var alpn: Set<ALPN> = Set(ALPN.allCases)
                 public var fingerprint: Fingerprint = .chrome
             }
             public struct Reality: Codable, Equatable {
@@ -525,7 +525,6 @@ extension MGConfiguration {
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.protocolType = try container.decode(ProtocolType.self, forKey: .protocolType)
-            let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
             switch self.protocolType {
             case .vless:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)

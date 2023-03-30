@@ -343,10 +343,10 @@ extension MGConfiguration.Outbound.StreamSettings.TLS: MGConfigurationParserProt
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) TLS alpn 不能为空")
             } else {
-                tls.alpn = value.components(separatedBy: ",").compactMap(MGConfiguration.Outbound.StreamSettings.ALPN.init(rawValue:))
+                tls.alpn = Set(value.components(separatedBy: ",").compactMap(MGConfiguration.Outbound.StreamSettings.ALPN.init(rawValue:)))
             }
         } else {
-            tls.alpn = MGConfiguration.Outbound.StreamSettings.ALPN.allCases
+            tls.alpn = Set(MGConfiguration.Outbound.StreamSettings.ALPN.allCases)
         }
         return tls
     }
