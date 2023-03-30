@@ -2,7 +2,7 @@ import Foundation
 
 extension MGConfiguration {
     
-    public struct Outbound: Codable, Equatable, MGConfigurationPersistentModel {
+    public struct Outbounds: Codable, Equatable, MGConfigurationPersistentModel {
         
         public enum Tag: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
             public var id: Self { self }
@@ -112,6 +112,6 @@ extension MGConfiguration {
 
         public static let storeKey = "XRAY_OUTBOUND_DATA"
         
-        public static let defaultValue = MGConfiguration.Outbound()
+        public static let defaultValue = MGConfiguration.Outbounds()
     }
 }

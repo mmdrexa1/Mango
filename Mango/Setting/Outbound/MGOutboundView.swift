@@ -2,9 +2,9 @@ import SwiftUI
 
 struct MGOutboundView: View {
     
-    @ObservedObject private var outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Outbound>
+    @ObservedObject private var outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Outbounds>
     
-    init(outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Outbound>) {
+    init(outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Outbounds>) {
         self._outboundViewModel = ObservedObject(initialValue: outboundViewModel)
     }
     
@@ -13,7 +13,7 @@ struct MGOutboundView: View {
             Section("Freedom") {
                 LabeledContent("Domain Strategy") {
                     Picker("", selection: $outboundViewModel.model.freedom.settings.domainStrategy) {
-                        ForEach(MGConfiguration.Outbound.FreedomSettings.DomainStrategy.allCases) { ds in
+                        ForEach(MGConfiguration.Outbounds.FreedomSettings.DomainStrategy.allCases) { ds in
                             Text(ds.description)
                         }
                     }
@@ -32,7 +32,7 @@ struct MGOutboundView: View {
             Section("Blackhole") {
                 LabeledContent("Response Type") {
                     Picker("", selection: $outboundViewModel.model.blackhole.settings.response.type) {
-                        ForEach(MGConfiguration.Outbound.BlackholeSettings.ResponseType.allCases) { rt in
+                        ForEach(MGConfiguration.Outbounds.BlackholeSettings.ResponseType.allCases) { rt in
                             Text(rt.description)
                         }
                     }
@@ -43,7 +43,7 @@ struct MGOutboundView: View {
             Section("DNS") {
                 LabeledContent("Network") {
                     Picker("", selection: $outboundViewModel.model.dns.settings.network) {
-                        ForEach(MGConfiguration.Outbound.DNSSettings.Network.allCases) { nw in
+                        ForEach(MGConfiguration.Outbounds.DNSSettings.Network.allCases) { nw in
                             Text(nw.description)
                         }
                     }

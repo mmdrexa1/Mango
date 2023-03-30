@@ -188,7 +188,7 @@ extension MGConfiguration.Model {
         configuration["routing"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(route))
         let dns = MGConfiguration.DNS.currentValue()
         configuration["dns"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(dns))
-        let outbound = MGConfiguration.Outbound.currentValue()
+        let outbound = MGConfiguration.Outbounds.currentValue()
         configuration["outbounds"] = try outbound.order.map { tag in
             switch tag {
             case .proxy:
