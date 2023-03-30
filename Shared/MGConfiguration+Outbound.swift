@@ -2,6 +2,88 @@ import Foundation
 
 extension MGConfiguration {    
     public struct Outbound: Codable {
+        public enum Tag: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+            public var id: Self { self }
+            case proxy, freedom, blackhole, dns
+            public var description: String {
+                switch self {
+                case .proxy:
+                    return "Proxy"
+                case .freedom:
+                    return "Freedom"
+                case .blackhole:
+                    return "Blackhole"
+                case .dns:
+                    return "DNS"
+                }
+            }
+        }
+        public struct DNS: Codable, Equatable {
+            public enum Network: String, Codable, Identifiable, CustomStringConvertible, CaseIterable {
+                public var id: Self { self }
+                case tcp, udp, inherit
+                public var description: String {
+                    switch self {
+                    case .tcp:
+                        return "TCP"
+                    case .udp:
+                        return "UDP"
+                    case .inherit:
+                        return "Inherit"
+                    }
+                }
+                public init(from decoder: Decoder) throws {
+                    let coantiner = try decoder.singleValueContainer()
+                    self = Network(rawValue: try coantiner.decode(String.self)) ?? .inherit
+                }
+                public func encode(to encoder: Encoder) throws {
+                    if self == .none {
+                        return
+                    } else {
+                        var container = encoder.singleValueContainer()
+                        try container.encode(self.rawValue)
+                    }
+                }
+            }
+            public var network: Network = .inherit
+            public var address: String?
+            public var port: Int?
+        }
+        
+        public struct Freedom: Codable, Equatable {
+            public enum DomainStrategy: String, Codable, Identifiable, CaseIterable, CustomStringConvertible {
+                public var id: Self { self }
+                case asIs       = "AsIs"
+                case useIP      = "UseIP"
+                case useIPv4    = "UseIPv4"
+                case useIPv6    = "UseIPv6"
+                public var description: String {
+                    self.rawValue
+                }
+            }
+            public var domainStrategy: DomainStrategy = .asIs
+            public var redirect: String?
+            public var userLevel: Int = 0
+        }
+        
+        public struct Blackhole: Codable, Equatable {
+            public enum ResponseType: String, Codable, Identifiable, CaseIterable, CustomStringConvertible {
+                public var id: Self { self }
+                case none, http
+                public var description: String {
+                    switch self {
+                    case .none:
+                        return "None"
+                    case .http:
+                        return "HTTP"
+                    }
+                }
+            }
+            public struct Response: Codable, Equatable {
+                public var type: ResponseType = .none
+            }
+            public var response = Response()
+        }
         public enum ProtocolType: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
             public var id: Self { self }
             case vless, vmess, trojan, shadowsocks, dns, freedom, blackhole
@@ -425,6 +507,9 @@ extension MGConfiguration {
         public var vmess = VMess()
         public var trojan = Trojan()
         public var shadowsocks = Shadowsocks()
+        public var dns = DNS()
+        public var freedom = Freedom()
+        public var blackhole = Blackhole()
         public var streamSettings = StreamSettings()
         private enum CodingKeys: String, CodingKey {
             case protocolType = "protocol"
@@ -440,47 +525,68 @@ extension MGConfiguration {
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.protocolType = try container.decode(ProtocolType.self, forKey: .protocolType)
-            self.streamSettings = try container.decode(StreamSettings.self, forKey: .streamSettings)
             let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
             switch self.protocolType {
             case .vless:
+                let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 self.vless = try settings.decode([VLESS].self, forKey: .vnext)[0]
             case .vmess:
+                let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 self.vmess = try settings.decode([VMess].self, forKey: .vnext)[0]
             case .trojan:
+                let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 self.trojan = try settings.decode([Trojan].self, forKey: .servers)[0]
             case .shadowsocks:
+                let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 self.shadowsocks = try settings.decode([Shadowsocks].self, forKey: .servers)[0]
             case .dns:
-                break
+                self.dns = try container.decode(DNS.self, forKey: .settings)
             case .freedom:
-                break
+                self.freedom = try container.decode(Freedom.self, forKey: .settings)
             case .blackhole:
+                self.blackhole = try container.decode(Blackhole.self, forKey: .settings)
+            }
+            switch self.protocolType {
+            case .vless, .vmess, .trojan, .shadowsocks:
+                self.streamSettings = try container.decode(StreamSettings.self, forKey: .streamSettings)
+            case .dns, .freedom, .blackhole:
                 break
             }
         }
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(self.protocolType, forKey: .protocolType)
-            var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
             switch self.protocolType {
             case .vless:
+                var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 try settings.encode([self.vless], forKey: .vnext)
             case .vmess:
+                var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 try settings.encode([self.vmess], forKey: .vnext)
             case .trojan:
+                var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 try settings.encode([self.trojan], forKey: .servers)
             case .shadowsocks:
+                var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 try settings.encode([self.shadowsocks], forKey: .servers)
             case .dns:
-                break
+                try container.encode(self.dns, forKey: .settings)
             case .freedom:
-                break
+                try container.encode(self.freedom, forKey: .settings)
             case .blackhole:
-                break
+                try container.encode(self.blackhole, forKey: .settings)
             }
-            try container.encode(self.streamSettings, forKey: .streamSettings)
-            try container.encode("proxy", forKey: .tag)
+            switch self.protocolType {
+            case .vless, .vmess, .trojan, .shadowsocks:
+                try container.encode(self.streamSettings, forKey: .streamSettings)
+                try container.encode(Tag.proxy.rawValue, forKey: .tag)
+            case .dns:
+                try container.encode(Tag.dns.rawValue, forKey: .tag)
+            case .freedom:
+                try container.encode(Tag.freedom.rawValue, forKey: .tag)
+            case .blackhole:
+                try container.encode(Tag.blackhole.rawValue, forKey: .tag)
+            }
         }
     }
 }
