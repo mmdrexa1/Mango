@@ -23,7 +23,7 @@ struct MGShadowsocksView: View {
         }
         LabeledContent("Method") {
             Picker("Method", selection: $vm.model.shadowsocks.method) {
-                ForEach(MGConfiguration.Outbound.Shadowsocks.Method.allCases) { method in
+                ForEach(MGConfiguration.Outbound.ShadowsocksSettings.Method.allCases) { method in
                     Text(method.description)
                 }
             }

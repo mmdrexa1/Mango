@@ -23,7 +23,7 @@ struct MGVLESSView: View {
         }
         LabeledContent("Flow") {
             Picker("Flow", selection: $vm.model.vless.user.flow) {
-                ForEach(MGConfiguration.Outbound.VLESS.Flow.allCases) { encryption in
+                ForEach(MGConfiguration.Outbound.VLESSSettings.Flow.allCases) { encryption in
                     Text(encryption.description)
                 }
             }

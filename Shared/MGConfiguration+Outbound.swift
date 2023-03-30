@@ -373,7 +373,7 @@ extension MGConfiguration {
                 }
             }
         }
-        public struct VLESS: Codable, Equatable {
+        public struct VLESSSettings: Codable, Equatable {
             public enum Flow: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
                 public var id: Self { self }
                 case none                       = "none"
@@ -421,7 +421,7 @@ extension MGConfiguration {
                 try container.encode([self.user], forKey: .users)
             }
         }
-        public struct VMess: Codable, Equatable {
+        public struct VMessSettings: Codable, Equatable {
             public struct User: Codable, Equatable {
                 public var id: String = ""
                 public var alterId: Int = 0
@@ -453,13 +453,13 @@ extension MGConfiguration {
                 try container.encode([self.user], forKey: .users)
             }
         }
-        public struct Trojan: Codable, Equatable {
+        public struct TrojanSettings: Codable, Equatable {
             public var address: String = ""
             public var port: Int = 443
             public var password: String = ""
             public var email: String = ""
         }
-        public struct Shadowsocks: Codable, Equatable {
+        public struct ShadowsocksSettings: Codable, Equatable {
             public enum Method: String, Identifiable, CustomStringConvertible, Codable, CaseIterable, Equatable {
                 public var id: Self { self }
                 case _2022_blake3_aes_128_gcm       = "2022-blake3-aes-128-gcm"
@@ -503,10 +503,10 @@ extension MGConfiguration {
             public var level: Int = 0
         }
         public var protocolType: ProtocolType
-        public var vless = VLESS()
-        public var vmess = VMess()
-        public var trojan = Trojan()
-        public var shadowsocks = Shadowsocks()
+        public var vless = VLESSSettings()
+        public var vmess = VMessSettings()
+        public var trojan = TrojanSettings()
+        public var shadowsocks = ShadowsocksSettings()
         public var dns = DNS()
         public var freedom = Freedom()
         public var blackhole = Blackhole()
@@ -528,16 +528,16 @@ extension MGConfiguration {
             switch self.protocolType {
             case .vless:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                self.vless = try settings.decode([VLESS].self, forKey: .vnext)[0]
+                self.vless = try settings.decode([VLESSSettings].self, forKey: .vnext)[0]
             case .vmess:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                self.vmess = try settings.decode([VMess].self, forKey: .vnext)[0]
+                self.vmess = try settings.decode([VMessSettings].self, forKey: .vnext)[0]
             case .trojan:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                self.trojan = try settings.decode([Trojan].self, forKey: .servers)[0]
+                self.trojan = try settings.decode([TrojanSettings].self, forKey: .servers)[0]
             case .shadowsocks:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                self.shadowsocks = try settings.decode([Shadowsocks].self, forKey: .servers)[0]
+                self.shadowsocks = try settings.decode([ShadowsocksSettings].self, forKey: .servers)[0]
             case .dns:
                 self.dns = try container.decode(DNS.self, forKey: .settings)
             case .freedom:

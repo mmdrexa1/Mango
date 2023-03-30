@@ -77,10 +77,10 @@ protocol MGConfigurationParserProtocol {
     static func parse(with components: MGConfiguration.URLComponents) throws -> Output
 }
 
-extension MGConfiguration.Outbound.VLESS: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.VLESSSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var vless = MGConfiguration.Outbound.VLESS()
+        var vless = MGConfiguration.Outbound.VLESSSettings()
         vless.address = components.host
         vless.port = components.port
         vless.user.id = components.user
@@ -101,7 +101,7 @@ extension MGConfiguration.Outbound.VLESS: MGConfigurationParserProtocol {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) 流控不能为空")
             } else {
-                if let value = MGConfiguration.Outbound.VLESS.Flow(rawValue: value) {
+                if let value = MGConfiguration.Outbound.VLESSSettings.Flow(rawValue: value) {
                     vless.user.flow = value
                 } else {
                     throw NSError.newError("\(components.protocolType.description) 不支持的流控: \(value)")
@@ -114,10 +114,10 @@ extension MGConfiguration.Outbound.VLESS: MGConfigurationParserProtocol {
     }
 }
 
-extension MGConfiguration.Outbound.VMess: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.VMessSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
-        var vmess = MGConfiguration.Outbound.VMess()
+        var vmess = MGConfiguration.Outbound.VMessSettings()
         vmess.address = components.host
         vmess.port = components.port
         vmess.user.id = components.user
@@ -138,14 +138,14 @@ extension MGConfiguration.Outbound.VMess: MGConfigurationParserProtocol {
     }
 }
 
-extension MGConfiguration.Outbound.Trojan: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.TrojanSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
         throw NSError.newError("Unsupported")
     }
 }
 
-extension MGConfiguration.Outbound.Shadowsocks: MGConfigurationParserProtocol {
+extension MGConfiguration.Outbound.ShadowsocksSettings: MGConfigurationParserProtocol {
         
     static func parse(with components: MGConfiguration.URLComponents) throws -> Self {
         throw NSError.newError("Unsupported")
@@ -395,13 +395,13 @@ extension MGConfiguration.Outbound {
         self.protocolType   = components.protocolType
         switch self.protocolType {
         case .vless:
-            self.vless = try MGConfiguration.Outbound.VLESS.parse(with: components)
+            self.vless = try MGConfiguration.Outbound.VLESSSettings.parse(with: components)
         case .vmess:
-            self.vmess = try MGConfiguration.Outbound.VMess.parse(with: components)
+            self.vmess = try MGConfiguration.Outbound.VMessSettings.parse(with: components)
         case .trojan:
-            self.trojan = try MGConfiguration.Outbound.Trojan.parse(with: components)
+            self.trojan = try MGConfiguration.Outbound.TrojanSettings.parse(with: components)
         case .shadowsocks:
-            self.shadowsocks = try MGConfiguration.Outbound.Shadowsocks.parse(with: components)
+            self.shadowsocks = try MGConfiguration.Outbound.ShadowsocksSettings.parse(with: components)
         case .dns, .freedom, .blackhole:
             fatalError()
         }
