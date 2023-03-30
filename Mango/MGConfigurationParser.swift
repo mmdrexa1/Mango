@@ -402,6 +402,8 @@ extension MGConfiguration.Outbound {
             self.trojan = try MGConfiguration.Outbound.Trojan.parse(with: components)
         case .shadowsocks:
             self.shadowsocks = try MGConfiguration.Outbound.Shadowsocks.parse(with: components)
+        case .dns, .freedom, .blackhole:
+            fatalError()
         }
         self.streamSettings.transport = components.transport
         switch self.streamSettings.transport {

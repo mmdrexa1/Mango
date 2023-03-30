@@ -4,7 +4,7 @@ extension MGConfiguration {
     public struct Outbound: Codable {
         public enum ProtocolType: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
             public var id: Self { self }
-            case vless, vmess, trojan, shadowsocks
+            case vless, vmess, trojan, shadowsocks, dns, freedom, blackhole
             public var description: String {
                 switch self {
                 case .vless:
@@ -15,8 +15,15 @@ extension MGConfiguration {
                     return "Trojan"
                 case .shadowsocks:
                     return "Shadowsocks"
+                case .dns:
+                    return "DNS"
+                case .freedom:
+                    return "Freedom"
+                case .blackhole:
+                    return "Blackhole"
                 }
             }
+            public static let allCases: [MGConfiguration.Outbound.ProtocolType] = [.vless, .vmess, .trojan, .shadowsocks]
         }
         public enum Encryption: String, Identifiable, CustomStringConvertible, Codable {
             public var id: Self { self }
@@ -444,6 +451,12 @@ extension MGConfiguration {
                 self.trojan = try settings.decode([Trojan].self, forKey: .servers)[0]
             case .shadowsocks:
                 self.shadowsocks = try settings.decode([Shadowsocks].self, forKey: .servers)[0]
+            case .dns:
+                break
+            case .freedom:
+                break
+            case .blackhole:
+                break
             }
         }
         public func encode(to encoder: Encoder) throws {
@@ -459,6 +472,12 @@ extension MGConfiguration {
                 try settings.encode([self.trojan], forKey: .servers)
             case .shadowsocks:
                 try settings.encode([self.shadowsocks], forKey: .servers)
+            case .dns:
+                break
+            case .freedom:
+                break
+            case .blackhole:
+                break
             }
             try container.encode(self.streamSettings, forKey: .streamSettings)
             try container.encode("proxy", forKey: .tag)

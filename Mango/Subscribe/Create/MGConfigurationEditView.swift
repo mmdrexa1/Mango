@@ -26,6 +26,8 @@ struct MGConfigurationEditView: View {
                         MGTrojanView(vm: vm)
                     case .shadowsocks:
                         MGShadowsocksView(vm: vm)
+                    case .dns, .freedom, .blackhole:
+                        fatalError()
                     }
                 } header: {
                     Text("Server")

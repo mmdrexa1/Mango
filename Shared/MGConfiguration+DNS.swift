@@ -89,7 +89,6 @@ extension MGConfiguration {
         public var disableFallbackIfMatch: Bool
         public var tag: String
         
-        
         private enum CodingKeys: String, CodingKey {
             case hosts
             case servers

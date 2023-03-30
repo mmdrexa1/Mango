@@ -37,8 +37,8 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
         settings.dnsSettings = NEDNSSettings(servers: ["1.1.1.1"])
         try await self.setTunnelNetworkSettings(settings)
         do {
-            try self.startXray(inboundPort: netowrk.inboundPort)
-            try self.startSocks5Tunnel(serverPort: netowrk.inboundPort)
+            try self.startXray(inboundPort: 8080)
+            try self.startSocks5Tunnel(serverPort: 8080)
         } catch {
             MGNotification.send(title: "", subtitle: "", body: error.localizedDescription)
             throw error
@@ -169,14 +169,51 @@ extension MGConfiguration {
 //        if self.attributes.source.scheme.flatMap(MGConfiguration.Outbound.ProtocolType.init(rawValue:)) == nil {
 //            return data
 //        } else {
-//            let model = try JSONDecoder().decode(MGConfiguration.Model.self, from: data)
+//            let proxy = try JSONSerialization.jsonObject(with: data)
+//            let outbound = try JSONDecoder().decode(MGConfiguration.Outbound.self, from: data)
 //            return try model.buildConfigurationData(inboundPort: inboundPort)
 //        }
     }
 }
 
+//extension MGConfiguration {
+//
+//    struct Model: Encodable {
+//        let dns: DNS
+//        let route: Route
+//        let inbound: Inbound
+//        let outbounds: [Outbound]
+//        init(proxy: Outbound) {
+//            self.dns = MGConfiguration.DNS.currentValue()
+//            self.route = {
+//                var reval = MGConfiguration.Route.currentValue()
+//                reval.rules = reval.rules.filter(\.__enabled__)
+//                return reval
+//            }()
+//            self.inbound = {
+//                var reval = MGConfiguration.Inbound.currentValue()
+//                reval.sniffing.destOverride = {
+//                    if reval.sniffing.destOverride.count == 4 {
+//                        return [Inbound.DestinationOverride(rawValue: "fakedns+others")]
+//                    } else {
+//                        return reval.sniffing.destOverride
+//                    }
+//                }()
+//                return reval
+//            }()
+//            self.outbounds = {
+//                let reval = Outbounds.currentValue()
+//                reval.order.map { tag in
+//                    <#code#>
+//                }
+//                return []
+//            }()
+//        }
+//    }
+//}
+
 //extension MGConfiguration.Model {
-//    
+//
 //    func buildConfigurationData(inboundPort: Int) throws -> Data {
 //        var configuration: [String: Any] = [:]
 //        var inbound = MGConfiguration.Inbound.currentValue()
@@ -204,7 +241,7 @@ extension MGConfiguration {
 //        }
 //        return try JSONSerialization.data(withJSONObject: configuration, options: .prettyPrinted)
 //    }
-//    
+//
 //    private func buildProxyOutbound() throws -> Any {
 //        var proxy: [String: Any] = [:]
 //        proxy["tag"] = "proxy"
