@@ -96,8 +96,8 @@ struct MGConfigurationListView: View {
                         }
                     }
                     .fullScreenCover(item: $protocolType, onDismiss: { configurationListManager.reload() }) { protocolType in
-                        MGCreateOrUpdateConfigurationView(
-                            vm: MGCreateOrUpdateConfigurationViewModel(id: UUID(), protocolType: protocolType)
+                        MGConfigurationEditView(
+                            vm: MGConfigurationEditViewModel(id: UUID(), protocolType: protocolType)
                         )
                     }
                 } header: {
@@ -138,8 +138,8 @@ struct MGConfigurationListView: View {
                 MGConfigurationLoadView(location: location)
             }
             .fullScreenCover(item: $editModel, onDismiss: { configurationListManager.reload() }) { em in
-                MGCreateOrUpdateConfigurationView(
-                    vm: MGCreateOrUpdateConfigurationViewModel(id: em.id, name: em.name, model: em.model)
+                MGConfigurationEditView(
+                    vm: MGConfigurationEditViewModel(id: em.id, name: em.name, model: em.model)
                 )
             }
             .fullScreenCover(isPresented: $isCodeScannerPresented) {

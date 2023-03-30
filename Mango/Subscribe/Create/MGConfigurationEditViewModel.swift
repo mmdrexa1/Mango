@@ -1,6 +1,6 @@
 import Foundation
 
-final class MGCreateOrUpdateConfigurationViewModel: ObservableObject {
+final class MGConfigurationEditViewModel: ObservableObject {
     
     let id: UUID
     @Published var name: String

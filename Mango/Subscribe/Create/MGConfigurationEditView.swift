@@ -1,12 +1,12 @@
 import SwiftUI
 
-struct MGCreateOrUpdateConfigurationView: View {
+struct MGConfigurationEditView: View {
     
-    @ObservedObject private var vm: MGCreateOrUpdateConfigurationViewModel
+    @ObservedObject private var vm: MGConfigurationEditViewModel
     
     @Environment(\.dismiss) private var dismiss
         
-    init(vm: MGCreateOrUpdateConfigurationViewModel) {
+    init(vm: MGConfigurationEditViewModel) {
         self._vm = ObservedObject(initialValue: vm)
     }
     
@@ -19,24 +19,24 @@ struct MGCreateOrUpdateConfigurationView: View {
                     }
                     switch vm.model.protocolType {
                     case .vless:
-                        MGConfigurationVLESSView(vm: vm)
+                        MGVLESSView(vm: vm)
                     case .vmess:
-                        MGConfigurationVMessView(vm: vm)
+                        MGVMessView(vm: vm)
                     case .trojan:
-                        MGConfigurationTrojanView(vm: vm)
+                        MGTrojanView(vm: vm)
                     case .shadowsocks:
-                        MGConfigurationShadowsocksView(vm: vm)
+                        MGShadowsocksView(vm: vm)
                     }
                 } header: {
                     Text("Server")
                 }
                 Section {
-                    MGConfigurationTransportView(vm: vm)
+                    MGTransportView(vm: vm)
                 } header: {
                     Text("Transport")
                 }
                 Section {
-                    MGConfigurationSecurityView(vm: vm)
+                    MGSecurityView(vm: vm)
                 } header: {
                     Text("Security")
                 }

@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct MGConfigurationTrojanView: View {
+struct MGTrojanView: View {
     
-    @ObservedObject private var vm: MGCreateOrUpdateConfigurationViewModel
+    @ObservedObject private var vm: MGConfigurationEditViewModel
     
-    init(vm: MGCreateOrUpdateConfigurationViewModel) {
+    init(vm: MGConfigurationEditViewModel) {
         self._vm = ObservedObject(initialValue: vm)
     }
     
