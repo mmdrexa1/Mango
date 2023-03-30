@@ -308,7 +308,29 @@ extension MGConfiguration {
             }
             public var address: String = ""
             public var port: Int = 443
-            public var users: [User] = [User()]
+            public var user: User = User()
+            private enum CodingKeys: CodingKey {
+                case address
+                case port
+                case users
+            }
+            public init() {}
+            public init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.address = try container.decode(String.self, forKey: .address)
+                self.port = try container.decode(Int.self, forKey: .port)
+                if let first = try container.decode([User].self, forKey: .users).first {
+                    self.user = first
+                } else {
+                    throw NSError.newError("VLESS no user data")
+                }
+            }
+            public func encode(to encoder: Encoder) throws {
+                var container = encoder.container(keyedBy: CodingKeys.self)
+                try container.encode(self.address, forKey: .address)
+                try container.encode(self.port, forKey: .port)
+                try container.encode([self.user], forKey: .users)
+            }
         }
         public struct VMess: Codable {
             public struct User: Codable {
@@ -318,7 +340,29 @@ extension MGConfiguration {
             }
             public var address: String = ""
             public var port: Int = 443
-            public var users: [User] = [User()]
+            public var user: User = User()
+            private enum CodingKeys: CodingKey {
+                case address
+                case port
+                case users
+            }
+            public init() {}
+            public init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.address = try container.decode(String.self, forKey: .address)
+                self.port = try container.decode(Int.self, forKey: .port)
+                if let first = try container.decode([User].self, forKey: .users).first {
+                    self.user = first
+                } else {
+                    throw NSError.newError("VMess no user data")
+                }
+            }
+            public func encode(to encoder: Encoder) throws {
+                var container = encoder.container(keyedBy: CodingKeys.self)
+                try container.encode(self.address, forKey: .address)
+                try container.encode(self.port, forKey: .port)
+                try container.encode([self.user], forKey: .users)
+            }
         }
         public struct Trojan: Codable {
             public var address: String = ""

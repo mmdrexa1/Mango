@@ -83,32 +83,32 @@ extension MGConfiguration.Outbound.VLESS: MGConfigurationParserProtocol {
         var vless = MGConfiguration.Outbound.VLESS()
         vless.address = components.host
         vless.port = components.port
-        vless.users[0].id = components.user
+        vless.user.id = components.user
         if let value = components.queryMapping["encryption"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) 加密算法存在但为空")
             } else {
                 if value == "none" {
-                    vless.users[0].encryption = value
+                    vless.user.encryption = value
                 } else {
                     throw NSError.newError("\(components.protocolType.description) 不支持的加密算法: \(value)")
                 }
             }
         } else {
-            vless.users[0].encryption = "none"
+            vless.user.encryption = "none"
         }
         if let value = components.queryMapping["flow"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) 流控不能为空")
             } else {
                 if let value = MGConfiguration.Outbound.VLESS.Flow(rawValue: value) {
-                    vless.users[0].flow = value
+                    vless.user.flow = value
                 } else {
                     throw NSError.newError("\(components.protocolType.description) 不支持的流控: \(value)")
                 }
             }
         } else {
-            vless.users[0].flow = .none
+            vless.user.flow = .none
         }
         return vless
     }
@@ -120,19 +120,19 @@ extension MGConfiguration.Outbound.VMess: MGConfigurationParserProtocol {
         var vmess = MGConfiguration.Outbound.VMess()
         vmess.address = components.host
         vmess.port = components.port
-        vmess.users[0].id = components.user
+        vmess.user.id = components.user
         if let value = components.queryMapping["encryption"] {
             if value.isEmpty {
                 throw NSError.newError("\(components.protocolType.description) 加密算法不能为空")
             } else {
                 if let value = MGConfiguration.Outbound.Encryption(rawValue: value) {
-                    vmess.users[0].security = value
+                    vmess.user.security = value
                 } else {
                     throw NSError.newError("\(components.protocolType.description) 不支持的加密算法: \(value)")
                 }
             }
         } else {
-            vmess.users[0].security = .auto
+            vmess.user.security = .auto
         }
         return vmess
     }
