@@ -3,13 +3,23 @@ import SwiftUI
 struct MGDisclosureGroup<Label: View, Content: View>: View {
     
     @State private var isExpanded: Bool = false
+    @Binding private var isExpanded__: Bool
     
     private let label: Label
     private let content: Content
     
+    
+    init(isExpanded: Binding<Bool>, @ViewBuilder content: () -> Content, @ViewBuilder label: () -> Label) {
+        self._isExpanded = State(initialValue: isExpanded.wrappedValue)
+        self._isExpanded__ = isExpanded
+        self.content = content()
+        self.label = label()
+    }
+    
     init(@ViewBuilder content: () -> Content, @ViewBuilder label: () -> Label) {
         self.content = content()
         self.label = label()
+        self._isExpanded__ = Binding(get: { false }, set: { _ in })
     }
     
     var body: some View {
@@ -33,5 +43,6 @@ struct MGDisclosureGroup<Label: View, Content: View>: View {
                 self.content
             }
         }
+        .onChange(of: isExpanded, perform: { isExpanded__ = $0 })
     }
 }

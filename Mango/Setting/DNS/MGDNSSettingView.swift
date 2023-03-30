@@ -21,9 +21,6 @@ struct MGDNSSettingView: View {
                     })) { host in
                         MGDNSHostItemView(host: host)
                     }
-                    .onMove { from, to in
-                        dnsViewModel.model.hosts?.move(fromOffsets: from, toOffset: to)
-                    }
                     .onDelete { offsets in
                         dnsViewModel.model.hosts?.remove(atOffsets: offsets)
                     }
@@ -31,7 +28,6 @@ struct MGDNSSettingView: View {
                         withAnimation {
                             if dnsViewModel.model.hosts == nil {
                                 dnsViewModel.model.hosts = [MGConfiguration.DNS.Host()]
-
                             } else {
                                 dnsViewModel.model.hosts?.append(MGConfiguration.DNS.Host())
                             }
@@ -59,7 +55,6 @@ struct MGDNSSettingView: View {
                         withAnimation {
                             if dnsViewModel.model.servers == nil {
                                 dnsViewModel.model.servers = [MGConfiguration.DNS.Server()]
-
                             } else {
                                 dnsViewModel.model.servers?.append(MGConfiguration.DNS.Server())
                             }
