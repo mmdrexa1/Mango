@@ -18,7 +18,7 @@ extension MGConfiguration {
                 }
             }
         }
-        public struct DNS: Codable, Equatable {
+        public struct DNSSettings: Codable, Equatable {
             public enum Network: String, Codable, Identifiable, CustomStringConvertible, CaseIterable, Equatable {
                 public var id: Self { self }
                 case tcp, udp, inherit
@@ -50,7 +50,7 @@ extension MGConfiguration {
             public var port: Int?
         }
         
-        public struct Freedom: Codable, Equatable {
+        public struct FreedomSettings: Codable, Equatable {
             public enum DomainStrategy: String, Codable, Identifiable, CaseIterable, CustomStringConvertible {
                 public var id: Self { self }
                 case asIs       = "AsIs"
@@ -66,7 +66,7 @@ extension MGConfiguration {
             public var userLevel: Int = 0
         }
         
-        public struct Blackhole: Codable, Equatable {
+        public struct BlackholeSettings: Codable, Equatable {
             public enum ResponseType: String, Codable, Identifiable, CaseIterable, CustomStringConvertible {
                 public var id: Self { self }
                 case none, http
@@ -507,9 +507,9 @@ extension MGConfiguration {
         public var vmess = VMessSettings()
         public var trojan = TrojanSettings()
         public var shadowsocks = ShadowsocksSettings()
-        public var dns = DNS()
-        public var freedom = Freedom()
-        public var blackhole = Blackhole()
+        public var dns = DNSSettings()
+        public var freedom = FreedomSettings()
+        public var blackhole = BlackholeSettings()
         public var streamSettings = StreamSettings()
         private enum CodingKeys: String, CodingKey {
             case protocolType = "protocol"
@@ -539,11 +539,11 @@ extension MGConfiguration {
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
                 self.shadowsocks = try settings.decode([ShadowsocksSettings].self, forKey: .servers)[0]
             case .dns:
-                self.dns = try container.decode(DNS.self, forKey: .settings)
+                self.dns = try container.decode(DNSSettings.self, forKey: .settings)
             case .freedom:
-                self.freedom = try container.decode(Freedom.self, forKey: .settings)
+                self.freedom = try container.decode(FreedomSettings.self, forKey: .settings)
             case .blackhole:
-                self.blackhole = try container.decode(Blackhole.self, forKey: .settings)
+                self.blackhole = try container.decode(BlackholeSettings.self, forKey: .settings)
             }
             switch self.protocolType {
             case .vless, .vmess, .trojan, .shadowsocks:

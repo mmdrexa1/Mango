@@ -13,7 +13,7 @@ struct MGOutboundView: View {
             Section("Freedom") {
                 LabeledContent("Domain Strategy") {
                     Picker("", selection: $outboundViewModel.model.freedom.freedom.domainStrategy) {
-                        ForEach(MGConfiguration.Outbound.Freedom.DomainStrategy.allCases) { ds in
+                        ForEach(MGConfiguration.Outbound.FreedomSettings.DomainStrategy.allCases) { ds in
                             Text(ds.description)
                         }
                     }
@@ -32,7 +32,7 @@ struct MGOutboundView: View {
             Section("Blackhole") {
                 LabeledContent("Response Type") {
                     Picker("", selection: $outboundViewModel.model.blackhole.blackhole.response.type) {
-                        ForEach(MGConfiguration.Outbound.Blackhole.ResponseType.allCases) { rt in
+                        ForEach(MGConfiguration.Outbound.BlackholeSettings.ResponseType.allCases) { rt in
                             Text(rt.description)
                         }
                     }
@@ -43,7 +43,7 @@ struct MGOutboundView: View {
             Section("DNS") {
                 LabeledContent("Network") {
                     Picker("", selection: $outboundViewModel.model.dns.dns.network) {
-                        ForEach(MGConfiguration.Outbound.DNS.Network.allCases) { nw in
+                        ForEach(MGConfiguration.Outbound.DNSSettings.Network.allCases) { nw in
                             Text(nw.description)
                         }
                     }
