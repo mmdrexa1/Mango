@@ -187,7 +187,7 @@ extension MGConfiguration.Model {
         route.rules = route.rules.filter(\.__enabled__)
         configuration["routing"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(route))
         let dns = MGConfiguration.DNS.currentValue()
-        configuration["dns"] = dns.__enabled__ ? try JSONSerialization.jsonObject(with: try JSONEncoder().encode(dns)) : nil
+        configuration["dns"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(dns))
         let outbound = MGConfiguration.Outbound.currentValue()
         configuration["outbounds"] = try outbound.order.map { tag in
             switch tag {

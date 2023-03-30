@@ -13,11 +13,6 @@ struct MGDNSSettingView: View {
     var body: some View {
         Form {
             Section {
-                Toggle("Enaled", isOn: $dnsViewModel.model.__enabled__)
-            } header: {
-                Text("State")
-            }
-            Section {
                 MGDisclosureGroup {
                     ForEach(Binding(get: {
                         dnsViewModel.model.hosts ?? []
