@@ -37,22 +37,21 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
         settings.dnsSettings = NEDNSSettings(servers: ["1.1.1.1"])
         try await self.setTunnelNetworkSettings(settings)
         do {
-            try self.startXray(inboundPort: 8080)
-            try self.startSocks5Tunnel(serverPort: 8080)
+            try self.run()
         } catch {
             MGNotification.send(title: "", subtitle: "", body: error.localizedDescription)
             throw error
         }
     }
     
-    private func startXray(inboundPort: Int) throws {
+    private func run() throws {
         guard let id = UserDefaults.shared.string(forKey: MGConfiguration.currentStoreKey), !id.isEmpty else {
             throw NSError.newError("当前无有效配置")
         }
-        let configuration = try MGConfiguration(uuidString: id)
-        let data = try configuration.loadData(inboundPort: inboundPort)
-        let configurationFilePath = MGConstant.cachesDirectory.appending(component: "config.json").path(percentEncoded: false)
-        guard FileManager.default.createFile(atPath: configurationFilePath, contents: data) else {
+        var port: Int = 0
+        let data = try MGConfiguration(uuidString: id).loadData(inboundPort: &port)
+        let path = MGConstant.cachesDirectory.appending(component: "config.json").path(percentEncoded: false)
+        guard FileManager.default.createFile(atPath: path, contents: data) else {
             throw NSError.newError("Xray 配置文件写入失败")
         }
         let log = MGConfiguration.Log.currentValue()
@@ -62,9 +61,6 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
         var error: NSError? = nil
         XrayRun(&error)
         try error.flatMap { throw $0 }
-    }
-    
-    private func startSocks5Tunnel(serverPort port: Int) throws {
         let config = """
         tunnel:
           mtu: 9000
@@ -162,162 +158,47 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
 
 extension MGConfiguration {
     
-    func loadData(inboundPort: Int) throws -> Data {
-        fatalError()
-//        let file = MGConstant.configDirectory.appending(component: "\(self.id)/config.json")
-//        let data = try Data(contentsOf: file)
-//        if self.attributes.source.scheme.flatMap(MGConfiguration.Outbound.ProtocolType.init(rawValue:)) == nil {
-//            return data
-//        } else {
-//            let proxy = try JSONSerialization.jsonObject(with: data)
-//            let outbound = try JSONDecoder().decode(MGConfiguration.Outbound.self, from: data)
-//            return try model.buildConfigurationData(inboundPort: inboundPort)
-//        }
+    private struct Model: Encodable {
+        let dns: DNS
+        let routing: Route
+        let inbounds: [Inbound]
+        let outbounds: [Outbound]
+    }
+    
+    func loadData(inboundPort: inout Int) throws -> Data {
+        let inbound: Inbound = {
+            var reval = Inbound.currentValue()
+            if reval.sniffing.destOverride.count == 4 {
+                reval.sniffing.destOverride = [Inbound.DestinationOverride(rawValue: "fakedns+others")]
+            }
+            inboundPort = reval.port
+            return reval
+        }()
+        let file = MGConstant.configDirectory.appending(component: "\(self.id)/config.json")
+        let data = try Data(contentsOf: file)
+        if self.attributes.source.scheme.flatMap(MGConfiguration.Outbound.ProtocolType.init(rawValue:)) == nil {
+            return data
+        } else {
+            let routing: Route = {
+                var reval = Route.currentValue()
+                reval.rules = reval.rules.filter(\.__enabled__)
+                return reval
+            }()
+            let outboundSettings = OutboundSettings.currentValue()
+            let outbounds = try outboundSettings.order.map { tag in
+                switch tag {
+                case .proxy:
+                    return try JSONDecoder().decode(MGConfiguration.Outbound.self, from: data)
+                case .dns:
+                    return outboundSettings.dns
+                case .freedom:
+                    return outboundSettings.freedom
+                case .blackhole:
+                    return outboundSettings.blackhole
+                }
+            }
+            let model = Model(dns: DNS.currentValue(), routing: routing, inbounds: [inbound], outbounds: outbounds)
+            return try JSONEncoder().encode(model)
+        }
     }
 }
-
-//extension MGConfiguration {
-//
-//    struct Model: Encodable {
-//        let dns: DNS
-//        let route: Route
-//        let inbound: Inbound
-//        let outbounds: [Outbound]
-//        init(proxy: Outbound) {
-//            self.dns = MGConfiguration.DNS.currentValue()
-//            self.route = {
-//                var reval = MGConfiguration.Route.currentValue()
-//                reval.rules = reval.rules.filter(\.__enabled__)
-//                return reval
-//            }()
-//            self.inbound = {
-//                var reval = MGConfiguration.Inbound.currentValue()
-//                reval.sniffing.destOverride = {
-//                    if reval.sniffing.destOverride.count == 4 {
-//                        return [Inbound.DestinationOverride(rawValue: "fakedns+others")]
-//                    } else {
-//                        return reval.sniffing.destOverride
-//                    }
-//                }()
-//                return reval
-//            }()
-//            self.outbounds = {
-//                let reval = Outbounds.currentValue()
-//                reval.order.map { tag in
-//                    <#code#>
-//                }
-//                return []
-//            }()
-//        }
-//    }
-//}
-
-//extension MGConfiguration.Model {
-//
-//    func buildConfigurationData(inboundPort: Int) throws -> Data {
-//        var configuration: [String: Any] = [:]
-//        var inbound = MGConfiguration.Inbound.currentValue()
-//        if inbound.sniffing.destOverride.count == 4 {
-//            inbound.sniffing.destOverride = [MGConfiguration.Inbound.DestinationOverride(rawValue: "fakedns+others")]
-//        }
-//        configuration["inbounds"] = [try JSONSerialization.jsonObject(with: try JSONEncoder().encode(inbound))]
-//        var route = MGConfiguration.Route.currentValue()
-//        route.rules = route.rules.filter(\.__enabled__)
-//        configuration["routing"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(route))
-//        let dns = MGConfiguration.DNS.currentValue()
-//        configuration["dns"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(dns))
-//        let outbound = MGConfiguration.Outbounds.currentValue()
-//        configuration["outbounds"] = try outbound.order.map { tag in
-//            switch tag {
-//            case .proxy:
-//                return try self.buildProxyOutbound()
-//            case .freedom:
-//                return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.freedom))
-//            case .blackhole:
-//                return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.blackhole))
-//            case .dns:
-//                return try JSONSerialization.jsonObject(with: try JSONEncoder().encode(outbound.dns))
-//            }
-//        }
-//        return try JSONSerialization.data(withJSONObject: configuration, options: .prettyPrinted)
-//    }
-//
-//    private func buildProxyOutbound() throws -> Any {
-//        var proxy: [String: Any] = [:]
-//        proxy["tag"] = "proxy"
-//        proxy["protocol"] = self.protocolType.rawValue
-//        switch self.protocolType {
-//        case .vless:
-//            guard let vless = self.vless else {
-//                throw NSError.newError("\(self.protocolType.description) 构建失败")
-//            }
-//            proxy["settings"] = ["vnext": [try JSONSerialization.jsonObject(with: try JSONEncoder().encode(vless))]]
-//        case .vmess:
-//            guard let vmess = self.vmess else {
-//                throw NSError.newError("\(self.protocolType.description) 构建失败")
-//            }
-//            proxy["settings"] = ["vnext": [try JSONSerialization.jsonObject(with: try JSONEncoder().encode(vmess))]]
-//        case .trojan:
-//            guard let trojan = self.trojan else {
-//                throw NSError.newError("\(self.protocolType.description) 构建失败")
-//            }
-//            proxy["settings"] = ["servers": [try JSONSerialization.jsonObject(with: try JSONEncoder().encode(trojan))]]
-//        case .shadowsocks:
-//            guard let shadowsocks = self.shadowsocks else {
-//                throw NSError.newError("\(self.protocolType.description) 构建失败")
-//            }
-//            proxy["settings"] = ["servers": [try JSONSerialization.jsonObject(with: try JSONEncoder().encode(shadowsocks))]]
-//        }
-//        var streamSettings: [String: Any] = [:]
-//        streamSettings["network"] = self.network.rawValue
-//        switch self.network {
-//        case .tcp:
-//            guard let tcp = self.tcp else {
-//                throw NSError.newError("\(self.network.description) 构建失败")
-//            }
-//            streamSettings["tcpSettings"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(tcp))
-//        case .kcp:
-//            guard let kcp = self.kcp else {
-//                throw NSError.newError("\(self.network.description) 构建失败")
-//            }
-//            streamSettings["kcpSettings"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(kcp))
-//        case .ws:
-//            guard let ws = self.ws else {
-//                throw NSError.newError("\(self.network.description) 构建失败")
-//            }
-//            streamSettings["wsSettings"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(ws))
-//        case .http:
-//            guard let http = self.http else {
-//                throw NSError.newError("\(self.network.description) 构建失败")
-//            }
-//            streamSettings["httpSettings"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(http))
-//        case .quic:
-//            guard let quic = self.quic else {
-//                throw NSError.newError("\(self.network.description) 构建失败")
-//            }
-//            streamSettings["quicSettings"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(quic))
-//        case .grpc:
-//            guard let grpc = self.grpc else {
-//                throw NSError.newError("\(self.network.description) 构建失败")
-//            }
-//            streamSettings["grpcSettings"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(grpc))
-//        }
-//        streamSettings["security"] = self.security.rawValue
-//        switch self.security {
-//        case .none:
-//            break
-//        case .tls:
-//            guard let tls = self.tls else {
-//                throw NSError.newError("\(self.security.description) 构建失败")
-//            }
-//            streamSettings["tlsSettings"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(tls))
-//        case .reality:
-//            guard let reality = self.reality else {
-//                throw NSError.newError("\(self.security.description) 构建失败")
-//            }
-//            streamSettings["realitySettings"] = try JSONSerialization.jsonObject(with: try JSONEncoder().encode(reality))
-//        }
-//        proxy["streamSettings"] = streamSettings
-//        return proxy
-//    }
-//}
