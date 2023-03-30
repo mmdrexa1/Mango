@@ -1,8 +1,8 @@
 import Foundation
 
 extension MGConfiguration {    
-    public struct Outbound: Codable {
-        public enum Tag: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+    public struct Outbound: Codable, Equatable {
+        public enum Tag: String, Identifiable, CaseIterable, CustomStringConvertible, Codable, Equatable {
             public var id: Self { self }
             case proxy, freedom, blackhole, dns
             public var description: String {
@@ -19,7 +19,7 @@ extension MGConfiguration {
             }
         }
         public struct DNS: Codable, Equatable {
-            public enum Network: String, Codable, Identifiable, CustomStringConvertible, CaseIterable {
+            public enum Network: String, Codable, Identifiable, CustomStringConvertible, CaseIterable, Equatable {
                 public var id: Self { self }
                 case tcp, udp, inherit
                 public var description: String {
@@ -84,7 +84,7 @@ extension MGConfiguration {
             }
             public var response = Response()
         }
-        public enum ProtocolType: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+        public enum ProtocolType: String, Identifiable, CaseIterable, CustomStringConvertible, Codable, Equatable {
             public var id: Self { self }
             case vless, vmess, trojan, shadowsocks, dns, freedom, blackhole
             public var description: String {
@@ -107,7 +107,7 @@ extension MGConfiguration {
             }
             public static let allCases: [MGConfiguration.Outbound.ProtocolType] = [.vless, .vmess, .trojan, .shadowsocks]
         }
-        public enum Encryption: String, Identifiable, CustomStringConvertible, Codable {
+        public enum Encryption: String, Identifiable, CustomStringConvertible, Codable, Equatable {
             public var id: Self { self }
             case aes_128_gcm        = "aes-128-gcm"
             case chacha20_poly1305  = "chacha20-poly1305"
@@ -131,8 +131,8 @@ extension MGConfiguration {
             public static let vmess: [Encryption] = [.chacha20_poly1305, .aes_128_gcm, .auto, .none, .zero]
             public static let quic:  [Encryption] = [.chacha20_poly1305, .aes_128_gcm, .none]
         }
-        public struct StreamSettings: Codable {
-            public enum Transport: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+        public struct StreamSettings: Codable, Equatable {
+            public enum Transport: String, Identifiable, CaseIterable, CustomStringConvertible, Codable, Equatable {
                 public var id: Self { self }
                 case tcp, kcp, ws, http, quic, grpc
                 public var description: String {
@@ -152,7 +152,7 @@ extension MGConfiguration {
                     }
                 }
             }
-            public enum Security: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+            public enum Security: String, Identifiable, CaseIterable, CustomStringConvertible, Codable, Equatable {
                 public var id: Self { self }
                 case none, tls, reality
                 public var description: String {
@@ -166,7 +166,7 @@ extension MGConfiguration {
                     }
                 }
             }
-            public enum HeaderType: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+            public enum HeaderType: String, Identifiable, CaseIterable, CustomStringConvertible, Codable, Equatable {
                 public var id: Self { self }
                 case none           = "none"
                 case srtp           = "srtp"
@@ -191,7 +191,7 @@ extension MGConfiguration {
                     }
                 }
             }
-            public enum Fingerprint: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+            public enum Fingerprint: String, Identifiable, CaseIterable, CustomStringConvertible, Codable, Equatable {
                 public var id: Self { self }
                 case chrome     = "chrome"
                 case firefox    = "firefox"
@@ -228,7 +228,7 @@ extension MGConfiguration {
                     }
                 }
             }
-            public enum ALPN: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+            public enum ALPN: String, Identifiable, CaseIterable, CustomStringConvertible, Codable, Equatable {
                 public var id: Self { self }
                 case h2         = "h2"
                 case http1_1    = "http/1.1"
@@ -241,13 +241,13 @@ extension MGConfiguration {
                     }
                 }
             }
-            public struct TLS: Codable {
+            public struct TLS: Codable, Equatable {
                 public var serverName: String = ""
                 public var allowInsecure: Bool = false
                 public var alpn: [ALPN] = ALPN.allCases
                 public var fingerprint: Fingerprint = .chrome
             }
-            public struct Reality: Codable {
+            public struct Reality: Codable, Equatable {
                 public var show: Bool = false
                 public var fingerprint: Fingerprint = .chrome
                 public var serverName: String = ""
@@ -255,14 +255,14 @@ extension MGConfiguration {
                 public var shortId: String = ""
                 public var spiderX: String = ""
             }
-            public struct TCP: Codable {
-                public struct Header: Codable {
+            public struct TCP: Codable, Equatable {
+                public struct Header: Codable, Equatable {
                     public var type: HeaderType = .none
                 }
                 public var header = Header()
             }
-            public struct KCP: Codable {
-                public struct Header: Codable {
+            public struct KCP: Codable, Equatable {
+                public struct Header: Codable, Equatable {
                     public var type: HeaderType = .none
                 }
                 public var mtu: Int = 1350
@@ -275,23 +275,23 @@ extension MGConfiguration {
                 public var header = Header()
                 public var seed: String = ""
             }
-            public struct WS: Codable {
+            public struct WS: Codable, Equatable {
                 public var path: String = "/"
                 public var headers: [String: String] = [:]
             }
-            public struct HTTP: Codable {
+            public struct HTTP: Codable, Equatable {
                 public var host: [String] = []
                 public var path: String = "/"
             }
-            public struct QUIC: Codable {
-                public struct Header: Codable {
+            public struct QUIC: Codable, Equatable {
+                public struct Header: Codable, Equatable {
                     public var type: HeaderType = .none
                 }
                 public var security = Encryption.none
                 public var key: String = ""
                 public var header = Header()
             }
-            public struct GRPC: Codable {
+            public struct GRPC: Codable, Equatable {
                 public var serviceName: String = ""
                 public var multiMode: Bool = false
             }
@@ -373,7 +373,7 @@ extension MGConfiguration {
                 }
             }
         }
-        public struct VLESS: Codable {
+        public struct VLESS: Codable, Equatable {
             public enum Flow: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
                 public var id: Self { self }
                 case none                       = "none"
@@ -390,7 +390,7 @@ extension MGConfiguration {
                     }
                 }
             }
-            public struct User: Codable {
+            public struct User: Codable, Equatable {
                 public var id: String = ""
                 public var encryption: String = "none"
                 public var flow = Flow.none
@@ -421,8 +421,8 @@ extension MGConfiguration {
                 try container.encode([self.user], forKey: .users)
             }
         }
-        public struct VMess: Codable {
-            public struct User: Codable {
+        public struct VMess: Codable, Equatable {
+            public struct User: Codable, Equatable {
                 public var id: String = ""
                 public var alterId: Int = 0
                 public var security = Encryption.auto
@@ -453,14 +453,14 @@ extension MGConfiguration {
                 try container.encode([self.user], forKey: .users)
             }
         }
-        public struct Trojan: Codable {
+        public struct Trojan: Codable, Equatable {
             public var address: String = ""
             public var port: Int = 443
             public var password: String = ""
             public var email: String = ""
         }
-        public struct Shadowsocks: Codable {
-            public enum Method: String, Identifiable, CustomStringConvertible, Codable, CaseIterable {
+        public struct Shadowsocks: Codable, Equatable {
+            public enum Method: String, Identifiable, CustomStringConvertible, Codable, CaseIterable, Equatable {
                 public var id: Self { self }
                 case _2022_blake3_aes_128_gcm       = "2022-blake3-aes-128-gcm"
                 case _2022_blake3_aes_256_gcm       = "2022-blake3-aes-256-gcm"

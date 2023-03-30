@@ -85,7 +85,7 @@ extension MGConfiguration {
             public var inboundTag: Set<Inbound>?
             public var `protocol`: Set<Protocol_>?
             public var attrs: String?
-            public var outboundTag: Outbounds.Tag = .freedom
+            public var outboundTag: Outbound.Tag = .freedom
             public var balancerTag: String?
             
             public var __id__: UUID = UUID()
@@ -117,7 +117,7 @@ extension MGConfiguration {
                 self.inboundTag = try container.decodeIfPresent(Set<MGConfiguration.Route.Inbound>.self, forKey: MGConfiguration.Route.Rule.CodingKeys.inboundTag)
                 self.protocol = try container.decodeIfPresent(Set<MGConfiguration.Route.Protocol_>.self, forKey: MGConfiguration.Route.Rule.CodingKeys.protocol)
                 self.attrs = try container.decodeIfPresent(String.self, forKey: MGConfiguration.Route.Rule.CodingKeys.attrs)
-                self.outboundTag = try container.decode(MGConfiguration.Outbounds.Tag.self, forKey: MGConfiguration.Route.Rule.CodingKeys.outboundTag)
+                self.outboundTag = try container.decode(MGConfiguration.Outbound.Tag.self, forKey: MGConfiguration.Route.Rule.CodingKeys.outboundTag)
                 self.balancerTag = try container.decodeIfPresent(String.self, forKey: MGConfiguration.Route.Rule.CodingKeys.balancerTag)
                 self.__id__ = try container.decode(UUID.self, forKey: MGConfiguration.Route.Rule.CodingKeys.__id__)
                 self.__name__ = try container.decode(String.self, forKey: MGConfiguration.Route.Rule.CodingKeys.__name__)

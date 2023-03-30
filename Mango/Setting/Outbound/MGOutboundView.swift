@@ -2,9 +2,9 @@ import SwiftUI
 
 struct MGOutboundView: View {
     
-    @ObservedObject private var outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Outbounds>
+    @ObservedObject private var outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.OutboundSettings>
     
-    init(outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Outbounds>) {
+    init(outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.OutboundSettings>) {
         self._outboundViewModel = ObservedObject(initialValue: outboundViewModel)
     }
     

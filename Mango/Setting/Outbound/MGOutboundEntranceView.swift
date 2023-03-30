@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MGOutboundEntranceView: View {
     
-    @StateObject private var outboundViewModel = MGConfigurationPersistentViewModel<MGConfiguration.Outbounds>()
+    @StateObject private var outboundViewModel = MGConfigurationPersistentViewModel<MGConfiguration.OutboundSettings>()
 
     
     var body: some View {

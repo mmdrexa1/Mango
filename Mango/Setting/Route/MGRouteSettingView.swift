@@ -183,7 +183,7 @@ struct MGRouteRuleSettingView: View {
                     }
                 }
                 Picker("Outbound", selection: $rule.outboundTag) {
-                    ForEach(MGConfiguration.Outbounds.Tag.allCases) { tag in
+                    ForEach(MGConfiguration.Outbound.Tag.allCases) { tag in
                         Text(tag.description)
                     }
                 }
