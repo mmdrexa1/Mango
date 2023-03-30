@@ -395,13 +395,13 @@ extension MGConfiguration.Outbound {
         self.protocolType   = components.protocolType
         switch self.protocolType {
         case .vless:
-            self.vless = try MGConfiguration.Outbound.VLESSSettings.parse(with: components)
+            self.vlessSettings = try MGConfiguration.Outbound.VLESSSettings.parse(with: components)
         case .vmess:
-            self.vmess = try MGConfiguration.Outbound.VMessSettings.parse(with: components)
+            self.vmessSettings = try MGConfiguration.Outbound.VMessSettings.parse(with: components)
         case .trojan:
-            self.trojan = try MGConfiguration.Outbound.TrojanSettings.parse(with: components)
+            self.trojanSettings = try MGConfiguration.Outbound.TrojanSettings.parse(with: components)
         case .shadowsocks:
-            self.shadowsocks = try MGConfiguration.Outbound.ShadowsocksSettings.parse(with: components)
+            self.shadowsocksSettings = try MGConfiguration.Outbound.ShadowsocksSettings.parse(with: components)
         case .dns, .freedom, .blackhole:
             fatalError()
         }

@@ -10,16 +10,16 @@ struct MGTrojanView: View {
     
     var body: some View {
         LabeledContent("Address") {
-            TextField("", text: $vm.model.trojan.address)
+            TextField("", text: $vm.model.trojanSettings.address)
         }
         LabeledContent("Port") {
-            TextField("", value: $vm.model.trojan.port, format: .number)
+            TextField("", value: $vm.model.trojanSettings.port, format: .number)
         }
         LabeledContent("Password") {
-            TextField("", text: $vm.model.trojan.password)
+            TextField("", text: $vm.model.trojanSettings.password)
         }
         LabeledContent("Email") {
-            TextField("", text: $vm.model.trojan.email)
+            TextField("", text: $vm.model.trojanSettings.email)
         }
     }
 }

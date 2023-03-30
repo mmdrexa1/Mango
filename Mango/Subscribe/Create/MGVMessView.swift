@@ -10,18 +10,18 @@ struct MGVMessView: View {
     
     var body: some View {
         LabeledContent("Address") {
-            TextField("", text: $vm.model.vmess.address)
+            TextField("", text: $vm.model.vmessSettings.address)
         }
         LabeledContent("Port") {
-            TextField("", value: $vm.model.vmess.port, format: .number)
+            TextField("", value: $vm.model.vmessSettings.port, format: .number)
         }
         LabeledContent("ID") {
-            TextField("", text: $vm.model.vmess.user.id)
+            TextField("", text: $vm.model.vmessSettings.user.id)
         }
         LabeledContent("Alert ID") {
-            TextField("", value: $vm.model.vmess.user.alterId, format: .number)
+            TextField("", value: $vm.model.vmessSettings.user.alterId, format: .number)
         }
-        Picker("Security", selection: $vm.model.vmess.user.security) {
+        Picker("Security", selection: $vm.model.vmessSettings.user.security) {
             ForEach(MGConfiguration.Outbound.Encryption.vmess) { encryption in
                 Text(encryption.description)
             }

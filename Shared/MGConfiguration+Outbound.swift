@@ -503,13 +503,13 @@ extension MGConfiguration {
             public var level: Int = 0
         }
         public var protocolType: ProtocolType
-        public var vless = VLESSSettings()
-        public var vmess = VMessSettings()
-        public var trojan = TrojanSettings()
-        public var shadowsocks = ShadowsocksSettings()
-        public var dns = DNSSettings()
-        public var freedom = FreedomSettings()
-        public var blackhole = BlackholeSettings()
+        public var vlessSettings = VLESSSettings()
+        public var vmessSettings = VMessSettings()
+        public var trojanSettings = TrojanSettings()
+        public var shadowsocksSettings = ShadowsocksSettings()
+        public var dnsSettings = DNSSettings()
+        public var freedomSettings = FreedomSettings()
+        public var blackholeSettings = BlackholeSettings()
         public var streamSettings = StreamSettings()
         private enum CodingKeys: String, CodingKey {
             case protocolType = "protocol"
@@ -528,22 +528,22 @@ extension MGConfiguration {
             switch self.protocolType {
             case .vless:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                self.vless = try settings.decode([VLESSSettings].self, forKey: .vnext)[0]
+                self.vlessSettings = try settings.decode([VLESSSettings].self, forKey: .vnext)[0]
             case .vmess:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                self.vmess = try settings.decode([VMessSettings].self, forKey: .vnext)[0]
+                self.vmessSettings = try settings.decode([VMessSettings].self, forKey: .vnext)[0]
             case .trojan:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                self.trojan = try settings.decode([TrojanSettings].self, forKey: .servers)[0]
+                self.trojanSettings = try settings.decode([TrojanSettings].self, forKey: .servers)[0]
             case .shadowsocks:
                 let settings = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                self.shadowsocks = try settings.decode([ShadowsocksSettings].self, forKey: .servers)[0]
+                self.shadowsocksSettings = try settings.decode([ShadowsocksSettings].self, forKey: .servers)[0]
             case .dns:
-                self.dns = try container.decode(DNSSettings.self, forKey: .settings)
+                self.dnsSettings = try container.decode(DNSSettings.self, forKey: .settings)
             case .freedom:
-                self.freedom = try container.decode(FreedomSettings.self, forKey: .settings)
+                self.freedomSettings = try container.decode(FreedomSettings.self, forKey: .settings)
             case .blackhole:
-                self.blackhole = try container.decode(BlackholeSettings.self, forKey: .settings)
+                self.blackholeSettings = try container.decode(BlackholeSettings.self, forKey: .settings)
             }
             switch self.protocolType {
             case .vless, .vmess, .trojan, .shadowsocks:
@@ -558,22 +558,22 @@ extension MGConfiguration {
             switch self.protocolType {
             case .vless:
                 var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                try settings.encode([self.vless], forKey: .vnext)
+                try settings.encode([self.vlessSettings], forKey: .vnext)
             case .vmess:
                 var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                try settings.encode([self.vmess], forKey: .vnext)
+                try settings.encode([self.vmessSettings], forKey: .vnext)
             case .trojan:
                 var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                try settings.encode([self.trojan], forKey: .servers)
+                try settings.encode([self.trojanSettings], forKey: .servers)
             case .shadowsocks:
                 var settings = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .settings)
-                try settings.encode([self.shadowsocks], forKey: .servers)
+                try settings.encode([self.shadowsocksSettings], forKey: .servers)
             case .dns:
-                try container.encode(self.dns, forKey: .settings)
+                try container.encode(self.dnsSettings, forKey: .settings)
             case .freedom:
-                try container.encode(self.freedom, forKey: .settings)
+                try container.encode(self.freedomSettings, forKey: .settings)
             case .blackhole:
-                try container.encode(self.blackhole, forKey: .settings)
+                try container.encode(self.blackholeSettings, forKey: .settings)
             }
             switch self.protocolType {
             case .vless, .vmess, .trojan, .shadowsocks:
