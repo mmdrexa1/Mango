@@ -1,9 +1,7 @@
 import Foundation
 
-extension MGConfiguration {
-    
+extension MGConfiguration {    
     public struct Outbound: Codable {
-        
         public struct StreamSettings: Codable {
             public enum Security: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
                 public var id: Self { self }
