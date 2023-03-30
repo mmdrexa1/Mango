@@ -9,83 +9,83 @@ struct MGConfigurationTransportView: View {
     }
         
     var body: some View {
-        Picker("Transport", selection: $vm.transport) {
-            ForEach(MGConfiguration.Transport.allCases) { type in
+        Picker("Transport", selection: $vm.model.streamSettings.transport) {
+            ForEach(MGConfiguration.Outbound.StreamSettings.Transport.allCases) { type in
                 Text(type.description)
             }
         }
-        switch vm.transport {
+        switch vm.model.streamSettings.transport {
         case .tcp:
             EmptyView()
         case .kcp:
             LabeledContent("MTU") {
-                TextField("", value: $vm.kcp.mtu, format: .number)
+                TextField("", value: $vm.model.streamSettings.kcpSettings.mtu, format: .number)
             }
             LabeledContent("TTI") {
-                TextField("", value: $vm.kcp.tti, format: .number)
+                TextField("", value: $vm.model.streamSettings.kcpSettings.tti, format: .number)
             }
             LabeledContent("Uplink Capacity") {
-                TextField("", value: $vm.kcp.uplinkCapacity, format: .number)
+                TextField("", value: $vm.model.streamSettings.kcpSettings.uplinkCapacity, format: .number)
             }
             LabeledContent("Downlink Capacity") {
-                TextField("", value: $vm.kcp.downlinkCapacity, format: .number)
+                TextField("", value: $vm.model.streamSettings.kcpSettings.downlinkCapacity, format: .number)
             }
             Toggle("Congestion", isOn: .constant(false))
             LabeledContent("Read Buffer Size") {
-                TextField("", value: $vm.kcp.readBufferSize, format: .number)
+                TextField("", value: $vm.model.streamSettings.kcpSettings.readBufferSize, format: .number)
             }
             LabeledContent("Write Buffer Size") {
-                TextField("", value: $vm.kcp.writeBufferSize, format: .number)
+                TextField("", value: $vm.model.streamSettings.kcpSettings.writeBufferSize, format: .number)
             }
-            Picker("Header Type", selection: $vm.kcp.header.type) {
-                ForEach(MGConfiguration.HeaderType.allCases) { type in
+            Picker("Header Type", selection: $vm.model.streamSettings.kcpSettings.header.type) {
+                ForEach(MGConfiguration.Outbound.StreamSettings.HeaderType.allCases) { type in
                     Text(type.description)
                 }
             }
             LabeledContent("Seed") {
-                TextField("", text: $vm.kcp.seed)
+                TextField("", text: $vm.model.streamSettings.kcpSettings.seed)
             }
         case .ws:
             LabeledContent("Host") {
                 TextField("", text: Binding(get: {
-                    vm.ws.headers["Host"] ?? ""
+                    vm.model.streamSettings.wsSettings.headers["Host"] ?? ""
                 }, set: { value in
-                    vm.ws.headers["Host"] = value.trimmingCharacters(in: .whitespacesAndNewlines)
+                    vm.model.streamSettings.wsSettings.headers["Host"] = value.trimmingCharacters(in: .whitespacesAndNewlines)
                 }))
             }
             LabeledContent("Path") {
-                TextField("", text: $vm.ws.path)
+                TextField("", text: $vm.model.streamSettings.wsSettings.path)
             }
         case .http:
             LabeledContent("Host") {
                 TextField("", text: Binding(get: {
-                    vm.http.host.first ?? ""
+                    vm.model.streamSettings.httpSettings.host.first ?? ""
                 }, set: { value in
-                    vm.http.host = [value.trimmingCharacters(in: .whitespacesAndNewlines)]
+                    vm.model.streamSettings.httpSettings.host = [value.trimmingCharacters(in: .whitespacesAndNewlines)]
                 }))
             }
             LabeledContent("Path") {
-                TextField("", text: $vm.http.path)
+                TextField("", text: $vm.model.streamSettings.httpSettings.path)
             }
         case .quic:
-            Picker("Security", selection: $vm.quic.security) {
-                ForEach(MGConfiguration.Encryption.quic) { encryption in
+            Picker("Security", selection: $vm.model.streamSettings.quicSettings.security) {
+                ForEach(MGConfiguration.Outbound.Encryption.quic) { encryption in
                     Text(encryption.description)
                 }
             }
             LabeledContent("Key") {
-                TextField("", text: $vm.quic.key)
+                TextField("", text: $vm.model.streamSettings.quicSettings.key)
             }
-            Picker("Header Type", selection: $vm.quic.header.type) {
-                ForEach(MGConfiguration.HeaderType.allCases) { type in
+            Picker("Header Type", selection: $vm.model.streamSettings.quicSettings.header.type) {
+                ForEach(MGConfiguration.Outbound.StreamSettings.HeaderType.allCases) { type in
                     Text(type.description)
                 }
             }
         case .grpc:
             LabeledContent("Service Name") {
-                TextField("", text: $vm.grpc.serviceName)
+                TextField("", text: $vm.model.streamSettings.grpcSettings.serviceName)
             }
-            Toggle("Multi-Mode", isOn: $vm.grpc.multiMode)
+            Toggle("Multi-Mode", isOn: $vm.model.streamSettings.grpcSettings.multiMode)
         }
     }
 }

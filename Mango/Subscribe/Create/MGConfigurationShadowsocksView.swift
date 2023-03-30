@@ -10,26 +10,26 @@ struct MGConfigurationShadowsocksView: View {
     
     var body: some View {
         LabeledContent("Address") {
-            TextField("", text: $vm.shadowsocks.servers[0].address)
+            TextField("", text: $vm.model.shadowsocks.address)
         }
         LabeledContent("Port") {
-            TextField("", value: $vm.shadowsocks.servers[0].port, format: .number)
+            TextField("", value: $vm.model.shadowsocks.port, format: .number)
         }
         LabeledContent("Email") {
-            TextField("", text: $vm.shadowsocks.servers[0].email)
+            TextField("", text: $vm.model.shadowsocks.email)
         }
         LabeledContent("Password") {
-            TextField("", text: $vm.shadowsocks.servers[0].password)
+            TextField("", text: $vm.model.shadowsocks.password)
         }
         LabeledContent("Method") {
-            Picker("Method", selection: $vm.shadowsocks.servers[0].method) {
-                ForEach(MGConfiguration.Shadowsocks.Method.allCases) { method in
+            Picker("Method", selection: $vm.model.shadowsocks.method) {
+                ForEach(MGConfiguration.Outbound.Shadowsocks.Method.allCases) { method in
                     Text(method.description)
                 }
             }
             .labelsHidden()
             .fixedSize()
         }
-        Toggle("UOT", isOn: $vm.shadowsocks.servers[0].uot)
+        Toggle("UOT", isOn: $vm.model.shadowsocks.uot)
     }
 }

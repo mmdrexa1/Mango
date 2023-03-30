@@ -10,20 +10,20 @@ struct MGConfigurationVLESSView: View {
     
     var body: some View {
         LabeledContent("Address") {
-            TextField("", text: $vm.vless.address)
+            TextField("", text: $vm.model.vless.address)
         }
         LabeledContent("Port") {
-            TextField("", value: $vm.vless.port, format: .number)
+            TextField("", value: $vm.model.vless.port, format: .number)
         }
         LabeledContent("UUID") {
-            TextField("", text: $vm.vless.users[0].id)
+            TextField("", text: $vm.model.vless.users[0].id)
         }
         LabeledContent("Encryption") {
-            TextField("", text: $vm.vless.users[0].encryption)
+            TextField("", text: $vm.model.vless.users[0].encryption)
         }
         LabeledContent("Flow") {
-            Picker("Flow", selection: $vm.vless.users[0].flow) {
-                ForEach(MGConfiguration.Flow.allCases) { encryption in
+            Picker("Flow", selection: $vm.model.vless.users[0].flow) {
+                ForEach(MGConfiguration.Outbound.VLESS.Flow.allCases) { encryption in
                     Text(encryption.description)
                 }
             }

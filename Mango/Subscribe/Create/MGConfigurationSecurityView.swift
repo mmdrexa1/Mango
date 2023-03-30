@@ -9,30 +9,32 @@ struct MGConfigurationSecurityView: View {
     }
     
     var body: some View {
-        Picker("Security", selection: $vm.security) {
-            ForEach(MGConfiguration.Security.allCases) { type in
+        Picker("Security", selection: $vm.model.streamSettings.security) {
+            ForEach(MGConfiguration.Outbound.StreamSettings.Security.allCases) { type in
                 Text(type.description)
             }
         }
-        switch vm.security {
+        switch vm.model.streamSettings.security {
+        case .none:
+            EmptyView()
         case .tls:
             LabeledContent("Server Name") {
-                TextField("", text: $vm.tls.serverName)
+                TextField("", text: $vm.model.streamSettings.tlsSettings.serverName)
             }
             LabeledContent("ALPN") {
                 HStack {
-                    ForEach(MGConfiguration.ALPN.allCases) { alpn in
+                    ForEach(MGConfiguration.Outbound.StreamSettings.ALPN.allCases) { alpn in
                         MGToggleButton(
                             title: alpn.description,
                             isOn: Binding(
                                 get: {
-                                    vm.tls.alpn.contains(alpn)
+                                    vm.model.streamSettings.tlsSettings.alpn.contains(alpn)
                                 },
                                 set: { value in
                                     if value {
-                                        vm.tls.alpn.append(alpn)
+                                        vm.model.streamSettings.tlsSettings.alpn.append(alpn)
                                     } else {
-                                        vm.tls.alpn.removeAll(where: { $0 == alpn })
+                                        vm.model.streamSettings.tlsSettings.alpn.removeAll(where: { $0 == alpn })
                                     }
                                 }
                             )
@@ -41,35 +43,33 @@ struct MGConfigurationSecurityView: View {
                 }
             }
             LabeledContent("Fingerprint") {
-                Picker("", selection: $vm.tls.fingerprint) {
-                    ForEach(MGConfiguration.Fingerprint.allCases) { fingerprint in
+                Picker("", selection: $vm.model.streamSettings.tlsSettings.fingerprint) {
+                    ForEach(MGConfiguration.Outbound.StreamSettings.Fingerprint.allCases) { fingerprint in
                         Text(fingerprint.description)
                     }
                 }
             }
-            Toggle("Allow Insecure", isOn: $vm.tls.allowInsecure)
+            Toggle("Allow Insecure", isOn: $vm.model.streamSettings.tlsSettings.allowInsecure)
         case .reality:
             LabeledContent("Server Name") {
-                TextField("", text: $vm.reality.serverName)
+                TextField("", text: $vm.model.streamSettings.realitySettings.serverName)
             }
             LabeledContent("Fingerprint") {
-                Picker("", selection: $vm.reality.fingerprint) {
-                    ForEach(MGConfiguration.Fingerprint.allCases) { fingerprint in
+                Picker("", selection: $vm.model.streamSettings.realitySettings.fingerprint) {
+                    ForEach(MGConfiguration.Outbound.StreamSettings.Fingerprint.allCases) { fingerprint in
                         Text(fingerprint.description)
                     }
                 }
             }
             LabeledContent("Public Key") {
-                TextField("", text: $vm.reality.publicKey)
+                TextField("", text: $vm.model.streamSettings.realitySettings.publicKey)
             }
             LabeledContent("Short ID") {
-                TextField("", text: $vm.reality.shortId)
+                TextField("", text: $vm.model.streamSettings.realitySettings.shortId)
             }
             LabeledContent("SpiderX") {
-                TextField("", text: $vm.reality.spiderX)
+                TextField("", text: $vm.model.streamSettings.realitySettings.spiderX)
             }
-        case .none:
-            EmptyView()
         }
     }
 }

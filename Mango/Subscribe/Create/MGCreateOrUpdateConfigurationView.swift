@@ -15,9 +15,9 @@ struct MGCreateOrUpdateConfigurationView: View {
             Form {
                 Section {
                     LabeledContent("Description") {
-                        TextField("", text: $vm.descriptive)
+                        TextField("", text: $vm.name)
                     }
-                    switch vm.protocolType {
+                    switch vm.model.protocolType {
                     case .vless:
                         MGConfigurationVLESSView(vm: vm)
                     case .vmess:
@@ -43,7 +43,7 @@ struct MGCreateOrUpdateConfigurationView: View {
             }
             .lineLimit(1)
             .multilineTextAlignment(.trailing)
-            .navigationTitle(Text(vm.protocolType.description))
+            .navigationTitle(Text(vm.model.protocolType.description))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

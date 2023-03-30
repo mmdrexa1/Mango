@@ -4,7 +4,7 @@ import CodeScanner
 extension MGConfiguration {
     
     var typeString: String {
-        if let pt = self.attributes.source.scheme.flatMap(MGConfiguration.ProtocolType.init(rawValue:)) {
+        if let pt = self.attributes.source.scheme.flatMap(MGConfiguration.Outbound.ProtocolType.init(rawValue:)) {
             return pt.description
         } else {
             if self.attributes.source.isFileURL {
@@ -19,7 +19,7 @@ extension MGConfiguration {
 fileprivate extension MGConfiguration {
     
     var isUserCreated: Bool {
-        self.attributes.source.scheme.flatMap(MGConfiguration.ProtocolType.init(rawValue:)) != nil
+        self.attributes.source.scheme.flatMap(MGConfiguration.Outbound.ProtocolType.init(rawValue:)) != nil
     }
     
     var isLocal: Bool {
@@ -31,30 +31,24 @@ private struct MGConfigurationEditModel: Identifiable {
     
     let id: UUID
     let name: String
-    let type: MGConfiguration.ProtocolType
-    let model: MGConfiguration.Model
+    let model: MGConfiguration.Outbound
     
     init(configuration: MGConfiguration) throws {
         guard let id = UUID(uuidString: configuration.id) else {
-            throw NSError.newError("获取唯一标识失败")
-        }
-        guard let type = configuration.attributes.source.scheme.flatMap(MGConfiguration.ProtocolType.init(rawValue:)) else {
-            throw NSError.newError("不支持的类型")
+            throw NSError.newError("Invalid configuration")
         }
         self.id = id
         self.name = configuration.attributes.alias
-        self.type = type
         let fileURL = MGConstant.configDirectory.appending(component: "\(configuration.id)/config.json")
         let data = try Data(contentsOf: fileURL)
-        self.model = try JSONDecoder().decode(MGConfiguration.Model.self, from: data)
+        self.model = try JSONDecoder().decode(MGConfiguration.Outbound.self, from: data)
     }
     
     init(urlString: String) throws {
         let components = try MGConfiguration.URLComponents(urlString: urlString)
         self.id = UUID()
         self.name = components.descriptive
-        self.type = components.protocolType
-        self.model = try MGConfiguration.Model(components: components)
+        self.model = try MGConfiguration.Outbound(components: components)
     }
 }
 
@@ -73,7 +67,7 @@ struct MGConfigurationListView: View {
     @State private var location: MGConfigurationLocation?
     
     @State private var isConfirmationDialogPresented = false
-    @State private var protocolType: MGConfiguration.ProtocolType?
+    @State private var protocolType: MGConfiguration.Outbound.ProtocolType?
     
     @State private var isCodeScannerPresented: Bool = false
     @State private var scanResult: Swift.Result<ScanResult, ScanError>?
@@ -95,7 +89,7 @@ struct MGConfigurationListView: View {
                         Label("扫描二维码", systemImage: "qrcode.viewfinder")
                     }
                     .confirmationDialog("", isPresented: $isConfirmationDialogPresented) {
-                        ForEach(MGConfiguration.ProtocolType.allCases) { value in
+                        ForEach(MGConfiguration.Outbound.ProtocolType.allCases) { value in
                             Button(value.description) {
                                 protocolType = value
                             }
@@ -103,7 +97,7 @@ struct MGConfigurationListView: View {
                     }
                     .fullScreenCover(item: $protocolType, onDismiss: { configurationListManager.reload() }) { protocolType in
                         MGCreateOrUpdateConfigurationView(
-                            vm: MGCreateOrUpdateConfigurationViewModel(id: UUID(), descriptive: "", protocolType: protocolType, configurationModel: nil)
+                            vm: MGCreateOrUpdateConfigurationViewModel(id: UUID(), protocolType: protocolType)
                         )
                     }
                 } header: {
@@ -145,7 +139,7 @@ struct MGConfigurationListView: View {
             }
             .fullScreenCover(item: $editModel, onDismiss: { configurationListManager.reload() }) { em in
                 MGCreateOrUpdateConfigurationView(
-                    vm: MGCreateOrUpdateConfigurationViewModel(id: em.id, descriptive: em.name, protocolType: em.type, configurationModel: em.model)
+                    vm: MGCreateOrUpdateConfigurationViewModel(id: em.id, name: em.name, model: em.model)
                 )
             }
             .fullScreenCover(isPresented: $isCodeScannerPresented) {

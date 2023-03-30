@@ -2,7 +2,67 @@ import Foundation
 
 extension MGConfiguration {    
     public struct Outbound: Codable {
+        public enum ProtocolType: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+            public var id: Self { self }
+            case vless, vmess, trojan, shadowsocks
+            public var description: String {
+                switch self {
+                case .vless:
+                    return "VLESS"
+                case .vmess:
+                    return "VMess"
+                case .trojan:
+                    return "Trojan"
+                case .shadowsocks:
+                    return "Shadowsocks"
+                }
+            }
+        }
+        public enum Encryption: String, Identifiable, CustomStringConvertible, Codable {
+            public var id: Self { self }
+            case aes_128_gcm        = "aes-128-gcm"
+            case chacha20_poly1305  = "chacha20-poly1305"
+            case auto               = "auto"
+            case none               = "none"
+            case zero               = "zero"
+            public var description: String {
+                switch self {
+                case .aes_128_gcm:
+                    return "AES-128-GCM"
+                case .chacha20_poly1305:
+                    return "Chacha20-Poly1305"
+                case .auto:
+                    return "Auto"
+                case .none:
+                    return "None"
+                case .zero:
+                    return "Zero"
+                }
+            }
+            public static let vmess: [Encryption] = [.chacha20_poly1305, .aes_128_gcm, .auto, .none, .zero]
+            public static let quic:  [Encryption] = [.chacha20_poly1305, .aes_128_gcm, .none]
+        }
         public struct StreamSettings: Codable {
+            public enum Transport: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+                public var id: Self { self }
+                case tcp, kcp, ws, http, quic, grpc
+                public var description: String {
+                    switch self {
+                    case .tcp:
+                        return "TCP"
+                    case .kcp:
+                        return "mKCP"
+                    case .ws:
+                        return "WebSocket"
+                    case .http:
+                        return "HTTP/2"
+                    case .quic:
+                        return "QUIC"
+                    case .grpc:
+                        return "gRPC"
+                    }
+                }
+            }
             public enum Security: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
                 public var id: Self { self }
                 case none, tls, reality
@@ -225,6 +285,22 @@ extension MGConfiguration {
             }
         }
         public struct VLESS: Codable {
+            public enum Flow: String, Identifiable, CaseIterable, CustomStringConvertible, Codable {
+                public var id: Self { self }
+                case none                       = "none"
+                case xtls_rprx_vision           = "xtls-rprx-vision"
+                case xtls_rprx_vision_udp443    = "xtls-rprx-vision-udp443"
+                public var description: String {
+                    switch self {
+                    case .none:
+                        return "None"
+                    case .xtls_rprx_vision:
+                        return "XTLS-RPRX-Vision"
+                    case .xtls_rprx_vision_udp443:
+                        return "XTLS-RPRX-Vision-UDP443"
+                    }
+                }
+            }
             public struct User: Codable {
                 public var id: String = ""
                 public var encryption: String = "none"
@@ -306,6 +382,9 @@ extension MGConfiguration {
             case vnext
             case servers
             case tag
+        }
+        init(protocolType: ProtocolType) {
+            self.protocolType = protocolType
         }
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
