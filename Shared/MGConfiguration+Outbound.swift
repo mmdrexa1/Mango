@@ -37,7 +37,7 @@ extension MGConfiguration {
                     self = Network(rawValue: try coantiner.decode(String.self)) ?? .inherit
                 }
                 public func encode(to encoder: Encoder) throws {
-                    if self == .none {
+                    if self == .inherit {
                         return
                     } else {
                         var container = encoder.singleValueContainer()
