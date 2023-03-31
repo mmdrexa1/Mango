@@ -174,8 +174,7 @@ extension MGConfiguration {
             inboundPort = reval.port
             return reval
         }()
-        let file = MGConstant.configDirectory.appending(component: "\(self.id)/config.json")
-        let data = try Data(contentsOf: file)
+        let data = try Data(contentsOf: MGConstant.configDirectory.appending(component: "\(self.id)/config.json"))
         if self.attributes.source.scheme.flatMap(MGConfiguration.Outbound.ProtocolType.init(rawValue:)) == nil {
             return data
         } else {
@@ -197,8 +196,7 @@ extension MGConfiguration {
                     return outboundSettings.blackhole
                 }
             }
-            let model = Model(dns: DNS.currentValue(), routing: routing, inbounds: [inbound], outbounds: outbounds)
-            return try JSONEncoder().encode(model)
+            return try JSONEncoder().encode(Model(dns: DNS.currentValue(), routing: routing, inbounds: [inbound], outbounds: outbounds))
         }
     }
 }
