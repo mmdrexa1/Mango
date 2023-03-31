@@ -75,6 +75,7 @@ struct MGRouteSettingView: View {
         }
         .lineLimit(1)
         .navigationTitle(Text("Route"))
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationBarTitleDisplayMode(.large)
     }
 }
@@ -208,6 +209,7 @@ struct MGRouteRuleSettingView: View {
         .multilineTextAlignment(.trailing)
         .environment(\.editMode, .constant(.active))
         .navigationTitle(Text(rule.__name__))
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationBarTitleDisplayMode(.large)
     }
 }

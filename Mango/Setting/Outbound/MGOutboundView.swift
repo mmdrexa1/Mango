@@ -86,9 +86,9 @@ struct MGOutboundView: View {
         }
         .lineLimit(1)
         .multilineTextAlignment(.trailing)
-        .scrollDismissesKeyboard(.interactively)
         .navigationTitle(Text("Outbound"))
-        .navigationBarTitleDisplayMode(.large)
         .environment(\.editMode, .constant(.active))
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
+        .navigationBarTitleDisplayMode(.large)
     }
 }

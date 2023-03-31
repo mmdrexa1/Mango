@@ -95,6 +95,7 @@ struct MGDNSSettingView: View {
         .lineLimit(1)
         .multilineTextAlignment(.trailing)
         .environment(\.editMode, .constant(.active))
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle(Text("DNS"))
         .navigationBarTitleDisplayMode(.large)
     }

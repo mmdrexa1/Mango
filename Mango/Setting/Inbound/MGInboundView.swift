@@ -64,7 +64,8 @@ struct MGInboundView: View {
             inboundViewModel.save()
         }
         .navigationTitle(Text("Inbound"))
-        .navigationBarTitleDisplayMode(.large)
         .environment(\.editMode, .constant(.active))
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
+        .navigationBarTitleDisplayMode(.large)
     }
 }
