@@ -108,7 +108,6 @@ extension MGConfiguration {
             self.disableCache = try container.decode(Bool.self, forKey: .disableCache)
             self.disableFallback = try container.decode(Bool.self, forKey: .disableFallback)
             self.disableFallbackIfMatch = try container.decode(Bool.self, forKey: .disableFallbackIfMatch)
-            
         }
         
         public func encode(to encoder: Encoder) throws {
