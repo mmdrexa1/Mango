@@ -4,6 +4,8 @@ struct MGRouteSettingView: View {
     
     @ObservedObject private var routeViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Route>
 
+    @State private var isAddRulePresented: Bool = false
+    
     init(routeViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Route>) {
         self._routeViewModel = ObservedObject(initialValue: routeViewModel)
     }
@@ -57,15 +59,12 @@ struct MGRouteSettingView: View {
                 HStack {
                     Text("Rules")
                     Spacer()
-                    MGPresentedButton {
-                        MGRouteRuleSettingView(rule: MGConfiguration.Route.Rule()) { value in
-                            routeViewModel.model.rules.append(value)
-                        }
-                    } label: {
-                        Text("Add")
-                            .font(.callout)
-                            .foregroundColor(.accentColor)
+                    Button("Add") {
+                        isAddRulePresented.toggle()
                     }
+                    .buttonStyle(.plain)
+                    .font(.callout)
+                    .foregroundColor(.accentColor)
                 }
             }
         }
@@ -77,6 +76,11 @@ struct MGRouteSettingView: View {
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationBarTitleDisplayMode(.large)
         .environment(\.editMode, .constant(.active))
+        .sheet(isPresented: $isAddRulePresented) {
+            MGRouteRuleSettingView(rule: MGConfiguration.Route.Rule()) { value in
+                routeViewModel.model.rules.append(value)
+            }
+        }
     }
 }
 
