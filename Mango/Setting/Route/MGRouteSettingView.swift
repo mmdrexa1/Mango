@@ -132,7 +132,7 @@ struct MGRouteRuleSettingView: View {
                 } label: {
                     LabeledContent("Source Port", value: rule.sourcePort ?? "")
                 }
-                LabeledContent("Network") {
+                MGDisclosureGroup {
                     HStack {
                         ForEach(MGConfiguration.Route.Network.allCases) { network in
                             MGToggleButton(title: network.description, isOn: Binding(get: {
@@ -148,8 +148,11 @@ struct MGRouteRuleSettingView: View {
                             }))
                         }
                     }
+                    .padding(.vertical, 4)
+                } label: {
+                    LabeledContent("Network", value: "")
                 }
-                LabeledContent("Protocol") {
+                MGDisclosureGroup {
                     HStack {
                         ForEach(MGConfiguration.Route.Protocol_.allCases) { protocol_ in
                             MGToggleButton(title: protocol_.description, isOn: Binding(get: {
@@ -165,8 +168,11 @@ struct MGRouteRuleSettingView: View {
                             }))
                         }
                     }
+                    .padding(.vertical, 4)
+                } label: {
+                    LabeledContent("Protocol", value: "")
                 }
-                LabeledContent("Inbound") {
+                MGDisclosureGroup {
                     HStack {
                         ForEach(MGConfiguration.Route.Inbound.allCases) { inbound in
                             MGToggleButton(title: inbound.description, isOn: Binding(get: {
@@ -182,6 +188,9 @@ struct MGRouteRuleSettingView: View {
                             }))
                         }
                     }
+                    .padding(.vertical, 4)
+                } label: {
+                    LabeledContent("Inbound", value: "")
                 }
                 Picker("Outbound", selection: $rule.outboundTag) {
                     ForEach(MGConfiguration.Outbound.Tag.allCases) { tag in
