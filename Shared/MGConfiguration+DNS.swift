@@ -15,20 +15,15 @@ extension MGConfiguration {
         }
         
         public struct Server: Codable, Equatable, Identifiable {
-            
             public var __object__ = false
-            public var __uuid__ = UUID()
-            public var id: UUID {
-                self.__uuid__
-            }
-            
+            private var __uuid__ = UUID()
+            public var id: UUID { self.__uuid__ }
             public var address: String = ""
             public var port: Int = 0
             public var domains: [String] = []
             public var expectIPs: [String] = []
             public var skipFallback: Bool = false
             public var clientIP: String?
-            
             private enum CodingKeys: CodingKey {
                 case address
                 case port
@@ -37,36 +32,34 @@ extension MGConfiguration {
                 case skipFallback
                 case clientIP
             }
-            
             init() {}
-            
             public init(from decoder: Decoder) throws {
                 do {
                     let container = try decoder.singleValueContainer()
                     self.address = try container.decode(String.self)
                     self.__object__ = false
+                    self.__uuid__ = UUID()
                 } catch {
-                    let container = try decoder.container(keyedBy: Server.CodingKeys.self)
+                    let container = try decoder.container(keyedBy: CodingKeys.self)
+                    self.address = try container.decode(String.self, forKey: .address)
+                    self.port = try container.decode(Int.self, forKey: .port)
+                    self.domains = try container.decode([String].self, forKey: .domains)
+                    self.expectIPs = try container.decode([String].self, forKey: .expectIPs)
+                    self.skipFallback = try container.decode(Bool.self, forKey: .skipFallback)
+                    self.clientIP = try container.decodeIfPresent(String.self, forKey: .clientIP)
                     self.__object__ = true
                     self.__uuid__ = UUID()
-                    self.address = try container.decode(String.self, forKey: DNS.Server.CodingKeys.address)
-                    self.port = try container.decode(Int.self, forKey: DNS.Server.CodingKeys.port)
-                    self.domains = try container.decode([String].self, forKey: DNS.Server.CodingKeys.domains)
-                    self.expectIPs = try container.decode([String].self, forKey: DNS.Server.CodingKeys.expectIPs)
-                    self.skipFallback = try container.decode(Bool.self, forKey: DNS.Server.CodingKeys.skipFallback)
-                    self.clientIP = try container.decodeIfPresent(String.self, forKey: DNS.Server.CodingKeys.clientIP)
                 }
             }
-            
             public func encode(to encoder: Encoder) throws {
                 if self.__object__ {
-                    var container = encoder.container(keyedBy: DNS.Server.CodingKeys.self)
-                    try container.encode(self.address, forKey: DNS.Server.CodingKeys.address)
-                    try container.encode(self.port, forKey: DNS.Server.CodingKeys.port)
-                    try container.encode(self.domains, forKey: DNS.Server.CodingKeys.domains)
-                    try container.encode(self.expectIPs, forKey: DNS.Server.CodingKeys.expectIPs)
-                    try container.encode(self.skipFallback, forKey: DNS.Server.CodingKeys.skipFallback)
-                    try container.encodeIfPresent(self.clientIP, forKey: DNS.Server.CodingKeys.clientIP)
+                    var container = encoder.container(keyedBy: CodingKeys.self)
+                    try container.encode(self.address, forKey: .address)
+                    try container.encode(self.port, forKey: .port)
+                    try container.encode(self.domains, forKey: .domains)
+                    try container.encode(self.expectIPs, forKey: .expectIPs)
+                    try container.encode(self.skipFallback, forKey: .skipFallback)
+                    try container.encodeIfPresent(self.clientIP, forKey: .clientIP)
                 } else {
                     var container = encoder.singleValueContainer()
                     try container.encode(self.address)
@@ -80,14 +73,13 @@ extension MGConfiguration {
             public var values: [String] = []
         }
                 
-        public var hosts: [Host]?
-        public var servers: [Server]?
-        public var clientIp: String?
-        public var queryStrategy: QueryStrategy
-        public var disableCache: Bool
-        public var disableFallback: Bool
-        public var disableFallbackIfMatch: Bool
-        public var tag: String
+        public var hosts: [Host]? = nil
+        public var servers: [Server]? = nil
+        public var clientIp: String? = nil
+        public var queryStrategy: QueryStrategy = .useIP
+        public var disableCache: Bool = false
+        public var disableFallback: Bool = false
+        public var disableFallbackIfMatch: Bool = false
         
         private enum CodingKeys: String, CodingKey {
             case hosts
@@ -100,24 +92,7 @@ extension MGConfiguration {
             case tag
         }
         
-        public init(
-            hosts: [Host]? = nil,
-            servers: [Server]? = nil,
-            clientIp: String? = nil,
-            queryStrategy: QueryStrategy = .useIP,
-            disableCache: Bool = false,
-            disableFallback: Bool = false,
-            disableFallbackIfMatch: Bool = false
-        ) {
-            self.hosts = hosts
-            self.servers = servers
-            self.clientIp = clientIp
-            self.queryStrategy = queryStrategy
-            self.disableCache = disableCache
-            self.disableFallback = disableFallback
-            self.disableFallbackIfMatch = disableFallbackIfMatch
-            self.tag = "dns-in"
-        }
+        public init() {}
         
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -133,7 +108,6 @@ extension MGConfiguration {
             self.disableCache = try container.decode(Bool.self, forKey: .disableCache)
             self.disableFallback = try container.decode(Bool.self, forKey: .disableFallback)
             self.disableFallbackIfMatch = try container.decode(Bool.self, forKey: .disableFallbackIfMatch)
-            self.tag = try container.decode(String.self, forKey: .tag)
             
         }
         
@@ -151,13 +125,12 @@ extension MGConfiguration {
             try container.encode(self.disableCache, forKey: .disableCache)
             try container.encode(self.disableFallback, forKey: .disableFallback)
             try container.encode(self.disableFallbackIfMatch, forKey: .disableFallbackIfMatch)
-            try container.encode(self.tag, forKey: .tag)
-            
+            try container.encode("dns-in", forKey: .tag)
         }
         
         public static var storeKey = "XRAY_DNS_DATA"
         
-        public static var defaultValue = MGConfiguration.DNS()
+        public static var defaultValue = DNS()
     }
 }
 
