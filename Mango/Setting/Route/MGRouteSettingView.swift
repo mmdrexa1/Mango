@@ -231,22 +231,6 @@ struct MGRouteRuleSettingView: View {
                         }
                     }
                 }
-                Section {
-                    Button {
-                        self.onSave(self.rule)
-                        self.dismiss()
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text("Save")
-                                .padding(.vertical, 6)
-                                .fontWeight(.medium)
-                            Spacer()
-                        }
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .listRowInsets(EdgeInsets(.zero))
-                }
             }
             .lineLimit(1)
             .multilineTextAlignment(.trailing)
@@ -254,6 +238,13 @@ struct MGRouteRuleSettingView: View {
             .navigationTitle(Text("Rule"))
             .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button("Save") {
+                    self.onSave(self.rule)
+                    self.dismiss()
+                }
+                .fontWeight(.medium)
+            }
         }
     }
 }
