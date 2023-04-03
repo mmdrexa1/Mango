@@ -101,30 +101,45 @@ struct MGRouteRuleSettingView: View {
         NavigationStack {
             Form {
                 Section {
+                    LabeledContent("Name") {
+                        TextField("", text: $rule.__name__)
+                            .onSubmit {
+                                if rule.__name__.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                    rule.__name__ = rule.__defaultName__
+                                }
+                            }
+                    }
+                }
+                Section {
+                    Toggle("Enabled", isOn: $rule.__enabled__)
+                }
+                Section {
                     Picker("Matcher", selection: $rule.domainMatcher) {
                         ForEach(MGConfiguration.Route.DomainMatcher.allCases) { strategy in
                             Text(strategy.description)
                         }
                     }
-                    MGDisclosureGroup {
+                }
+                Group {
+                    Section {
                         MGStringListEditor(strings: Binding(get: {
                             rule.domain ?? []
                         }, set: { newValue in
                             rule.domain = newValue.isEmpty ? nil : newValue
                         }), placeholder: nil)
-                    } label: {
-                        LabeledContent("Domain", value: "\(rule.domain?.count ?? 0)")
+                    } header: {
+                        Text("Domain")
                     }
-                    MGDisclosureGroup {
+                    Section {
                         MGStringListEditor(strings: Binding(get: {
                             rule.ip ?? []
                         }, set: { newValue in
                             rule.ip = newValue.isEmpty ? nil : newValue
                         }), placeholder: nil)
-                    } label: {
-                        LabeledContent("IP", value: "\(rule.ip?.count ?? 0)")
+                    } header: {
+                        Text("IP")
                     }
-                    MGDisclosureGroup {
+                    Section {
                         MGStringListEditor(strings:  Binding {
                             let reval = rule.port ?? ""
                             return reval.components(separatedBy: ",").filter { !$0.isEmpty }
@@ -132,10 +147,10 @@ struct MGRouteRuleSettingView: View {
                             let reval = newValue.joined(separator: ",")
                             rule.port = reval.isEmpty ? nil : reval
                         }, placeholder: nil)
-                    } label: {
-                        LabeledContent("Port", value: rule.port ?? "")
+                    } header: {
+                        Text("Port")
                     }
-                    MGDisclosureGroup {
+                    Section {
                         MGStringListEditor(strings:  Binding {
                             let reval = rule.sourcePort ?? ""
                             return reval.components(separatedBy: ",").filter { !$0.isEmpty }
@@ -143,10 +158,12 @@ struct MGRouteRuleSettingView: View {
                             let reval = newValue.joined(separator: ",")
                             rule.sourcePort = reval.isEmpty ? nil : reval
                         }, placeholder: nil)
-                    } label: {
-                        LabeledContent("Source Port", value: rule.sourcePort ?? "")
+                    } header: {
+                        Text("Source Port")
                     }
-                    MGDisclosureGroup {
+                }
+                Group {
+                    Section {
                         HStack {
                             ForEach(MGConfiguration.Route.Network.allCases) { network in
                                 MGToggleButton(title: network.description, isOn: Binding(get: {
@@ -163,10 +180,10 @@ struct MGRouteRuleSettingView: View {
                             }
                         }
                         .padding(.vertical, 4)
-                    } label: {
-                        LabeledContent("Network", value: "")
+                    } header: {
+                        Text("Network")
                     }
-                    MGDisclosureGroup {
+                    Section {
                         HStack {
                             ForEach(MGConfiguration.Route.Protocol_.allCases) { protocol_ in
                                 MGToggleButton(title: protocol_.description, isOn: Binding(get: {
@@ -183,10 +200,10 @@ struct MGRouteRuleSettingView: View {
                             }
                         }
                         .padding(.vertical, 4)
-                    } label: {
-                        LabeledContent("Protocol", value: "")
+                    } header: {
+                        Text("Protocol")
                     }
-                    MGDisclosureGroup {
+                    Section {
                         HStack {
                             ForEach(MGConfiguration.Route.Inbound.allCases) { inbound in
                                 MGToggleButton(title: inbound.description, isOn: Binding(get: {
@@ -203,29 +220,16 @@ struct MGRouteRuleSettingView: View {
                             }
                         }
                         .padding(.vertical, 4)
-                    } label: {
-                        LabeledContent("Inbound", value: "")
+                    } header: {
+                        Text("Inbound")
                     }
+                }
+                Section {
                     Picker("Outbound", selection: $rule.outboundTag) {
                         ForEach(MGConfiguration.Outbound.Tag.allCases) { tag in
                             Text(tag.description)
                         }
                     }
-                } header: {
-                    Text("Settings")
-                }
-                Section {
-                    LabeledContent("Name") {
-                        TextField("", text: $rule.__name__)
-                            .onSubmit {
-                                if rule.__name__.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                                    rule.__name__ = rule.__defaultName__
-                                }
-                            }
-                    }
-                    Toggle("Enable", isOn: $rule.__enabled__)
-                } header: {
-                    Text("Other")
                 }
                 Section {
                     Button {
