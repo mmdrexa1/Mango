@@ -18,13 +18,13 @@ struct MGRouteSettingView: View {
                         Text(strategy.description)
                     }
                 }
+            }
+            Section {
                 Picker("Matcher", selection: $routeViewModel.model.domainMatcher) {
                     ForEach(MGConfiguration.Route.DomainMatcher.allCases) { strategy in
                         Text(strategy.description)
                     }
                 }
-            } header: {
-                Text("Domain")
             }
             Section {
                 ForEach($routeViewModel.model.rules) { rule in
@@ -74,7 +74,7 @@ struct MGRouteSettingView: View {
         .lineLimit(1)
         .navigationTitle(Text("Route"))
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .environment(\.editMode, .constant(.active))
         .sheet(isPresented: $isAddRulePresented) {
             MGRouteRuleSettingView(rule: MGConfiguration.Route.Rule()) { value in
