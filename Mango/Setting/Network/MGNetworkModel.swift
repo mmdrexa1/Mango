@@ -8,12 +8,10 @@ public struct MGNetworkModel: Codable, Equatable {
     
     public let hideVPNIcon: Bool
     public let ipv6Enabled: Bool
-    public let inboundPort: Int
     
     public static let `default` = MGNetworkModel(
         hideVPNIcon: false,
-        ipv6Enabled: false,
-        inboundPort: 8080
+        ipv6Enabled: false
     )
     
     public static var current: MGNetworkModel {

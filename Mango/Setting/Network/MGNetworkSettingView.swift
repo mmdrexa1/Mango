@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MGNetworkSettingView: View {
     
-    @EnvironmentObject  private var packetTunnelManager: MGPacketTunnelManager
+    @EnvironmentObject private var packetTunnelManager: MGPacketTunnelManager
     @ObservedObject private var networkViewModel: MGNetworkViewModel
     
     init(networkViewModel: MGNetworkViewModel) {
@@ -11,16 +11,6 @@ struct MGNetworkSettingView: View {
     
     var body: some View {
         Form {
-            Section {
-                LabeledContent("SOCKS5 端口") {
-                    TextField("8080", value: $networkViewModel.inboundPort, format: .number)
-                        .multilineTextAlignment(.trailing)
-                }
-            } header: {
-                Text("Inbound")
-            } footer: {
-                Text("自定义配置需将 SOCKS5 入站端口修改为设置的值")
-            }
             Section {
                 Toggle("隐藏 VPN 图标", isOn: $networkViewModel.hideVPNIcon)
             } header: {
