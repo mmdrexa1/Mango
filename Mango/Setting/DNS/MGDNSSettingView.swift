@@ -113,9 +113,9 @@ struct MGDNSSettingView: View {
         .sheet(isPresented: $isAddServerPresented) {
             MGDNSServerView(server: MGConfiguration.DNS.Server()) { value in
                 if dnsViewModel.model.servers == nil {
-                    dnsViewModel.model.servers = [MGConfiguration.DNS.Server()]
+                    dnsViewModel.model.servers = [value]
                 } else {
-                    dnsViewModel.model.servers?.append(MGConfiguration.DNS.Server())
+                    dnsViewModel.model.servers?.append(value)
                 }
             }
         }
@@ -174,6 +174,7 @@ struct MGDNSHostView: View {
                     Text("Values")
                 }
             }
+            .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
             .environment(\.editMode, .constant(.active))
             .navigationTitle("Host")
             .toolbar(.visible, for: .navigationBar)
@@ -228,18 +229,6 @@ struct MGDNSServerView: View {
     var body: some View {
         NavigationStack {
             Form {
-//                Section {
-//                    Picker(selection: $server.__object__) {
-//                        ForEach([false, true], id: \.self) { bool in
-//                            Text(bool ? "OBJECT" : "STRING")
-//                        }
-//                    } label: {
-//                        EmptyView()
-//                    }
-//                    .pickerStyle(.segmented)
-//                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-//                    .listRowBackground(Color.clear)
-//                }
                 Section {
                     LabeledContent("Address") {
                         TextField("", text: $server.address)
@@ -289,6 +278,7 @@ struct MGDNSServerView: View {
                     }
                 }
             }
+            .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
             .multilineTextAlignment(.trailing)
             .environment(\.editMode, .constant(.active))
             .navigationTitle(Text("Server"))
