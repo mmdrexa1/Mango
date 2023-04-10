@@ -7,7 +7,7 @@ extension MGConstant {
     static let cachesDirectory = URL(filePath: NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0])
 }
 
-class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
+class PacketTunnelProvider: NEPacketTunnelProvider, XrayOSLoggerProtocol {
     
     private let logger = Logger(subsystem: "com.Arror.Mango.XrayTunnel", category: "Core")
     
@@ -54,10 +54,9 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
         guard FileManager.default.createFile(atPath: path, contents: data) else {
             throw NSError.newError("Xray 配置文件写入失败")
         }
-        let log = MGConfiguration.Log.currentValue()
-        XraySetupLogger(self, log.accessLogEnabled, log.dnsLogEnabled, log.errorLogSeverity.rawValue)
         XraySetenv("XRAY_LOCATION_CONFIG", MGConstant.cachesDirectory.path(percentEncoded: false), nil)
         XraySetenv("XRAY_LOCATION_ASSET", MGConstant.assetDirectory.path(percentEncoded: false), nil)
+        XrayRegisterOSLogger(self)
         var error: NSError? = nil
         XrayRun(&error)
         try error.flatMap { throw $0 }
@@ -136,9 +135,9 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
         message.flatMap { logger.log("\($0, privacy: .public)") }
     }
     
-    func onGeneralMessage(_ severity: Int, message: String?) {
-        let level = MGConfiguration.Log.Severity(rawValue: severity) ?? .none
-        guard let message = message, !message.isEmpty else {
+    func onGeneralMessage(_ severity: String?, message: String?) {
+        guard let level = severity.flatMap(MGConfiguration.Log.Severity.init(rawValue:)),
+              let message = message, !message.isEmpty else {
             return
         }
         switch level {
@@ -150,7 +149,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
             logger.warning("\(message, privacy: .public)")
         case .error:
             logger.error("\(message, privacy: .public)")
-        case .none:
+        case .unknown:
             break
         }
     }
@@ -159,6 +158,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayLoggerProtocol {
 extension MGConfiguration {
     
     private struct Model: Encodable {
+        let log: Log
         let dns: DNS
         let routing: Route
         let inbounds: [Inbound]
@@ -196,7 +196,15 @@ extension MGConfiguration {
                     return outboundSettings.blackhole
                 }
             }
-            return try JSONEncoder().encode(Model(dns: DNS.currentValue(), routing: routing, inbounds: [inbound], outbounds: outbounds))
+            return try JSONEncoder().encode(
+                Model(
+                    log: Log.currentValue(),
+                    dns: DNS.currentValue(),
+                    routing: routing,
+                    inbounds: [inbound],
+                    outbounds: outbounds
+                )
+            )
         }
     }
 }
