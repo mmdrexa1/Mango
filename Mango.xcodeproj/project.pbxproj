@@ -29,6 +29,10 @@
 		708B380329B0937600E24312 /* MGInboundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708B380229B0937600E24312 /* MGInboundView.swift */; };
 		708B385B29B81CEB00E24312 /* Tun2SocksKit in Frameworks */ = {isa = PBXBuildFile; productRef = 708B385A29B81CEB00E24312 /* Tun2SocksKit */; };
 		708B386129B81DDB00E24312 /* MGNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702D9089299B58A400B83324 /* MGNotification.swift */; };
+		7093A37B29E3D4F600C05C6C /* MGConfiguration+Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37A29E3D4F600C05C6C /* MGConfiguration+Statistics.swift */; };
+		7093A37C29E3D4F600C05C6C /* MGConfiguration+Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37A29E3D4F600C05C6C /* MGConfiguration+Statistics.swift */; };
+		7093A37E29E3D55D00C05C6C /* MGConfiguration+Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */; };
+		7093A37F29E3D55D00C05C6C /* MGConfiguration+Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */; };
 		70B89C1E29C17C29003DA577 /* MGInboundEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C1D29C17C29003DA577 /* MGInboundEntranceView.swift */; };
 		70B89C2429C1984A003DA577 /* MGDataSizeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2329C1984A003DA577 /* MGDataSizeFormatter.swift */; };
 		70B89C2E29C19F7D003DA577 /* MGLogEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2D29C19F7D003DA577 /* MGLogEntranceView.swift */; };
@@ -54,8 +58,6 @@
 		70C4E5B929D3F74F00D1A52D /* MGConfiguration+DNS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5B729D3F74F00D1A52D /* MGConfiguration+DNS.swift */; };
 		70C4E5BC29D3FDEA00D1A52D /* MGOutboundEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5BB29D3FDEA00D1A52D /* MGOutboundEntranceView.swift */; };
 		70C4E5BE29D3FDF800D1A52D /* MGOutboundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5BD29D3FDF800D1A52D /* MGOutboundView.swift */; };
-		70C4E5C229D3FF1700D1A52D /* MGStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5C029D3FF1700D1A52D /* MGStatisticsView.swift */; };
-		70C4E5C329D3FF1700D1A52D /* MGStatisticsEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5C129D3FF1700D1A52D /* MGStatisticsEntranceView.swift */; };
 		70C4E5CB29D42D4A00D1A52D /* MGAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5C829D42D4A00D1A52D /* MGAssetView.swift */; };
 		70C4E5CC29D42D4A00D1A52D /* MGAssetEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5C929D42D4A00D1A52D /* MGAssetEntranceView.swift */; };
 		70C4E5CD29D42D4A00D1A52D /* MGAssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C4E5CA29D42D4A00D1A52D /* MGAssetViewModel.swift */; };
@@ -157,6 +159,8 @@
 		7084FC242963FB8A00065DAF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		7084FC252963FDE300065DAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		708B380229B0937600E24312 /* MGInboundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGInboundView.swift; sourceTree = "<group>"; };
+		7093A37A29E3D4F600C05C6C /* MGConfiguration+Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGConfiguration+Statistics.swift"; sourceTree = "<group>"; };
+		7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGConfiguration+Policy.swift"; sourceTree = "<group>"; };
 		70B89C1D29C17C29003DA577 /* MGInboundEntranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGInboundEntranceView.swift; sourceTree = "<group>"; };
 		70B89C2329C1984A003DA577 /* MGDataSizeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDataSizeFormatter.swift; sourceTree = "<group>"; };
 		70B89C2D29C19F7D003DA577 /* MGLogEntranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLogEntranceView.swift; sourceTree = "<group>"; };
@@ -175,8 +179,6 @@
 		70C4E5B729D3F74F00D1A52D /* MGConfiguration+DNS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGConfiguration+DNS.swift"; sourceTree = "<group>"; };
 		70C4E5BB29D3FDEA00D1A52D /* MGOutboundEntranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGOutboundEntranceView.swift; sourceTree = "<group>"; };
 		70C4E5BD29D3FDF800D1A52D /* MGOutboundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGOutboundView.swift; sourceTree = "<group>"; };
-		70C4E5C029D3FF1700D1A52D /* MGStatisticsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MGStatisticsView.swift; sourceTree = "<group>"; };
-		70C4E5C129D3FF1700D1A52D /* MGStatisticsEntranceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MGStatisticsEntranceView.swift; sourceTree = "<group>"; };
 		70C4E5C829D42D4A00D1A52D /* MGAssetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MGAssetView.swift; sourceTree = "<group>"; };
 		70C4E5C929D42D4A00D1A52D /* MGAssetEntranceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MGAssetEntranceView.swift; sourceTree = "<group>"; };
 		70C4E5CA29D42D4A00D1A52D /* MGAssetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MGAssetViewModel.swift; sourceTree = "<group>"; };
@@ -311,15 +313,6 @@
 			path = Outbound;
 			sourceTree = "<group>";
 		};
-		70C4E5BF29D3FEE700D1A52D /* Statistics */ = {
-			isa = PBXGroup;
-			children = (
-				70C4E5C129D3FF1700D1A52D /* MGStatisticsEntranceView.swift */,
-				70C4E5C029D3FF1700D1A52D /* MGStatisticsView.swift */,
-			);
-			path = Statistics;
-			sourceTree = "<group>";
-		};
 		70C4E5C729D42D1000D1A52D /* Asset */ = {
 			isa = PBXGroup;
 			children = (
@@ -405,6 +398,8 @@
 				70C4E58829D2FDE300D1A52D /* MGConfiguration+Inbound.swift */,
 				70C4E5B729D3F74F00D1A52D /* MGConfiguration+DNS.swift */,
 				70C4E59429D3DBBC00D1A52D /* MGConfiguration+Route.swift */,
+				7093A37A29E3D4F600C05C6C /* MGConfiguration+Statistics.swift */,
+				7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */,
 				70C4E5D129D547D200D1A52D /* MGConfiguration+Outbound.swift */,
 				70C4E5CE29D433DD00D1A52D /* MGConfiguration+OutboundSettings.swift */,
 			);
@@ -434,7 +429,6 @@
 				70F82CDE29CC05740072B334 /* DNS */,
 				70F82CDD29CC056E0072B334 /* Route */,
 				70C4E5BA29D3FDCF00D1A52D /* Outbound */,
-				70C4E5BF29D3FEE700D1A52D /* Statistics */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -587,7 +581,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				70C4E59029D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift in Sources */,
+				7093A37F29E3D55D00C05C6C /* MGConfiguration+Policy.swift in Sources */,
 				7069E01F29ADEAA30012C435 /* PacketTunnelProvider.swift in Sources */,
+				7093A37C29E3D4F600C05C6C /* MGConfiguration+Statistics.swift in Sources */,
 				70CEB89929A30C79003436C2 /* MGConstant.swift in Sources */,
 				70B89C3429C1A918003DA577 /* MGNetworkModel.swift in Sources */,
 				70C4E5D029D433E100D1A52D /* MGConfiguration+OutboundSettings.swift in Sources */,
@@ -606,6 +602,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7093A37E29E3D55D00C05C6C /* MGConfiguration+Policy.swift in Sources */,
 				702D908A299B58A400B83324 /* MGNotification.swift in Sources */,
 				70F82CD629C990E60072B334 /* MGShadowsocksView.swift in Sources */,
 				70B89C3329C1A918003DA577 /* MGNetworkModel.swift in Sources */,
@@ -620,6 +617,7 @@
 				70F82CB629C2E6B40072B334 /* MGContentView.swift in Sources */,
 				70C9EDD82951587D00B6995B /* MGVPNResettingView.swift in Sources */,
 				702A08A629D182CF00B0BBF8 /* MGDNSSettingView.swift in Sources */,
+				7093A37B29E3D4F600C05C6C /* MGConfiguration+Statistics.swift in Sources */,
 				70F82CDC29CAC2D50072B334 /* MGConfigurationEditViewModel.swift in Sources */,
 				70B89C1E29C17C29003DA577 /* MGInboundEntranceView.swift in Sources */,
 				70F82CD429C978CF0072B334 /* MGSecurityView.swift in Sources */,
@@ -642,13 +640,11 @@
 				70C4E58929D2FDE300D1A52D /* MGConfiguration+Inbound.swift in Sources */,
 				7000C6E4295D635F0005626E /* MGControlView.swift in Sources */,
 				70B89C3829C1AA94003DA577 /* MGNetworkEntranceView.swift in Sources */,
-				70C4E5C329D3FF1700D1A52D /* MGStatisticsEntranceView.swift in Sources */,
 				70C4E58F29D3D39D00D1A52D /* MGConfigurationPersistentViewModel.swift in Sources */,
 				706DB6C729BAC4C7002F22C7 /* MGConfigurationListView.swift in Sources */,
 				702A08AC29D1A1E600B0BBF8 /* MGStringListEditor.swift in Sources */,
 				70CEB89329A0C7BA003436C2 /* MGConstant.swift in Sources */,
 				70B89C2429C1984A003DA577 /* MGDataSizeFormatter.swift in Sources */,
-				70C4E5C229D3FF1700D1A52D /* MGStatisticsView.swift in Sources */,
 				706DB6C129B9E006002F22C7 /* MGConfigurationLoadViewModel.swift in Sources */,
 				70C4E5CD29D42D4A00D1A52D /* MGAssetViewModel.swift in Sources */,
 				7000C6DE295D5F690005626E /* MGConnectedDurationView.swift in Sources */,
@@ -952,7 +948,7 @@
 			repositoryURL = "https://github.com/daemooon/XrayKit.git";
 			requirement = {
 				kind = exactVersion;
-				version = 0.1.49;
+				version = 0.1.50;
 			};
 		};
 		708B37F829B036C500E24312 /* XCRemoteSwiftPackageReference "Tun2SocksKit" */ = {

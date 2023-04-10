@@ -7,7 +7,7 @@ extension MGConstant {
     static let cachesDirectory = URL(filePath: NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0])
 }
 
-class PacketTunnelProvider: NEPacketTunnelProvider, XrayOSLoggerProtocol {
+class PacketTunnelProvider: NEPacketTunnelProvider, XrayOSLoggerProtocol, XrayTrafficReceiverProtocol {
     
     private let logger = Logger(subsystem: "com.Arror.Mango.XrayTunnel", category: "Core")
     
@@ -54,9 +54,10 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayOSLoggerProtocol {
         guard FileManager.default.createFile(atPath: path, contents: data) else {
             throw NSError.newError("Xray 配置文件写入失败")
         }
+        XrayRegisterOSLogger(self)
+        XrayRegisterTrafficReceiver(self)
         XraySetenv("XRAY_LOCATION_CONFIG", MGConstant.cachesDirectory.path(percentEncoded: false), nil)
         XraySetenv("XRAY_LOCATION_ASSET", MGConstant.assetDirectory.path(percentEncoded: false), nil)
-        XrayRegisterOSLogger(self)
         var error: NSError? = nil
         XrayRun(&error)
         try error.flatMap { throw $0 }
@@ -153,6 +154,11 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayOSLoggerProtocol {
             break
         }
     }
+    
+    func onTrafficUpdate(_ up: Int64, down: Int64) {
+        UserDefaults.shared.set(up, forKey: "XRAY_PROXY_TRAFFIC_UP")
+        UserDefaults.shared.set(down, forKey: "XRAY_PROXY_TRAFFIC_DOWN")
+    }
 }
 
 extension MGConfiguration {
@@ -163,6 +169,8 @@ extension MGConfiguration {
         let routing: Route
         let inbounds: [Inbound]
         let outbounds: [Outbound]
+        let stats = Statistics.defaultValue
+        let policy = Policy.defaultValue
     }
     
     func loadData(inboundPort: inout Int) throws -> Data {

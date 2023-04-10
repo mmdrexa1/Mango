@@ -2,6 +2,9 @@ import SwiftUI
 
 struct MGConfigurationView: View {
     
+    @AppStorage("XRAY_PROXY_TRAFFIC_UP", store: .shared) private var up: Double = 0
+    @AppStorage("XRAY_PROXY_TRAFFIC_DOWN", store: .shared) private var down: Double = 0
+    
     @EnvironmentObject private var packetTunnelManager: MGPacketTunnelManager
     
     @EnvironmentObject private var configurationListManager: MGConfigurationListManager
@@ -19,6 +22,10 @@ struct MGConfigurationView: View {
                             .font(.callout)
                             .fontWeight(.light)
                     }
+                }
+                if let status = packetTunnelManager.status, status == .connected {
+                    LabeledContent("UP", value: "\(Int64(up))")
+                    LabeledContent("DOWN", value: "\(Int64(down))")
                 }
             } else {
                 NoCurrentConfigurationView()
