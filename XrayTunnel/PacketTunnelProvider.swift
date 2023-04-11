@@ -7,7 +7,7 @@ extension MGConstant {
     static let cachesDirectory = URL(filePath: NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0])
 }
 
-class PacketTunnelProvider: NEPacketTunnelProvider, XrayOSLoggerProtocol, XrayTrafficReceiverProtocol {
+class PacketTunnelProvider: NEPacketTunnelProvider, XrayClientProtocol {
     
     private let logger = Logger(subsystem: "com.Arror.Mango.XrayTunnel", category: "Core")
     
@@ -54,13 +54,12 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayOSLoggerProtocol, XrayTr
         guard FileManager.default.createFile(atPath: path, contents: data) else {
             throw NSError.newError("Xray 配置文件写入失败")
         }
-        XrayRegisterOSLogger(self)
-        XrayRegisterTrafficReceiver(self)
-        XraySetenv("XRAY_LOCATION_CONFIG", MGConstant.cachesDirectory.path(percentEncoded: false), nil)
-        XraySetenv("XRAY_LOCATION_ASSET", MGConstant.assetDirectory.path(percentEncoded: false), nil)
-        var error: NSError? = nil
-        XrayRun(&error)
-        try error.flatMap { throw $0 }
+        guard let instance = XrayCreateInstanceWithDelegate(self) else {
+            return
+        }
+        try instance.setenv("XRAY_LOCATION_CONFIG", value: MGConstant.cachesDirectory.path(percentEncoded: false))
+        try instance.setenv("XRAY_LOCATION_ASSET", value: MGConstant.assetDirectory.path(percentEncoded: false))
+        try instance.run()
         let config = """
         tunnel:
           mtu: 9000

@@ -19,8 +19,6 @@ struct MGConfigurationView: View {
                 LabeledContent("最近更新") {
                     TimelineView(.periodic(from: Date(), by: 1)) { _ in
                         Text(configuration.attributes.leastUpdated.formatted(.relative(presentation: .numeric)))
-                            .font(.callout)
-                            .fontWeight(.light)
                     }
                 }
                 if let status = packetTunnelManager.status, status == .connected {
