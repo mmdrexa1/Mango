@@ -33,6 +33,7 @@
 		7093A37C29E3D4F600C05C6C /* MGConfiguration+Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37A29E3D4F600C05C6C /* MGConfiguration+Statistics.swift */; };
 		7093A37E29E3D55D00C05C6C /* MGConfiguration+Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */; };
 		7093A37F29E3D55D00C05C6C /* MGConfiguration+Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */; };
+		7093A38329E9229500C05C6C /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70B89C3D29C1C117003DA577 /* libresolv.9.tbd */; };
 		70B89C1E29C17C29003DA577 /* MGInboundEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C1D29C17C29003DA577 /* MGInboundEntranceView.swift */; };
 		70B89C2429C1984A003DA577 /* MGDataSizeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2329C1984A003DA577 /* MGDataSizeFormatter.swift */; };
 		70B89C2E29C19F7D003DA577 /* MGLogEntranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2D29C19F7D003DA577 /* MGLogEntranceView.swift */; };
@@ -228,6 +229,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7093A38329E9229500C05C6C /* libresolv.9.tbd in Frameworks */,
 				70F82CEB29CC21B40072B334 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -948,7 +950,7 @@
 			repositoryURL = "https://github.com/daemooon/XrayKit.git";
 			requirement = {
 				kind = exactVersion;
-				version = 0.1.60;
+				version = 0.1.61;
 			};
 		};
 		708B37F829B036C500E24312 /* XCRemoteSwiftPackageReference "Tun2SocksKit" */ = {

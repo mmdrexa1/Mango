@@ -10,7 +10,6 @@ extension MGConstant {
 class PacketTunnelProvider: NEPacketTunnelProvider, XrayClientProtocol, XrayOSLoggerProtocol {
     
     private let instance = XrayInstance()
-    private let environment = XrayEnvironment()
     
     private let logger = Logger(subsystem: "com.Arror.Mango.XrayTunnel", category: "Core")
     
@@ -62,8 +61,6 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayClientProtocol, XrayOSLo
         guard FileManager.default.createFile(atPath: path, contents: data) else {
             throw NSError.newError("Xray 配置文件写入失败")
         }
-        try self.environment.set("XRAY_LOCATION_CONFIG", value: MGConstant.cachesDirectory.path(percentEncoded: false))
-        try self.environment.set("XRAY_LOCATION_ASSET", value: MGConstant.assetDirectory.path(percentEncoded: false))
         try self.instance.run(self)
         let config = """
         tunnel:
@@ -158,6 +155,15 @@ class PacketTunnelProvider: NEPacketTunnelProvider, XrayClientProtocol, XrayOSLo
             break
         }
     }
+    
+    func onPrepare(_ env: XrayEnvironmentProtocol?) throws {
+        try env.flatMap {
+            try $0.set("XRAY_LOCATION_CONFIG", value: MGConstant.cachesDirectory.path(percentEncoded: false))
+            try $0.set("XRAY_LOCATION_ASSET", value: MGConstant.assetDirectory.path(percentEncoded: false))
+        }
+    }
+    
+    func onServerRunning() {}
     
     func onTrafficUpdate(_ up: Int64, down: Int64) {
         UserDefaults.shared.set(up, forKey: "XRAY_PROXY_TRAFFIC_UP")
