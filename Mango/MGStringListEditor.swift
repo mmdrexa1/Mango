@@ -24,7 +24,7 @@ struct MGStringListEditor: View {
                 .frame(width: 18, height: 18)
                 .foregroundColor(.green)
                 .background(Circle().foregroundColor(.white))
-            TextField(placeholder ?? "Input new element here", text: $value)
+            TextField(placeholder ?? "", text: $value)
                 .onSubmit {
                     let temp = self.value.trimmingCharacters(in: .whitespacesAndNewlines)
                     DispatchQueue.main.async {

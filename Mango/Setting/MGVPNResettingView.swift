@@ -9,22 +9,20 @@ struct MGVPNResettingView: View {
     var body: some View {
         HStack {
             Spacer()
-            Button("重置VPN配置", role: .destructive) {
+            Button("Reset VPN Configuration", role: .destructive) {
                 isPresented.toggle()
             }
             .disabled(packetTunnelManager.status == nil)
             Spacer()
         }
-        .alert("重置", isPresented: $isPresented) {
-            Button("确定", role: .destructive) {
+        .alert("Reset", isPresented: $isPresented) {
+            Button("Confirm", role: .destructive) {
                 Task(priority: .high) {
                     try await packetTunnelManager.removeFromPreferences()
                     try await packetTunnelManager.saveToPreferences()
                 }
             }
-            Button("取消", role: .cancel, action: {})
-        } message: {
-            Text("确定重置您的 VPN 配置么?")
+            Button("Cancel", role: .cancel, action: {})
         }
     }
 }

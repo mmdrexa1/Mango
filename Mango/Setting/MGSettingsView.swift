@@ -12,12 +12,12 @@ struct MGSettingsView: View {
         case outbound
         var title: String {
             switch self {
-            case .log:      return "日志"
-            case .asset:    return "资源"
+            case .log:      return "Log"
+            case .asset:    return "Assets"
             case .dns:      return "DNS"
-            case .route:    return "路由"
-            case .inbound:  return "入站"
-            case .outbound: return "出站"
+            case .route:    return "Route"
+            case .inbound:  return "Inbound"
+            case .outbound: return "Outbound"
             }
         }
         var systemImage: String {
@@ -46,7 +46,7 @@ struct MGSettingsView: View {
                     MGVPNResettingView()
                 }
             }
-            .navigationTitle(Text("设置"))
+            .navigationTitle(Text("Settings"))
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Destination.self) { destination in
                 switch destination {

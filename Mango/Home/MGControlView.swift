@@ -21,14 +21,14 @@ struct MGControlView: View {
                     Text(status.displayString)
                 }
             } else {
-                Text("未连接")
+                Text("Disconnected")
             }
         }
     }
     
     private func connectedDateString(current: Date) -> String {
         guard let connectedDate = packetTunnelManager.connectedDate else {
-            return "已连接"
+            return "Connected"
         }
         let duration = Int64(abs(current.distance(to: connectedDate)))
         let hs = duration / 3600
@@ -79,19 +79,19 @@ extension NEVPNStatus {
     var displayString: String {
         switch self {
         case .invalid:
-            return "不可用"
+            return "Invalid"
         case .disconnected:
-            return "未连接"
+            return "Disconnected"
         case .connecting:
-            return "正在连接..."
+            return "Connecting"
         case .connected:
-            return "已连接"
+            return "Connected"
         case .reasserting:
-            return "正在重连..."
+            return "Reasserting"
         case .disconnecting:
-            return "正在断开..."
+            return "Disconnecting"
         @unknown default:
-            return "未知"
+            return "Unknown"
         }
     }
 }

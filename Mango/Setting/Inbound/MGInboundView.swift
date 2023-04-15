@@ -7,8 +7,8 @@ struct MGInboundView: View {
     var body: some View {
         Form {
             Section {
-                LabeledContent("地址", value: "[::1]")
-                LabeledContent("端口") {
+                LabeledContent("Listen", value: "[::1]")
+                LabeledContent("Port") {
                     TextField("", text: Binding(get: {
                         "\(inboundViewModel.model.port)"
                     }, set: { value in
@@ -25,9 +25,9 @@ struct MGInboundView: View {
                 Text("SOSCK5")
             }
             Section {
-                Toggle("状态", isOn: $inboundViewModel.model.sniffing.enabled)
+                Toggle("Enabled", isOn: $inboundViewModel.model.sniffing.enabled)
                 VStack(alignment: .leading) {
-                    Text("流量类型")
+                    Text("Destination Override")
                     HStack {
                         ForEach(MGConfiguration.Inbound.DestinationOverride.allCases, id: \.rawValue) { `override` in
                             MGToggleButton(title: `override`.description, isOn: Binding(get: {
@@ -42,16 +42,16 @@ struct MGInboundView: View {
                         }
                     }
                 }
-                Toggle("使用元数据", isOn: $inboundViewModel.model.sniffing.metadataOnly)
-                Toggle("仅用于路由", isOn: $inboundViewModel.model.sniffing.routeOnly)
+                Toggle("Metadata Only", isOn: $inboundViewModel.model.sniffing.metadataOnly)
+                Toggle("Route Only", isOn: $inboundViewModel.model.sniffing.routeOnly)
             } header: {
-                Text("流量嗅探")
+                Text("Sniffing")
             }
         }
         .onDisappear {
             inboundViewModel.save()
         }
-        .navigationTitle(Text("入站"))
+        .navigationTitle(Text("Inbound"))
         .environment(\.editMode, .constant(.active))
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
     }

@@ -7,14 +7,14 @@ struct MGDNSSettingView: View {
     var body: some View {
         Form {
             Section {
-                NavigationLink("静态 IP") {
+                NavigationLink("Hosts") {
                     MGDNSHostsView(hosts: $dnsViewModel.model.hosts)
                 }
-                NavigationLink("服务器") {
+                NavigationLink("Servers") {
                     MGDNSServersView(servers: $dnsViewModel.model.servers)
                 }
                 LabeledContent {
-                    Picker("查询策略", selection: $dnsViewModel.model.queryStrategy) {
+                    Picker("Query Strategy", selection: $dnsViewModel.model.queryStrategy) {
                         ForEach(MGConfiguration.DNS.QueryStrategy.allCases) { strategy in
                             Text(strategy.description)
                         }
@@ -22,11 +22,11 @@ struct MGDNSSettingView: View {
                     .labelsHidden()
                     .fixedSize()
                 } label: {
-                    Text("查询策略")
+                    Text("Query Strategy")
                 }
-                Toggle("禁用缓存", isOn: $dnsViewModel.model.disableCache)
-                Toggle("禁用 Fallback 查询", isOn: $dnsViewModel.model.disableFallback)
-                Toggle("禁用 Fallback 查询如果命中", isOn: $dnsViewModel.model.disableFallbackIfMatch)
+                Toggle("Disable Cache", isOn: $dnsViewModel.model.disableCache)
+                Toggle("Disable Fallback", isOn: $dnsViewModel.model.disableFallback)
+                Toggle("Disable Fallback If Match", isOn: $dnsViewModel.model.disableFallbackIfMatch)
             }
         }
         .lineLimit(1)
@@ -76,7 +76,7 @@ struct MGDNSHostsView: View {
                 hosts.remove(atOffsets: offsets)
             }
         }
-        .navigationTitle(Text("静态 IP"))
+        .navigationTitle(Text("Hosts"))
         .environment(\.editMode, .constant(.active))
         .toolbar {
             Button {
@@ -134,7 +134,7 @@ struct MGDNSServersView: View {
                 servers.remove(atOffsets: offsets)
             }
         }
-        .navigationTitle(Text("服务器"))
+        .navigationTitle(Text("Servers"))
         .environment(\.editMode, .constant(.active))
         .toolbar {
             Button {
@@ -171,13 +171,13 @@ struct MGDNSHostView: View {
                     TextField("", text: $host.key)
                         .multilineTextAlignment(.leading)
                 } header: {
-                    Text("域名")
+                    Text("Domain")
                 }
                 Section {
                     MGStringListEditor(strings: $host.values, placeholder: nil)
                         .moveDisabled(true)
                 } header: {
-                    Text("地址")
+                    Text("Addresses")
                 }
             }
             .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
@@ -187,12 +187,12 @@ struct MGDNSHostView: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("取消", role: .cancel) {
+                    Button("Cancel", role: .cancel) {
                         self.dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("保存", role: .none) {
+                    Button("Save", role: .none) {
                         self.onSave(self.host)
                         self.dismiss()
                     }
@@ -218,49 +218,48 @@ struct MGDNSServerView: View {
     var body: some View {
         NavigationStack {
             Form {
-                LabeledContent("地址") {
+                LabeledContent("Address") {
                     TextField("", text: $server.address)
                 }
                 if server.__object__ {
-                    LabeledContent("端口") {
+                    LabeledContent("Port") {
                         TextField("", value: $server.port, format: .number)
                     }
-                    NavigationLink("域名") {
+                    NavigationLink("Domains") {
                         Form {
                             MGStringListEditor(strings: $server.domains, placeholder: nil)
                         }
-                        .navigationTitle(Text("域名"))
+                        .navigationTitle(Text("Domains"))
                         .environment(\.editMode, .constant(.active))
                     }
-                    NavigationLink("IP 范围") {
+                    NavigationLink("Expect IPs") {
                         Form {
                             MGStringListEditor(strings: $server.expectIPs, placeholder: nil)
                         }
-                        .navigationTitle(Text("IP 范围"))
+                        .navigationTitle(Text("Expect IPs"))
                         .environment(\.editMode, .constant(.active))
                     }
-                    Toggle("Fallback 查询跳过此服务器", isOn: $server.skipFallback)
+                    Toggle("Skip Fallback", isOn: $server.skipFallback)
                 }
                 Button {
                     withAnimation {
                         server.__object__.toggle()
                     }
                 } label: {
-                    Text(server.__object__ ? "使用简单配置" : "使用复杂配置")
+                    Text(server.__object__ ? "Simple" : "Complex")
                 }
             }
             .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
             .multilineTextAlignment(.trailing)
-            .navigationTitle(Text(" "))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("取消", role: .cancel) {
+                    Button("Cancel", role: .cancel) {
                         self.dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("保存", role: .none) {
+                    Button("Save", role: .none) {
                         self.onSave(self.server)
                         self.dismiss()
                     }

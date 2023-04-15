@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7000C6DE295D5F690005626E /* MGConnectedDurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7000C6DD295D5F690005626E /* MGConnectedDurationView.swift */; };
 		7000C6E4295D635F0005626E /* MGControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7000C6E3295D635F0005626E /* MGControlView.swift */; };
 		702A08A629D182CF00B0BBF8 /* MGDNSSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */; };
 		702A08AC29D1A1E600B0BBF8 /* MGStringListEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */; };
@@ -132,7 +131,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7000C6DD295D5F690005626E /* MGConnectedDurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGConnectedDurationView.swift; sourceTree = "<group>"; };
 		7000C6E3295D635F0005626E /* MGControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGControlView.swift; sourceTree = "<group>"; };
 		702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDNSSettingView.swift; sourceTree = "<group>"; };
 		702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGStringListEditor.swift; sourceTree = "<group>"; };
@@ -397,7 +395,6 @@
 			children = (
 				70DE0D7229A62C4E00B3E343 /* MGHomeView.swift */,
 				7000C6E3295D635F0005626E /* MGControlView.swift */,
-				7000C6DD295D5F690005626E /* MGConnectedDurationView.swift */,
 				706DB6CA29BAE954002F22C7 /* MGConfigurationView.swift */,
 			);
 			path = Home;
@@ -627,7 +624,6 @@
 				70B89C2429C1984A003DA577 /* MGDataSizeFormatter.swift in Sources */,
 				706DB6C129B9E006002F22C7 /* MGConfigurationLoadViewModel.swift in Sources */,
 				70C4E5CD29D42D4A00D1A52D /* MGAssetViewModel.swift in Sources */,
-				7000C6DE295D5F690005626E /* MGConnectedDurationView.swift in Sources */,
 				70B89C3029C19FF3003DA577 /* MGLogSettingView.swift in Sources */,
 				70C4E5CF29D433DD00D1A52D /* MGConfiguration+OutboundSettings.swift in Sources */,
 				70C4E5B829D3F74F00D1A52D /* MGConfiguration+DNS.swift in Sources */,

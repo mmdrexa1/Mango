@@ -11,12 +11,12 @@ struct MGLogSettingView: View {
                     Text(severity.description)
                 }
             } label: {
-                Text("错误日志")
+                Text("Level")
             }
-            Toggle("访问日志", isOn: $logViewModel.model.accessLogEnabled)
-            Toggle("DNS日志", isOn: $logViewModel.model.dnsLogEnabled)
+            Toggle("Access", isOn: $logViewModel.model.accessLogEnabled)
+            Toggle("DNS", isOn: $logViewModel.model.dnsLogEnabled)
         }
-        .navigationTitle(Text("日志"))
+        .navigationTitle(Text("Log"))
         .onDisappear {
             self.logViewModel.save()
         }

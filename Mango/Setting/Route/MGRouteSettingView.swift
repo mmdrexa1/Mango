@@ -9,17 +9,17 @@ struct MGRouteSettingView: View {
     var body: some View {
         Form {
             Section {
-                Picker("解析策略", selection: $routeViewModel.model.domainStrategy) {
+                Picker("Domain Strategy", selection: $routeViewModel.model.domainStrategy) {
                     ForEach(MGConfiguration.Route.DomainStrategy.allCases) { strategy in
                         Text(strategy.description)
                     }
                 }
-                Picker("匹配算法", selection: $routeViewModel.model.domainMatcher) {
+                Picker("Domain Matcher", selection: $routeViewModel.model.domainMatcher) {
                     ForEach(MGConfiguration.Route.DomainMatcher.allCases) { strategy in
                         Text(strategy.description)
                     }
                 }
-                NavigationLink("规则") {
+                NavigationLink("Rules") {
                     MGRouteRulesView(rules: $routeViewModel.model.rules)
                 }
             }
@@ -28,7 +28,7 @@ struct MGRouteSettingView: View {
             self.routeViewModel.save()
         }
         .lineLimit(1)
-        .navigationTitle(Text("路由"))
+        .navigationTitle(Text("Route"))
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .sheet(isPresented: $isAddRulePresented) {
             MGRouteRuleSettingView(rule: MGConfiguration.Route.Rule()) { value in
@@ -73,7 +73,7 @@ struct MGRouteRulesView: View {
                 rules.remove(atOffsets: offsets)
             }
         }
-        .navigationTitle(Text("规则"))
+        .navigationTitle(Text("Rules"))
         .environment(\.editMode, .constant(.active))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -106,7 +106,7 @@ struct MGRouteRuleSettingView: View {
         NavigationStack {
             Form {
                 Group {
-                    LabeledContent("名称") {
+                    LabeledContent("Name") {
                         TextField("", text: $rule.__name__)
                             .onSubmit {
                                 if rule.__name__.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -114,15 +114,15 @@ struct MGRouteRuleSettingView: View {
                                 }
                             }
                     }
-                    Toggle("状态", isOn: $rule.__enabled__)
+                    Toggle("Enabled", isOn: $rule.__enabled__)
                 }
                 Group {
-                    Picker("匹配算法", selection: $rule.domainMatcher) {
+                    Picker("Domain Matcher", selection: $rule.domainMatcher) {
                         ForEach(MGConfiguration.Route.DomainMatcher.allCases) { strategy in
                             Text(strategy.description)
                         }
                     }
-                    NavigationLink("域名") {
+                    NavigationLink("Domain") {
                         Form {
                             MGStringListEditor(strings: Binding(get: {
                                 rule.domain ?? []
@@ -131,9 +131,9 @@ struct MGRouteRuleSettingView: View {
                             }), placeholder: nil)
                         }
                         .environment(\.editMode, .constant(.active))
-                        .navigationBarTitle(Text("域名"))
+                        .navigationBarTitle(Text("Domain"))
                     }
-                    NavigationLink("目标 IP") {
+                    NavigationLink("IP") {
                         Form {
                             MGStringListEditor(strings: Binding(get: {
                                 rule.ip ?? []
@@ -142,9 +142,9 @@ struct MGRouteRuleSettingView: View {
                             }), placeholder: nil)
                         }
                         .environment(\.editMode, .constant(.active))
-                        .navigationBarTitle(Text("目标 IP"))
+                        .navigationBarTitle(Text("IP"))
                     }
-                    NavigationLink("目标端口") {
+                    NavigationLink("Port") {
                         Form {
                             MGStringListEditor(strings:  Binding {
                                 let reval = rule.port ?? ""
@@ -155,9 +155,9 @@ struct MGRouteRuleSettingView: View {
                             }, placeholder: nil)
                         }
                         .environment(\.editMode, .constant(.active))
-                        .navigationBarTitle(Text("目标端口"))
+                        .navigationBarTitle(Text("Port"))
                     }
-                    NavigationLink("源端口") {
+                    NavigationLink("Source Port") {
                         Form {
                             MGStringListEditor(strings:  Binding {
                                 let reval = rule.sourcePort ?? ""
@@ -168,10 +168,10 @@ struct MGRouteRuleSettingView: View {
                             }, placeholder: nil)
                         }
                         .environment(\.editMode, .constant(.active))
-                        .navigationBarTitle(Text("源端口"))
+                        .navigationBarTitle(Text("Source Port"))
                     }
                     Group {
-                        LabeledContent("连接方式") {
+                        LabeledContent("Network") {
                             HStack {
                                 ForEach(MGConfiguration.Route.Network.allCases) { network in
                                     MGToggleButton(title: network.description, isOn: Binding(get: {
@@ -188,7 +188,7 @@ struct MGRouteRuleSettingView: View {
                                 }
                             }
                         }
-                        LabeledContent("协议") {
+                        LabeledContent("Protocol") {
                             HStack {
                                 ForEach(MGConfiguration.Route.Protocol_.allCases) { protocol_ in
                                     MGToggleButton(title: protocol_.description, isOn: Binding(get: {
@@ -205,7 +205,7 @@ struct MGRouteRuleSettingView: View {
                                 }
                             }
                         }
-                        LabeledContent("入站") {
+                        LabeledContent("Inbound Tag") {
                             HStack {
                                 ForEach(MGConfiguration.Route.Inbound.allCases) { inbound in
                                     MGToggleButton(title: inbound.description, isOn: Binding(get: {
@@ -223,7 +223,7 @@ struct MGRouteRuleSettingView: View {
                             }
                         }
                     }
-                    Picker("出站", selection: $rule.outboundTag) {
+                    Picker("Outbound Tag", selection: $rule.outboundTag) {
                         ForEach(MGConfiguration.Outbound.Tag.allCases) { tag in
                             Text(tag.description)
                         }
@@ -232,17 +232,17 @@ struct MGRouteRuleSettingView: View {
             }
             .lineLimit(1)
             .multilineTextAlignment(.trailing)
-            .navigationTitle(Text("规则"))
+            .navigationTitle(Text("Rule"))
             .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("取消", role: .cancel) {
+                    Button("Cancel", role: .cancel) {
                         self.dismiss()
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("保存") {
+                    Button("Save") {
                         self.onSave(self.rule)
                         self.dismiss()
                     }

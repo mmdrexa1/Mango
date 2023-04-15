@@ -38,7 +38,7 @@ struct MGAssetView: View {
             }
         }
         .lineLimit(1)
-        .navigationTitle(Text("资源"))
+        .navigationTitle(Text("Assets"))
         .onAppear {
             assetViewModel.reload()
         }
