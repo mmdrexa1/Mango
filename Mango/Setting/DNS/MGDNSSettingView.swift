@@ -41,7 +41,7 @@ struct MGDNSSettingView: View {
 
 struct MGDNSHostsView: View {
     
-    struct Cell: View {
+    private struct Cell: View {
         
         @State private var isPresented: Bool = false
         
@@ -64,7 +64,6 @@ struct MGDNSHostsView: View {
         }
     }
     
-    @Environment(\.editMode) private var editMode
     @State private var isPresented: Bool = false
     
     @Binding var hosts: [MGConfiguration.DNS.Host]
@@ -73,24 +72,19 @@ struct MGDNSHostsView: View {
         Form {
             ForEach($hosts) { host in
                 Cell(host: host)
-                    .disabled(!isAddButtonEnabled)
-            }
-            .onMove { from, to in
-                hosts.move(fromOffsets: from, toOffset: to)
             }
             .onDelete { offsets in
                 hosts.remove(atOffsets: offsets)
             }
+        }
+        .navigationTitle(Text("静态 IP"))
+        .environment(\.editMode, .constant(.active))
+        .toolbar {
             Button {
                 isPresented.toggle()
             } label: {
-                Text("添加")
+                Image(systemName: "plus")
             }
-            .disabled(!isAddButtonEnabled)
-        }
-        .navigationTitle(Text("Hosts"))
-        .toolbar {
-            EditButton()
         }
         .sheet(isPresented: $isPresented) {
             MGDNSHostView(host: MGConfiguration.DNS.Host()) { value in
@@ -98,18 +92,11 @@ struct MGDNSHostsView: View {
             }
         }
     }
-    
-    private var isAddButtonEnabled: Bool {
-        guard let mode = editMode else {
-            return true
-        }
-        return mode.wrappedValue == .inactive
-    }
 }
 
 struct MGDNSServersView: View {
     
-    struct Cell: View {
+    private struct Cell: View {
         
         @Binding var server: MGConfiguration.DNS.Server
         
@@ -132,7 +119,6 @@ struct MGDNSServersView: View {
         }
     }
     
-    @Environment(\.editMode) private var editMode
     @State private var isPresented: Bool = false
     
     @Binding var servers: [MGConfiguration.DNS.Server]
@@ -148,29 +134,21 @@ struct MGDNSServersView: View {
             .onDelete { offsets in
                 servers.remove(atOffsets: offsets)
             }
+        }
+        .navigationTitle(Text("服务器"))
+        .environment(\.editMode, .constant(.active))
+        .toolbar {
             Button {
                 isPresented.toggle()
             } label: {
-                Text("添加")
+                Image(systemName: "plus")
             }
-            .disabled(!isAddButtonEnabled)
-        }
-        .navigationTitle(Text("Servers"))
-        .toolbar {
-            EditButton()
         }
         .sheet(isPresented: $isPresented) {
             MGDNSServerView(server: MGConfiguration.DNS.Server()) { value in
                 servers.append(value)
             }
         }
-    }
-    
-    private var isAddButtonEnabled: Bool {
-        guard let mode = editMode else {
-            return true
-        }
-        return mode.wrappedValue == .inactive
     }
 }
 
@@ -194,18 +172,18 @@ struct MGDNSHostView: View {
                     TextField("", text: $host.key)
                         .multilineTextAlignment(.leading)
                 } header: {
-                    Text("Key")
+                    Text("域名")
                 }
                 Section {
                     MGStringListEditor(strings: $host.values, placeholder: nil)
                         .moveDisabled(true)
                 } header: {
-                    Text("Values")
+                    Text("地址")
                 }
             }
             .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
             .environment(\.editMode, .constant(.active))
-            .navigationTitle("Host")
+            .navigationTitle(" ")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -241,47 +219,40 @@ struct MGDNSServerView: View {
     var body: some View {
         NavigationStack {
             Form {
-                LabeledContent("Address") {
+                LabeledContent("地址") {
                     TextField("", text: $server.address)
                 }
                 if server.__object__ {
-                    LabeledContent("Port") {
+                    LabeledContent("端口") {
                         TextField("", value: $server.port, format: .number)
                     }
-                    Group {
-                        Text("Domain")
-                        MGStringListEditor(strings: $server.domains, placeholder: nil)
+                    NavigationLink("域名") {
+                        Form {
+                            MGStringListEditor(strings: $server.domains, placeholder: nil)
+                        }
+                        .navigationTitle(Text("域名"))
+                        .environment(\.editMode, .constant(.active))
                     }
-                    Group {
-                        Text("Expect IP")
-                        MGStringListEditor(strings: $server.expectIPs, placeholder: nil)
+                    NavigationLink("IP 范围") {
+                        Form {
+                            MGStringListEditor(strings: $server.expectIPs, placeholder: nil)
+                        }
+                        .navigationTitle(Text("IP 范围"))
+                        .environment(\.editMode, .constant(.active))
                     }
-                    Toggle("Skip Fallback", isOn: $server.skipFallback)
-                    LabeledContent("Client IP") {
-                        TextField("", text: Binding(get: {
-                            server.clientIP ?? ""
-                        }, set: { newValue in
-                            let reval = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                            server.clientIP = reval.isEmpty ? nil : reval
-                        }))
-                    }
+                    Toggle("Fallback 查询跳过此服务器", isOn: $server.skipFallback)
                 }
                 Button {
                     withAnimation {
                         server.__object__.toggle()
                     }
                 } label: {
-                    HStack {
-                        Spacer()
-                        Text(server.__object__ ? "Less" : "More")
-                        Spacer()
-                    }
+                    Text(server.__object__ ? "使用简单配置" : "使用复杂配置")
                 }
             }
             .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
             .multilineTextAlignment(.trailing)
-            .environment(\.editMode, .constant(.active))
-            .navigationTitle(Text("Server"))
+            .navigationTitle(Text(" "))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
