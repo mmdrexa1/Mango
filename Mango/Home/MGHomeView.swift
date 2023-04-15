@@ -4,6 +4,9 @@ struct MGHomeView: View {
     
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var packetTunnelManager: MGPacketTunnelManager
+    @EnvironmentObject private var configurationListManager: MGConfigurationListManager
+    
+    @StateObject private var configurationListViewModel = MGConfigurationListViewModel()
     
     let current: Binding<String>
     
@@ -11,7 +14,7 @@ struct MGHomeView: View {
     
     var body: some View {
         NavigationStack {
-            Form {
+            List {
                 Section {
                     if packetTunnelManager.isProcessing {
                         ProgressView()
@@ -20,14 +23,17 @@ struct MGHomeView: View {
                     }
                 }
                 Section {
-                    MGConfigurationView(current: current)
-                } header: {
-                    Text("当前配置")
+                    ForEach(configurationListManager.configurations) { configuration in
+                        MGConfigurationItemView(current: current, configuration: configuration)
+                    }
                 }
             }
             .environmentObject(packetTunnelManager)
             .navigationTitle(Text("Mango"))
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                configurationListManager.reload()
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     MGPresentedButton {
@@ -38,34 +44,27 @@ struct MGHomeView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
-                        Button("VLESS") {
-                            
-                        }
-                        Button("VMess") {
-                            
-                        }
-                        Button("Trojan") {
-                            
-                        }
-                        Button("Shadowsocks") {
-                            
+                        ForEach(MGConfiguration.Outbound.ProtocolType.allCases) { pt in
+                            Button(pt.description) {
+                                configurationListViewModel.protocolType = pt
+                            }
                         }
                         Divider()
                         Button {
                             
                         } label: {
-                            Label("扫描二维码", systemImage: "qrcode.viewfinder")
+                            Label("Scan QR Code", systemImage: "qrcode.viewfinder")
                         }
                         Divider()
                         Button {
                             
                         } label: {
-                            Label("从 URL 下载", systemImage: "square.and.arrow.down.on.square")
+                            Label("Download", systemImage: "square.and.arrow.down.on.square")
                         }
                         Button {
                             
                         } label: {
-                            Label("从文件夹导入", systemImage: "tray.and.arrow.down")
+                            Label("Browse", systemImage: "tray.and.arrow.down")
                         }
                     } label: {
                         Image(systemName: "plus")
@@ -76,64 +75,23 @@ struct MGHomeView: View {
     }
 }
 
-struct MGSwitchButton: View {
+struct MGConfigurationItemView: View {
     
-    enum State: Int, Identifiable {
-        var id: Self { self }
-        case off = 0
-        case processing = 1
-        case on = 2
-    }
-    
-    @Binding private var state: State
-    
-    let action: (State) -> Void
-    
-    init(state: Binding<State>, action: @escaping (State) -> Void) {
-        self._state = state
-        self.action = action
-    }
+    @Binding var current: String
+    let configuration: MGConfiguration
     
     var body: some View {
-        HStack(spacing: 6) {
-            if state == .on {
-                Spacer()
-                    .frame(width: 12)
-            }
-            Circle()
-                .frame(width: 24, height: 24)
-                .foregroundColor(.white)
-                .overlay {
-                    ProgressView()
-                        .opacity(state == .processing ? 1.0 : 0.0)
-                }
-            if state == .off {
-                Spacer()
-                    .frame(width: 12)
+        Button {
+            current = configuration.id
+        } label: {
+            HStack(spacing: 16) {
+                Image(systemName: "circle.fill")
+                    .font(.caption2)
+                    .foregroundColor(Color(uiColor: current == configuration.id ? .systemGreen : .systemGray6))
+                Text(configuration.attributes.alias)
+                    .foregroundColor(.primary)
             }
         }
-        .padding(2)
-        .onTapGesture {
-            action(state)
-        }
-        .background {
-            Capsule()
-                .foregroundColor(backgroundColor)
-        }
-        .buttonStyle(.plain)
-        .fixedSize()
-        .disabled(state == .processing)
-        .animation(.easeInOut(duration: 0.15), value: state)
-    }
-    
-    private var backgroundColor: Color {
-        switch state {
-        case .off:
-            return Color(uiColor: .systemGray5)
-        case .processing:
-            return Color(uiColor: .systemGray5)
-        case .on:
-            return Color(uiColor: .systemGreen)
-        }
+        .animation(.easeInOut, value: current)
     }
 }

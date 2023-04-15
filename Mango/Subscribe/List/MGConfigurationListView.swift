@@ -1,6 +1,11 @@
 import SwiftUI
 import CodeScanner
 
+final class MGConfigurationListViewModel: ObservableObject {
+    @Published var location: MGConfigurationLocation?
+    @Published var protocolType: MGConfiguration.Outbound.ProtocolType?
+}
+
 extension MGConfiguration {
     
     var typeString: String {
@@ -63,92 +68,41 @@ struct MGConfigurationListView: View {
     @State private var configurationName: String = ""
     
     @State private var editModel: MGConfigurationEditModel?
-    
-    @State private var location: MGConfigurationLocation?
-    
+        
     @State private var isConfirmationDialogPresented = false
-    @State private var protocolType: MGConfiguration.Outbound.ProtocolType?
     
     @State private var isCodeScannerPresented: Bool = false
     @State private var scanResult: Swift.Result<ScanResult, ScanError>?
     
     let current: Binding<String>
+    @ObservedObject var configurationListViewModel: MGConfigurationListViewModel
+    
+    init(current: Binding<String>, configurationListViewModel: MGConfigurationListViewModel) {
+        self.current = current
+        self._configurationListViewModel = ObservedObject(initialValue: configurationListViewModel)
+    }
     
     var body: some View {
-        NavigationStack {
-            List {
-                Section {
-                    Button {
-                        isConfirmationDialogPresented.toggle()
-                    } label: {
-                        Label("创建", systemImage: "square.and.pencil")
-                    }
-                    Button {
-                        isCodeScannerPresented.toggle()
-                    } label: {
-                        Label("扫描二维码", systemImage: "qrcode.viewfinder")
-                    }
-                    .confirmationDialog("", isPresented: $isConfirmationDialogPresented) {
-                        ForEach(MGConfiguration.Outbound.ProtocolType.allCases) { value in
-                            Button(value.description) {
-                                protocolType = value
-                            }
-                        }
-                    }
-                    .fullScreenCover(item: $protocolType, onDismiss: { configurationListManager.reload() }) { protocolType in
-                        MGConfigurationEditView(
-                            vm: MGConfigurationEditViewModel(id: UUID(), protocolType: protocolType)
-                        )
-                    }
-                } header: {
-                    Text("创建配置")
-                }
-                Section {
-                    Button {
-                        location = .remote
-                    } label: {
-                        Label("从 URL 下载", systemImage: "square.and.arrow.down.on.square")
-                    }
-                    Button {
-                        location = .local
-                    } label: {
-                        Label("从文件夹导入", systemImage: "tray.and.arrow.down")
-                    }
-                } header: {
-                    Text("导入自定义配置")
-                }
-                Section {
-                    if configurationListManager.configurations.isEmpty {
-                        NoConfigurationView()
-                    } else {
-                        ForEach(configurationListManager.configurations) { configuration in
-                            ConfigurationItemView(configuration: configuration)
-                                .listRowBackground(current.wrappedValue == configuration.id ? Color.accentColor : nil)
-                        }
-                    }
-                } header: {
-                    Text("配置列表")
-                }
+        ForEach(configurationListManager.configurations) { configuration in
+            ConfigurationItemView(configuration: configuration)
+                .listRowBackground(current.wrappedValue == configuration.id ? Color.accentColor : nil)
+        }
+        .sheet(item: $configurationListViewModel.location) { location in
+            MGConfigurationLoadView(location: location)
+        }
+        .fullScreenCover(item: $editModel, onDismiss: { configurationListManager.reload() }) { em in
+            MGConfigurationEditView(
+                vm: MGConfigurationEditViewModel(id: em.id, name: em.name, model: em.model)
+            )
+        }
+        .fullScreenCover(isPresented: $isCodeScannerPresented) {
+            guard let res = self.scanResult else {
+                return
             }
-            .navigationTitle(Text("配置管理"))
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(item: $location) { location in
-                MGConfigurationLoadView(location: location)
-            }
-            .fullScreenCover(item: $editModel, onDismiss: { configurationListManager.reload() }) { em in
-                MGConfigurationEditView(
-                    vm: MGConfigurationEditViewModel(id: em.id, name: em.name, model: em.model)
-                )
-            }
-            .fullScreenCover(isPresented: $isCodeScannerPresented) {
-                guard let res = self.scanResult else {
-                    return
-                }
-                self.scanResult = nil
-                self.handleScanResult(res)
-            } content: {
-                MGQRCodeScannerView(result: $scanResult)
-            }
+            self.scanResult = nil
+            self.handleScanResult(res)
+        } content: {
+            MGQRCodeScannerView(result: $scanResult)
         }
     }
     

@@ -33,6 +33,7 @@
 		7093A37E29E3D55D00C05C6C /* MGConfiguration+Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */; };
 		7093A37F29E3D55D00C05C6C /* MGConfiguration+Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */; };
 		7093A38329E9229500C05C6C /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 70B89C3D29C1C117003DA577 /* libresolv.9.tbd */; };
+		7093A38529EA9DA800C05C6C /* MGSwitchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7093A38429EA9DA800C05C6C /* MGSwitchButton.swift */; };
 		70B89C2429C1984A003DA577 /* MGDataSizeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2329C1984A003DA577 /* MGDataSizeFormatter.swift */; };
 		70B89C3029C19FF3003DA577 /* MGLogSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C2F29C19FF3003DA577 /* MGLogSettingView.swift */; };
 		70B89C3329C1A918003DA577 /* MGNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B89C3229C1A918003DA577 /* MGNetworkModel.swift */; };
@@ -154,6 +155,7 @@
 		708B380229B0937600E24312 /* MGInboundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGInboundView.swift; sourceTree = "<group>"; };
 		7093A37A29E3D4F600C05C6C /* MGConfiguration+Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGConfiguration+Statistics.swift"; sourceTree = "<group>"; };
 		7093A37D29E3D55D00C05C6C /* MGConfiguration+Policy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MGConfiguration+Policy.swift"; sourceTree = "<group>"; };
+		7093A38429EA9DA800C05C6C /* MGSwitchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGSwitchButton.swift; sourceTree = "<group>"; };
 		70B89C2329C1984A003DA577 /* MGDataSizeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDataSizeFormatter.swift; sourceTree = "<group>"; };
 		70B89C2F29C19FF3003DA577 /* MGLogSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGLogSettingView.swift; sourceTree = "<group>"; };
 		70B89C3229C1A918003DA577 /* MGNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGNetworkModel.swift; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				706A6D8329CCB20F00523A07 /* MGConfigurationParser.swift */,
 				702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */,
 				702A08AD29D287E700B0BBF8 /* MGDisclosureGroup.swift */,
+				7093A38429EA9DA800C05C6C /* MGSwitchButton.swift */,
 				70DE0D7129A62C4100B3E343 /* Home */,
 				706DB6B729B9DFAB002F22C7 /* Subscribe */,
 				70DE0D7629A6300100B3E343 /* Setting */,
@@ -626,6 +629,7 @@
 				70C4E5CD29D42D4A00D1A52D /* MGAssetViewModel.swift in Sources */,
 				70B89C3029C19FF3003DA577 /* MGLogSettingView.swift in Sources */,
 				70C4E5CF29D433DD00D1A52D /* MGConfiguration+OutboundSettings.swift in Sources */,
+				7093A38529EA9DA800C05C6C /* MGSwitchButton.swift in Sources */,
 				70C4E5B829D3F74F00D1A52D /* MGConfiguration+DNS.swift in Sources */,
 				70DE0D6829A6114B00B3E343 /* MGApp.swift in Sources */,
 				706A6D8429CCB20F00523A07 /* MGConfigurationParser.swift in Sources */,
