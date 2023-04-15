@@ -7,7 +7,7 @@ struct MGOutboundView: View {
     var body: some View {
         Form {
             Section("Freedom") {
-                LabeledContent("Domain Strategy") {
+                LabeledContent("策略") {
                     Picker("", selection: $outboundViewModel.model.freedom.freedomSettings.domainStrategy) {
                         ForEach(MGConfiguration.Outbound.FreedomSettings.DomainStrategy.allCases) { ds in
                             Text(ds.description)
@@ -16,7 +16,7 @@ struct MGOutboundView: View {
                     .labelsHidden()
                     .fixedSize()
                 }
-                LabeledContent("Redirect") {
+                LabeledContent("重定向") {
                     TextField("", text: Binding(get: {
                         outboundViewModel.model.freedom.freedomSettings.redirect ?? ""
                     }, set: { value in
@@ -26,7 +26,7 @@ struct MGOutboundView: View {
                 }
             }
             Section("Blackhole") {
-                LabeledContent("Response Type") {
+                LabeledContent("响应类型") {
                     Picker("", selection: $outboundViewModel.model.blackhole.blackholeSettings.response.type) {
                         ForEach(MGConfiguration.Outbound.BlackholeSettings.ResponseType.allCases) { rt in
                             Text(rt.description)
@@ -37,7 +37,7 @@ struct MGOutboundView: View {
                 }
             }
             Section("DNS") {
-                LabeledContent("Network") {
+                LabeledContent("协议") {
                     Picker("", selection: $outboundViewModel.model.dns.dnsSettings.network) {
                         ForEach(MGConfiguration.Outbound.DNSSettings.Network.allCases) { nw in
                             Text(nw.description)
@@ -46,7 +46,7 @@ struct MGOutboundView: View {
                     .labelsHidden()
                     .fixedSize()
                 }
-                LabeledContent("Address") {
+                LabeledContent("地址") {
                     TextField("", text: Binding(get: {
                         outboundViewModel.model.dns.dnsSettings.address ?? ""
                     }, set: { value in
@@ -54,7 +54,7 @@ struct MGOutboundView: View {
                         outboundViewModel.model.dns.dnsSettings.address = reval.isEmpty ? nil : reval
                     }))
                 }
-                LabeledContent("Port") {
+                LabeledContent("端口") {
                     TextField("", text: Binding(get: {
                         outboundViewModel.model.dns.dnsSettings.port.flatMap({ "\($0)" }) ?? ""
                     }, set: { value in
@@ -64,7 +64,7 @@ struct MGOutboundView: View {
                     .keyboardType(.numberPad)
                 }
             }
-            Section("Order") {
+            Section("排序") {
                 ForEach(outboundViewModel.model.order) { tag in
                     if tag == .dns {
                         EmptyView()

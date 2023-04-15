@@ -7,19 +7,14 @@ struct MGDNSSettingView: View {
     var body: some View {
         Form {
             Section {
-                NavigationLink("Hosts") {
+                NavigationLink("静态 IP") {
                     MGDNSHostsView(hosts: $dnsViewModel.model.hosts)
                 }
-                NavigationLink("Servers") {
+                NavigationLink("服务器") {
                     MGDNSServersView(servers: $dnsViewModel.model.servers)
                 }
                 LabeledContent {
-                    TextField("", text: $dnsViewModel.model.clientIp)
-                } label: {
-                    Text("Client IP")
-                }
-                LabeledContent {
-                    Picker("Query Strategy", selection: $dnsViewModel.model.queryStrategy) {
+                    Picker("查询策略", selection: $dnsViewModel.model.queryStrategy) {
                         ForEach(MGConfiguration.DNS.QueryStrategy.allCases) { strategy in
                             Text(strategy.description)
                         }
@@ -27,11 +22,11 @@ struct MGDNSSettingView: View {
                     .labelsHidden()
                     .fixedSize()
                 } label: {
-                    Text("Query Strategy")
+                    Text("查询策略")
                 }
-                Toggle("Cache", isOn: $dnsViewModel.model.disableCache)
-                Toggle("Fallback", isOn: $dnsViewModel.model.disableFallback)
-                Toggle("Fallback If Match", isOn: $dnsViewModel.model.disableFallbackIfMatch)
+                Toggle("禁用缓存", isOn: $dnsViewModel.model.disableCache)
+                Toggle("禁用 Fallback 查询", isOn: $dnsViewModel.model.disableFallback)
+                Toggle("禁用 Fallback 查询如果命中", isOn: $dnsViewModel.model.disableFallbackIfMatch)
             }
         }
         .lineLimit(1)
