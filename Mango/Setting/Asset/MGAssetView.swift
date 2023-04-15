@@ -39,7 +39,6 @@ struct MGAssetView: View {
         }
         .lineLimit(1)
         .navigationTitle(Text("资源"))
-        .toolbar(.hidden, for: .tabBar)
         .onAppear {
             assetViewModel.reload()
         }

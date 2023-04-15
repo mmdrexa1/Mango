@@ -8,24 +8,8 @@ struct MGContentView: View {
     @AppStorage(MGConfiguration.currentStoreKey, store: .shared) private var current: String = ""
     
     var body: some View {
-        TabView {
-            MGHomeView(current: $current)
-                .tabItem {
-                    Text("仪表盘")
-                    Image(systemName: "text.and.command.macwindow")
-                }
-            MGConfigurationListView(current: $current)
-                .tabItem {
-                    Text("配置管理")
-                    Image(systemName: "doc")
-                }
-            MGSettingsView()
-                .tabItem {
-                    Text("设置")
-                    Image(systemName: "gearshape")
-                }
-        }
-        .environmentObject(packetTunnelManager)
-        .environmentObject(configurationListManager)
+        MGHomeView(current: $current)
+            .environmentObject(packetTunnelManager)
+            .environmentObject(configurationListManager)
     }
 }

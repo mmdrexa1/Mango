@@ -52,7 +52,6 @@ struct MGInboundView: View {
             inboundViewModel.save()
         }
         .navigationTitle(Text("入站"))
-        .toolbar(.hidden, for: .tabBar)
         .environment(\.editMode, .constant(.active))
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
     }

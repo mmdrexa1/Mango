@@ -4,53 +4,57 @@ import NetworkExtension
 struct MGControlView: View {
     
     @EnvironmentObject private var packetTunnelManager: MGPacketTunnelManager
-    
+        
     var body: some View {
         LabeledContent {
-            if let status = packetTunnelManager.status {
-                switch status {
-                case .connected, .disconnected:
-                    Button {
-                        onTap(status: status)
-                    } label: {
-                        Text(status.buttonTitle)
-                    }
-                    .disabled(status == .invalid)
-                default:
-                    ProgressView()
-                }
-            } else {
-                Button  {
-                    Task(priority: .high) {
-                        do {
-                            try await packetTunnelManager.saveToPreferences()
-                        } catch {
-                            debugPrint(error.localizedDescription)
-                        }
-                    }
-                } label: {
-                    Text("安装")
-                }
+            MGSwitchButton(state: .constant(packetTunnelManager.status?.switchButtonState ?? .off)) { _ in
+                onTap(status: packetTunnelManager.status)
             }
         } label: {
-            Label {
-                Text(packetTunnelManager.status.flatMap({ $0.displayString }) ?? "未安装VPN配置")
-            } icon: {
-                Image(systemName: "link")
+            if let status = packetTunnelManager.status {
+                if status == .connected {
+                    TimelineView(.periodic(from: Date(), by: 1.0)) { context in
+                        Text(connectedDateString(current: context.date))
+                            .monospacedDigit()
+                    }
+                } else {
+                    Text(status.displayString)
+                }
+            } else {
+                Text("未连接")
             }
         }
     }
     
-    private func onTap(status: NEVPNStatus) {
+    private func connectedDateString(current: Date) -> String {
+        guard let connectedDate = packetTunnelManager.connectedDate else {
+            return "已连接"
+        }
+        let duration = Int64(abs(current.distance(to: connectedDate)))
+        let hs = duration / 3600
+        let ms = duration % 3600 / 60
+        let ss = duration % 60
+        if hs <= 0 {
+            return String(format: "%02d:%02d", ms, ss)
+        } else {
+            return String(format: "%02d:%02d:%02d", hs, ms, ss)
+        }
+    }
+    
+    private func onTap(status: NEVPNStatus?) {
         Task(priority: .high) {
             do {
-                switch status {
-                case .connected:
-                    packetTunnelManager.stop()
-                case .disconnected:
-                    try await packetTunnelManager.start()
-                default:
-                    break
+                if let status = status {
+                    switch status {
+                    case .connected:
+                        packetTunnelManager.stop()
+                    case .disconnected:
+                        try await packetTunnelManager.start()
+                    default:
+                        break
+                    }
+                } else {
+                    try await packetTunnelManager.saveToPreferences()
                 }
             } catch {
                 debugPrint(error.localizedDescription)
@@ -61,16 +65,14 @@ struct MGControlView: View {
 
 extension NEVPNStatus {
     
-    var buttonTitle: String {
+    var switchButtonState: MGSwitchButton.State {
         switch self {
-        case .invalid, .disconnected:
-            return "连接"
         case .connected:
-            return "断开"
+            return .on
         case .connecting, .reasserting, .disconnecting:
-            return ""
-        @unknown default:
-            return "未知"
+            return .processing
+        default:
+            return .off
         }
     }
     
@@ -85,9 +87,9 @@ extension NEVPNStatus {
         case .connected:
             return "已连接"
         case .reasserting:
-            return "正在重新连接..."
+            return "正在重连..."
         case .disconnecting:
-            return "正在断开连接..."
+            return "正在断开..."
         @unknown default:
             return "未知"
         }

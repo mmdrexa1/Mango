@@ -17,7 +17,6 @@ struct MGLogSettingView: View {
             Toggle("DNS日志", isOn: $logViewModel.model.dnsLogEnabled)
         }
         .navigationTitle(Text("日志"))
-        .toolbar(.hidden, for: .tabBar)
         .onDisappear {
             self.logViewModel.save()
         }

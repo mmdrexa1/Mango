@@ -32,7 +32,6 @@ struct MGDNSSettingView: View {
         .lineLimit(1)
         .multilineTextAlignment(.trailing)
         .navigationTitle(Text("DNS"))
-        .toolbar(.hidden, for: .tabBar)
         .onDisappear {
             self.dnsViewModel.save()
         }

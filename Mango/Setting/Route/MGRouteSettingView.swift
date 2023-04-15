@@ -29,7 +29,6 @@ struct MGRouteSettingView: View {
         }
         .lineLimit(1)
         .navigationTitle(Text("路由"))
-        .toolbar(.hidden, for: .tabBar)
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .sheet(isPresented: $isAddRulePresented) {
             MGRouteRuleSettingView(rule: MGConfiguration.Route.Rule()) { value in

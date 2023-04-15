@@ -83,7 +83,6 @@ struct MGOutboundView: View {
         .lineLimit(1)
         .multilineTextAlignment(.trailing)
         .navigationTitle(Text("出站"))
-        .toolbar(.hidden, for: .tabBar)
         .environment(\.editMode, .constant(.active))
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
     }
