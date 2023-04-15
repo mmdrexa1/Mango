@@ -4,11 +4,7 @@ struct MGAssetView: View {
     
     @Environment(\.dataSizeFormatter) private var dataSizeFormatter
 
-    @ObservedObject private var assetViewModel: MGAssetViewModel
-
-    init(assetViewModel: MGAssetViewModel) {
-        self._assetViewModel = ObservedObject(initialValue: assetViewModel)
-    }
+    @StateObject private var assetViewModel = MGAssetViewModel()
     
     var body: some View {
         Form {
@@ -39,13 +35,14 @@ struct MGAssetView: View {
                         }
                     }
                 }
-            } header: {
-                Text("Files")
             }
         }
         .lineLimit(1)
-        .navigationTitle(Text("Asset"))
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle(Text("资源"))
+        .toolbar(.hidden, for: .tabBar)
+        .onAppear {
+            assetViewModel.reload()
+        }
         .fileImporter(isPresented: $assetViewModel.isFileImporterPresented, allowedContentTypes: [.dat], allowsMultipleSelection: true) { result in
             do {
                 try assetViewModel.importLocalFiles(urls: try result.get())

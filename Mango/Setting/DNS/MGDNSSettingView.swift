@@ -2,77 +2,22 @@ import SwiftUI
 
 struct MGDNSSettingView: View {
     
-    @ObservedObject private var dnsViewModel: MGConfigurationPersistentViewModel<MGConfiguration.DNS>
-    
-    @State private var isAddHostPresented: Bool = false
-    @State private var isAddServerPresented: Bool = false
-    
-    init(dnsViewModel: MGConfigurationPersistentViewModel<MGConfiguration.DNS>) {
-        self._dnsViewModel = ObservedObject(initialValue: dnsViewModel)
-    }
+    @StateObject private var dnsViewModel = MGConfigurationPersistentViewModel<MGConfiguration.DNS>()
     
     var body: some View {
         Form {
             Section {
-                ForEach(Binding(get: {
-                    dnsViewModel.model.hosts ?? []
-                }, set: { value in
-                    dnsViewModel.model.hosts = value
-                })) { host in
-                    MGDNSHostItemView(host: host)
+                NavigationLink("Hosts") {
+                    MGDNSHostsView(hosts: $dnsViewModel.model.hosts)
                 }
-                .onDelete { offsets in
-                    dnsViewModel.model.hosts?.remove(atOffsets: offsets)
+                NavigationLink("Servers") {
+                    MGDNSServersView(servers: $dnsViewModel.model.servers)
                 }
-            } header: {
-                HStack {
-                    Text("Hosts")
-                    Spacer()
-                    Button("Add") {
-                        isAddHostPresented.toggle()
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.accentColor)
-                }
-            }
-            Section {
-                ForEach(Binding(get: {
-                    dnsViewModel.model.servers ?? []
-                }, set: { value in
-                    dnsViewModel.model.servers = value
-                })) { server in
-                    MGDNSServerItemView(server: server)
-                }
-                .onMove { from, to in
-                    dnsViewModel.model.servers?.move(fromOffsets: from, toOffset: to)
-                }
-                .onDelete { offsets in
-                    dnsViewModel.model.servers?.remove(atOffsets: offsets)
-                }
-            } header: {
-                HStack {
-                    Text("Servers")
-                    Spacer()
-                    Button("Add") {
-                        isAddServerPresented.toggle()
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.accentColor)
-                }
-            }
-            Section {
                 LabeledContent {
-                    TextField("", text: Binding(get: {
-                        dnsViewModel.model.clientIp ?? ""
-                    }, set: { value in
-                        let reval = value.trimmingCharacters(in: .whitespacesAndNewlines)
-                        dnsViewModel.model.clientIp = reval.isEmpty ? nil : reval
-                    }))
+                    TextField("", text: $dnsViewModel.model.clientIp)
                 } label: {
                     Text("Client IP")
                 }
-            }
-            Section {
                 LabeledContent {
                     Picker("Query Strategy", selection: $dnsViewModel.model.queryStrategy) {
                         ForEach(MGConfiguration.DNS.QueryStrategy.allCases) { strategy in
@@ -84,64 +29,153 @@ struct MGDNSSettingView: View {
                 } label: {
                     Text("Query Strategy")
                 }
-            }
-            Section {
                 Toggle("Cache", isOn: $dnsViewModel.model.disableCache)
-            }
-            Section {
                 Toggle("Fallback", isOn: $dnsViewModel.model.disableFallback)
-            }
-            Section {
                 Toggle("Fallback If Match", isOn: $dnsViewModel.model.disableFallbackIfMatch)
             }
         }
         .lineLimit(1)
         .multilineTextAlignment(.trailing)
-        .environment(\.editMode, .constant(.active))
-        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle(Text("DNS"))
-        .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $isAddHostPresented) {
-            MGDNSHostView(host: MGConfiguration.DNS.Host()) { value in
-                if dnsViewModel.model.hosts == nil {
-                    dnsViewModel.model.hosts = [value]
-                } else {
-                    dnsViewModel.model.hosts?.append(value)
-                }
-            }
-        }
-        .sheet(isPresented: $isAddServerPresented) {
-            MGDNSServerView(server: MGConfiguration.DNS.Server()) { value in
-                if dnsViewModel.model.servers == nil {
-                    dnsViewModel.model.servers = [value]
-                } else {
-                    dnsViewModel.model.servers?.append(value)
-                }
-            }
+        .toolbar(.hidden, for: .tabBar)
+        .onDisappear {
+            self.dnsViewModel.save()
         }
     }
 }
 
-struct MGDNSHostItemView: View {
+struct MGDNSHostsView: View {
     
-    @Binding var host: MGConfiguration.DNS.Host
-    
-    @State private var isPresented: Bool = false
-    
-    var body: some View {
-        HStack(spacing: 0) {
-            Text(host.key)
-            Spacer()
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            isPresented.toggle()
-        }
-        .sheet(isPresented: $isPresented) {
-            MGDNSHostView(host: host) { value in
-                host = value
+    struct Cell: View {
+        
+        @State private var isPresented: Bool = false
+        
+        @Binding var host: MGConfiguration.DNS.Host
+        
+        var body: some View {
+            Button {
+                isPresented.toggle()
+            } label: {
+                HStack {
+                    Text(host.key)
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .sheet(isPresented: $isPresented) {
+                MGDNSHostView(host: host) { host = $0 }
             }
         }
+    }
+    
+    @Environment(\.editMode) private var editMode
+    @State private var isPresented: Bool = false
+    
+    @Binding var hosts: [MGConfiguration.DNS.Host]
+    
+    var body: some View {
+        Form {
+            ForEach($hosts) { host in
+                Cell(host: host)
+                    .disabled(!isAddButtonEnabled)
+            }
+            .onMove { from, to in
+                hosts.move(fromOffsets: from, toOffset: to)
+            }
+            .onDelete { offsets in
+                hosts.remove(atOffsets: offsets)
+            }
+            Button {
+                isPresented.toggle()
+            } label: {
+                Text("添加")
+            }
+            .disabled(!isAddButtonEnabled)
+        }
+        .navigationTitle(Text("Hosts"))
+        .toolbar {
+            EditButton()
+        }
+        .sheet(isPresented: $isPresented) {
+            MGDNSHostView(host: MGConfiguration.DNS.Host()) { value in
+                hosts.append(value)
+            }
+        }
+    }
+    
+    private var isAddButtonEnabled: Bool {
+        guard let mode = editMode else {
+            return true
+        }
+        return mode.wrappedValue == .inactive
+    }
+}
+
+struct MGDNSServersView: View {
+    
+    struct Cell: View {
+        
+        @Binding var server: MGConfiguration.DNS.Server
+        
+        @State private var isPresented: Bool = false
+        
+        var body: some View {
+            HStack(spacing: 0) {
+                Text(server.address)
+                Spacer()
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isPresented.toggle()
+            }
+            .sheet(isPresented: $isPresented) {
+                MGDNSServerView(server: self.server) { value in
+                    self.server = value
+                }
+            }
+        }
+    }
+    
+    @Environment(\.editMode) private var editMode
+    @State private var isPresented: Bool = false
+    
+    @Binding var servers: [MGConfiguration.DNS.Server]
+    
+    var body: some View {
+        Form {
+            ForEach($servers) { server in
+                Cell(server: server)
+            }
+            .onMove { from, to in
+                servers.move(fromOffsets: from, toOffset: to)
+            }
+            .onDelete { offsets in
+                servers.remove(atOffsets: offsets)
+            }
+            Button {
+                isPresented.toggle()
+            } label: {
+                Text("添加")
+            }
+            .disabled(!isAddButtonEnabled)
+        }
+        .navigationTitle(Text("Servers"))
+        .toolbar {
+            EditButton()
+        }
+        .sheet(isPresented: $isPresented) {
+            MGDNSServerView(server: MGConfiguration.DNS.Server()) { value in
+                servers.append(value)
+            }
+        }
+    }
+    
+    private var isAddButtonEnabled: Bool {
+        guard let mode = editMode else {
+            return true
+        }
+        return mode.wrappedValue == .inactive
     }
 }
 
@@ -177,37 +211,20 @@ struct MGDNSHostView: View {
             .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
             .environment(\.editMode, .constant(.active))
             .navigationTitle("Host")
-            .toolbar(.visible, for: .navigationBar)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
             .toolbar {
-                Button("Save") {
-                    self.onSave(self.host)
-                    self.dismiss()
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("取消", role: .cancel) {
+                        self.dismiss()
+                    }
                 }
-                .fontWeight(.medium)
-            }
-        }
-    }
-}
-
-struct MGDNSServerItemView: View {
-    
-    @Binding var server: MGConfiguration.DNS.Server
-    
-    @State private var isPresented: Bool = false
-    
-    var body: some View {
-        HStack(spacing: 0) {
-            Text(server.address)
-            Spacer()
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            isPresented.toggle()
-        }
-        .sheet(isPresented: $isPresented) {
-            MGDNSServerView(server: self.server) { value in
-                self.server = value
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("保存", role: .none) {
+                        self.onSave(self.host)
+                        self.dismiss()
+                    }
+                }
             }
         }
     }
@@ -229,52 +246,40 @@ struct MGDNSServerView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    LabeledContent("Address") {
-                        TextField("", text: $server.address)
-                    }
+                LabeledContent("Address") {
+                    TextField("", text: $server.address)
                 }
                 if server.__object__ {
-                    Section {
-                        LabeledContent("Port") {
-                            TextField("", value: $server.port, format: .number)
-                        }
+                    LabeledContent("Port") {
+                        TextField("", value: $server.port, format: .number)
                     }
-                    Section {
-                        MGStringListEditor(strings: $server.domains, placeholder: nil)
-                    } header: {
+                    Group {
                         Text("Domain")
+                        MGStringListEditor(strings: $server.domains, placeholder: nil)
                     }
-                    Section {
-                        MGStringListEditor(strings: $server.expectIPs, placeholder: nil)
-                    } header: {
+                    Group {
                         Text("Expect IP")
+                        MGStringListEditor(strings: $server.expectIPs, placeholder: nil)
                     }
-                    Section{
-                        Toggle("Skip Fallback", isOn: $server.skipFallback)
-                    }
-                    Section {
-                        LabeledContent("Client IP") {
-                            TextField("", text: Binding(get: {
-                                server.clientIP ?? ""
-                            }, set: { newValue in
-                                let reval = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                                server.clientIP = reval.isEmpty ? nil : reval
-                            }))
-                        }
+                    Toggle("Skip Fallback", isOn: $server.skipFallback)
+                    LabeledContent("Client IP") {
+                        TextField("", text: Binding(get: {
+                            server.clientIP ?? ""
+                        }, set: { newValue in
+                            let reval = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                            server.clientIP = reval.isEmpty ? nil : reval
+                        }))
                     }
                 }
-                Section {
-                    Button {
-                        withAnimation {
-                            server.__object__.toggle()
-                        }
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text(server.__object__ ? "Less" : "More")
-                            Spacer()
-                        }
+                Button {
+                    withAnimation {
+                        server.__object__.toggle()
+                    }
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text(server.__object__ ? "Less" : "More")
+                        Spacer()
                     }
                 }
             }
@@ -284,11 +289,17 @@ struct MGDNSServerView: View {
             .navigationTitle(Text("Server"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                Button("Save") {
-                    self.onSave(self.server)
-                    self.dismiss()
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("取消", role: .cancel) {
+                        self.dismiss()
+                    }
                 }
-                .fontWeight(.medium)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("保存", role: .none) {
+                        self.onSave(self.server)
+                        self.dismiss()
+                    }
+                }
             }
         }
     }

@@ -2,11 +2,7 @@ import SwiftUI
 
 struct MGInboundView: View {
         
-    @ObservedObject private var inboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Inbound>
-    
-    init(inboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Inbound>) {
-        self._inboundViewModel = ObservedObject(initialValue: inboundViewModel)
-    }
+    @StateObject private var inboundViewModel = MGConfigurationPersistentViewModel<MGConfiguration.Inbound>()
     
     var body: some View {
         Form {
@@ -63,9 +59,9 @@ struct MGInboundView: View {
         .onDisappear {
             inboundViewModel.save()
         }
-        .navigationTitle(Text("Inbound"))
+        .navigationTitle(Text("入站"))
+        .toolbar(.hidden, for: .tabBar)
         .environment(\.editMode, .constant(.active))
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
-        .navigationBarTitleDisplayMode(.large)
     }
 }

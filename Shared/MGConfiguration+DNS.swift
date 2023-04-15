@@ -73,9 +73,9 @@ extension MGConfiguration {
             public var values: [String] = []
         }
                 
-        public var hosts: [Host]? = nil
-        public var servers: [Server]? = nil
-        public var clientIp: String? = nil
+        public var hosts: [Host] = []
+        public var servers: [Server] = []
+        public var clientIp: String = ""
         public var queryStrategy: QueryStrategy = .useIP
         public var disableCache: Bool = false
         public var disableFallback: Bool = false
@@ -96,14 +96,14 @@ extension MGConfiguration {
         
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let mapping = try container.decode(Optional<[String: [String]]>.self, forKey: .hosts)
+            let mapping = try container.decodeIfPresent([String: [String]].self, forKey: .hosts)
             self.hosts = mapping.flatMap({ mapping in
                 mapping.reduce(into: [Host]()) { result, pair in
                     result.append(Host(id: UUID(), key: pair.key, values: pair.value))
                 }
-            })
-            self.servers = try container.decode(Optional<[Server]>.self, forKey: .servers)
-            self.clientIp = try container.decode(Optional<String>.self, forKey: .clientIp)
+            }) ?? []
+            self.servers = try container.decodeIfPresent([Server].self, forKey: .servers) ?? []
+            self.clientIp = try container.decodeIfPresent(String.self, forKey: .clientIp) ?? ""
             self.queryStrategy = try container.decode(QueryStrategy.self, forKey: .queryStrategy)
             self.disableCache = try container.decode(Bool.self, forKey: .disableCache)
             self.disableFallback = try container.decode(Bool.self, forKey: .disableFallback)
@@ -112,14 +112,17 @@ extension MGConfiguration {
         
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            let mapping = self.hosts.flatMap { hosts in
-                hosts.reduce(into: [String: [String]]()) { result, host in
+            if self.hosts.isEmpty {
+                try container.encodeNil(forKey: .hosts)
+            } else {
+                let mapping = self.hosts.reduce(into: [String: [String]]()) { result, host in
                     result[host.key] = host.values
                 }
+                try container.encode(mapping, forKey: .hosts)
             }
-            try container.encode(mapping, forKey: .hosts)
-            try container.encode(self.servers, forKey: .servers)
-            try container.encode(self.clientIp, forKey: .clientIp)
+            try container.encodeIfPresent(self.servers.isEmpty ? nil : self.servers, forKey: .servers)
+            let trimmingClientIp = self.clientIp.trimmingCharacters(in: .whitespacesAndNewlines)
+            try container.encodeIfPresent(trimmingClientIp.isEmpty ? nil : trimmingClientIp, forKey: .clientIp)
             try container.encode(self.queryStrategy, forKey: .queryStrategy)
             try container.encode(self.disableCache, forKey: .disableCache)
             try container.encode(self.disableFallback, forKey: .disableFallback)

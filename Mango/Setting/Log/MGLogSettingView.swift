@@ -2,34 +2,22 @@ import SwiftUI
 
 struct MGLogSettingView: View {
     
-    @ObservedObject private var logViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Log>
-    
-    init(logViewModel: MGConfigurationPersistentViewModel<MGConfiguration.Log>) {
-        self._logViewModel = ObservedObject(initialValue: logViewModel)
-    }
+    @StateObject private var logViewModel = MGConfigurationPersistentViewModel<MGConfiguration.Log>()
     
     var body: some View {
         Form {
-            Section {
-                Picker(selection: $logViewModel.model.errorLogSeverity) {
-                    ForEach(MGConfiguration.Log.Severity.allCases) { severity in
-                        Text(severity.description)
-                    }
-                } label: {
-                    Text("Level")
+            Picker(selection: $logViewModel.model.errorLogSeverity) {
+                ForEach(MGConfiguration.Log.Severity.allCases) { severity in
+                    Text(severity.description)
                 }
-            } header: {
-                Text("Error")
+            } label: {
+                Text("错误日志")
             }
-            Section {
-                Toggle("Access Log", isOn: $logViewModel.model.accessLogEnabled)
-                Toggle("DNS Log", isOn: $logViewModel.model.dnsLogEnabled)
-            } header: {
-                Text("Other")
-            }
+            Toggle("访问日志", isOn: $logViewModel.model.accessLogEnabled)
+            Toggle("DNS日志", isOn: $logViewModel.model.dnsLogEnabled)
         }
-        .navigationTitle(Text("Log"))
-        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle(Text("日志"))
+        .toolbar(.hidden, for: .tabBar)
         .onDisappear {
             self.logViewModel.save()
         }

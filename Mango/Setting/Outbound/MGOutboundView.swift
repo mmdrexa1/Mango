@@ -2,11 +2,7 @@ import SwiftUI
 
 struct MGOutboundView: View {
     
-    @ObservedObject private var outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.OutboundSettings>
-    
-    init(outboundViewModel: MGConfigurationPersistentViewModel<MGConfiguration.OutboundSettings>) {
-        self._outboundViewModel = ObservedObject(initialValue: outboundViewModel)
-    }
+    @StateObject private var outboundViewModel = MGConfigurationPersistentViewModel<MGConfiguration.OutboundSettings>()
     
     var body: some View {
         Form {
@@ -86,9 +82,9 @@ struct MGOutboundView: View {
         }
         .lineLimit(1)
         .multilineTextAlignment(.trailing)
-        .navigationTitle(Text("Outbound"))
+        .navigationTitle(Text("出站"))
+        .toolbar(.hidden, for: .tabBar)
         .environment(\.editMode, .constant(.active))
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
-        .navigationBarTitleDisplayMode(.large)
     }
 }
