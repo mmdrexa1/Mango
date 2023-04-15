@@ -518,11 +518,11 @@
 			};
 			buildConfigurationList = 70C9ED9029501D5B00B6995B /* Build configuration list for PBXProject "Mango" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 70C9ED8C29501D5B00B6995B;
 			packageReferences = (

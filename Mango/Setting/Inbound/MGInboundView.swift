@@ -7,8 +7,8 @@ struct MGInboundView: View {
     var body: some View {
         Form {
             Section {
-                LabeledContent("Listen", value: "[::1]")
-                LabeledContent("Port") {
+                LabeledContent("地址", value: "[::1]")
+                LabeledContent("端口") {
                     TextField("", text: Binding(get: {
                         "\(inboundViewModel.model.port)"
                     }, set: { value in
@@ -25,8 +25,9 @@ struct MGInboundView: View {
                 Text("SOSCK5")
             }
             Section {
-                Toggle("Enabled", isOn: $inboundViewModel.model.sniffing.enabled)
-                MGDisclosureGroup {
+                Toggle("状态", isOn: $inboundViewModel.model.sniffing.enabled)
+                VStack(alignment: .leading) {
+                    Text("流量类型")
                     HStack {
                         ForEach(MGConfiguration.Inbound.DestinationOverride.allCases, id: \.rawValue) { `override` in
                             MGToggleButton(title: `override`.description, isOn: Binding(get: {
@@ -40,20 +41,11 @@ struct MGInboundView: View {
                             }))
                         }
                     }
-                    .padding(.vertical, 4)
-                } label: {
-                    Text("Destination Override")
                 }
-                MGDisclosureGroup {
-                    MGStringListEditor(strings: $inboundViewModel.model.sniffing.excludedDomains, placeholder: nil)
-                        .moveDisabled(true)
-                } label: {
-                    LabeledContent("Excluded Domains", value: "\(inboundViewModel.model.sniffing.excludedDomains.count)")
-                }
-                Toggle("Metadata Only", isOn: $inboundViewModel.model.sniffing.metadataOnly)
-                Toggle("Route Only", isOn: $inboundViewModel.model.sniffing.routeOnly)
+                Toggle("使用元数据", isOn: $inboundViewModel.model.sniffing.metadataOnly)
+                Toggle("仅用于路由", isOn: $inboundViewModel.model.sniffing.routeOnly)
             } header: {
-                Text("Sniffing")
+                Text("流量嗅探")
             }
         }
         .onDisappear {
