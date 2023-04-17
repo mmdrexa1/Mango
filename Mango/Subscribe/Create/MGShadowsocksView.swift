@@ -30,6 +30,6 @@ struct MGShadowsocksView: View {
             .labelsHidden()
             .fixedSize()
         }
-        Toggle("UOT", isOn: $vm.model.shadowsocksSettings.uot)
+        Toggle("UoT", isOn: $vm.model.shadowsocksSettings.uot)
     }
 }

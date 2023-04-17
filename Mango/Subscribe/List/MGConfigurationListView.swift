@@ -102,7 +102,8 @@ struct MGConfigurationListView: View {
             self.scanResult = nil
             self.handleScanResult(res)
         } content: {
-            MGQRCodeScannerView(result: $scanResult)
+            EmptyView()
+//            MGQRCodeScannerView(result: $scanResult)
         }
     }
     

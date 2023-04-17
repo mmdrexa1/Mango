@@ -44,15 +44,23 @@ struct MGHomeView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         ForEach(MGConfiguration.Outbound.ProtocolType.allCases) { pt in
-                            Button {
-                                
+                            NavigationLink {
+                                MGConfigurationEditView(vm: MGConfigurationEditViewModel(id: UUID(), protocolType: pt))
                             } label: {
                                 Label(pt.description, systemImage: "plus")
                             }
                         }
                         Divider()
-                        Button {
-                            
+                        NavigationLink {
+                            MGQRCodeScannerView { result in
+                                switch result {
+                                case .success(let success):
+                                    print(success.string)
+                                case .failure(let failure):
+                                    print(failure.localizedDescription)
+                                }
+                                return true
+                            }
                         } label: {
                             Label("Scan QR Code", systemImage: "qrcode.viewfinder")
                         }

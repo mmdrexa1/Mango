@@ -5,43 +5,41 @@ struct MGQRCodeScannerView: View {
         
     @Environment(\.dismiss) private var dismiss
     
-    let result: Binding<Swift.Result<ScanResult, ScanError>?>
+    private let onCompletion: (Swift.Result<ScanResult, ScanError>) -> Bool
+    
+    init(onCompletion: @escaping (Swift.Result<ScanResult, ScanError>) -> Bool) {
+        self.onCompletion = onCompletion
+    }
     
     var body: some View {
-        NavigationStack {
-            GeometryReader { proxy in
-                VStack {
-                    
-                    Spacer()
-                    
-                    CodeScannerView(codeTypes: [.qr]) {
-                        result.wrappedValue = $0
+        GeometryReader { proxy in
+            VStack {
+                Spacer()
+                CodeScannerView(codeTypes: [.qr]) {
+                    if onCompletion($0) {
                         dismiss()
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .padding(16)
-                    .frame(width: proxy.size.width, height: proxy.size.width)
-                    
-                    Spacer()
-                    
-                    Button(role: .cancel) {
-                        dismiss()
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text("关闭")
-                                .font(.title3)
-                                .fontWeight(.medium)
-                                .padding(8)
-                            Spacer()
-                        }
-                    }
-                    .padding(16)
-                    .buttonStyle(.borderedProminent)
                 }
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .padding(16)
+                .frame(width: proxy.size.width, height: proxy.size.width)
+                Spacer()
+                Button(role: .cancel) {
+                    dismiss()
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text("Close")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .padding(8)
+                        Spacer()
+                    }
+                }
+                .padding(16)
+                .buttonStyle(.borderedProminent)
             }
-            .navigationTitle(Text("扫描二维码"))
-            .navigationBarTitleDisplayMode(.large)
         }
+        .navigationTitle(Text("Scan QR Code"))
     }
 }

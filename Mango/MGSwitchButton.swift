@@ -19,21 +19,22 @@ struct MGSwitchButton: View {
     }
     
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 0) {
             if state == .on {
                 Spacer()
-                    .frame(width: 12)
+                    .frame(width: 20)
             }
             Circle()
-                .frame(width: 24, height: 24)
+                .frame(width: 27, height: 27)
                 .foregroundColor(.white)
                 .overlay {
                     ProgressView()
+                        .tint(Color.black.opacity(0.5))
                         .opacity(state == .processing ? 1.0 : 0.0)
                 }
             if state == .off {
                 Spacer()
-                    .frame(width: 12)
+                    .frame(width: 20)
             }
         }
         .padding(2)
