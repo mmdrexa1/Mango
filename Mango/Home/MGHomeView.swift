@@ -28,7 +28,6 @@ struct MGHomeView: View {
                     }
                 }
             }
-            .environmentObject(packetTunnelManager)
             .navigationTitle(Text("Mango"))
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
@@ -36,7 +35,7 @@ struct MGHomeView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    MGPresentedButton {
+                    NavigationLink {
                         MGSettingsView()
                     } label: {
                         Image(systemName: "gearshape")
@@ -45,8 +44,10 @@ struct MGHomeView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         ForEach(MGConfiguration.Outbound.ProtocolType.allCases) { pt in
-                            Button(pt.description) {
-                                configurationListViewModel.protocolType = pt
+                            Button {
+                                
+                            } label: {
+                                Label(pt.description, systemImage: "plus")
                             }
                         }
                         Divider()
@@ -59,12 +60,12 @@ struct MGHomeView: View {
                         Button {
                             
                         } label: {
-                            Label("Download", systemImage: "square.and.arrow.down.on.square")
+                            Label("Download from URL", systemImage: "square.and.arrow.down.on.square")
                         }
                         Button {
                             
                         } label: {
-                            Label("Browse", systemImage: "tray.and.arrow.down")
+                            Label("Import from Files", systemImage: "tray.and.arrow.down")
                         }
                     } label: {
                         Image(systemName: "plus")

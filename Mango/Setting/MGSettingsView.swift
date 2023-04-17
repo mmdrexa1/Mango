@@ -30,40 +30,39 @@ struct MGSettingsView: View {
             case .outbound: return "square.and.arrow.up"
             }
         }
-    }
-                
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    ForEach(Destination.allCases) { destination in
-                        NavigationLink(value: destination) {
-                            Label(destination.title, systemImage: destination.systemImage)
-                        }
-                    }
-                }
-                Section {
-                    MGVPNResettingView()
-                }
-            }
-            .navigationTitle(Text("Settings"))
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: Destination.self) { destination in
-                switch destination {
-                case .log:
-                    MGLogSettingView()
-                case .asset:
-                    MGAssetView()
-                case .dns:
-                    MGDNSSettingView()
-                case .route:
-                    MGRouteSettingView()
-                case .inbound:
-                    MGInboundView()
-                case .outbound:
-                    MGOutboundView()
-                }
+        @ViewBuilder
+        func view() -> some View {
+            switch self {
+            case .log:
+                MGLogSettingView()
+            case .asset:
+                MGAssetView()
+            case .dns:
+                MGDNSSettingView()
+            case .route:
+                MGRouteSettingView()
+            case .inbound:
+                MGInboundView()
+            case .outbound:
+                MGOutboundView()
             }
         }
+    }
+    var body: some View {
+        Form {
+            Section {
+                ForEach(Destination.allCases) { destination in
+                    NavigationLink {
+                        destination.view()
+                    } label: {
+                        Label(destination.title, systemImage: destination.systemImage)
+                    }
+                }
+            }
+            Section {
+                MGVPNResettingView()
+            }
+        }
+        .navigationTitle(Text("Settings"))
     }
 }
