@@ -61,7 +61,7 @@ struct MGConfigurationLoadView: View {
             }
         }
         .navigationTitle(Text(title))
-        .interactiveDismissDisabled(vm.isProcessing)
+        .navigationBarBackButtonHidden()
         .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.json]) { result in
             switch result {
             case .success(let success):
@@ -74,8 +74,15 @@ struct MGConfigurationLoadView: View {
             }
         }
         .toolbar {
-            if vm.isProcessing {
-                ProgressView()
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Cancel", role: .cancel) {
+                    dismiss()
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if vm.isProcessing {
+                    ProgressView()
+                }
             }
         }
         .disabled(vm.isProcessing)
