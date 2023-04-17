@@ -13,72 +13,69 @@ struct MGConfigurationLoadView: View {
     let location: MGConfigurationLocation
     
     var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    TextField("请输入配置名称", text: $vm.name)
-                } header: {
-                    Text("名称")
-                } footer: {
-                    Text("配置名称可以不唯一，但不推荐")
-                }
-                Section {
-                    HStack(spacing: 4) {
-                        TextField(addressPrompt, text: $vm.urlString)
-                            .disabled(isAddressTextFieldDisable)
-                        if location == .local {
-                            Button("浏览") {
-                                isFileImporterPresented.toggle()
-                            }
-                            .fixedSize()
+        Form {
+            Section {
+                TextField("", text: $vm.name)
+            } header: {
+                Text("Name")
+            }
+            Section {
+                HStack(spacing: 4) {
+                    TextField("", text: $vm.urlString)
+                        .disabled(isAddressTextFieldDisable)
+                    if location == .local {
+                        Button {
+                            isFileImporterPresented.toggle()
+                        } label: {
+                            Image(systemName: "ellipsis")
                         }
+                        .fixedSize()
                     }
-                } header: {
-                    Text(addressTitle)
                 }
-                Section {
-                    Button {
-                        Task(priority: .userInitiated) {
-                            do {
-                                try await vm.process(location: location)
-                                await MainActor.run {
-                                    configurationListManager.reload()
-                                    dismiss()
-                                }
-                            } catch {
-                                await MainActor.run {
-                                    MGNotification.send(title:"", subtitle: "", body: error.localizedDescription)
-                                }
+            } header: {
+                Text(addressTitle)
+            }
+            Section {
+                Button {
+                    Task(priority: .userInitiated) {
+                        do {
+                            try await vm.process(location: location)
+                            await MainActor.run {
+                                configurationListManager.reload()
+                                dismiss()
+                            }
+                        } catch {
+                            await MainActor.run {
+                                MGNotification.send(title:"", subtitle: "", body: error.localizedDescription)
                             }
                         }
-                    } label: {
-                        HStack {
-                            Spacer()
-                            Text(buttonTitle)
-                            Spacer()
-                        }
                     }
-                    .disabled(isButtonDisbale)
-                }
-            }
-            .navigationTitle(Text(title))
-            .navigationBarTitleDisplayMode(.large)
-            .interactiveDismissDisabled(vm.isProcessing)
-            .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.json]) { result in
-                switch result {
-                case .success(let success):
-                    vm.urlString = success.path(percentEncoded: false)
-                    if vm.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        vm.name = success.deletingPathExtension().lastPathComponent
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text(buttonTitle)
+                        Spacer()
                     }
-                case .failure(let failure):
-                    MGNotification.send(title: "", subtitle: "", body: failure.localizedDescription)
                 }
+                .disabled(isButtonDisbale)
             }
-            .toolbar {
-                if vm.isProcessing {
-                    ProgressView()
+        }
+        .navigationTitle(Text(title))
+        .interactiveDismissDisabled(vm.isProcessing)
+        .fileImporter(isPresented: $isFileImporterPresented, allowedContentTypes: [.json]) { result in
+            switch result {
+            case .success(let success):
+                vm.urlString = success.path(percentEncoded: false)
+                if vm.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    vm.name = success.deletingPathExtension().lastPathComponent
                 }
+            case .failure(let failure):
+                MGNotification.send(title: "", subtitle: "", body: failure.localizedDescription)
+            }
+        }
+        .toolbar {
+            if vm.isProcessing {
+                ProgressView()
             }
         }
         .disabled(vm.isProcessing)
@@ -87,27 +84,18 @@ struct MGConfigurationLoadView: View {
     private var title: String {
         switch location {
         case .local:
-            return "导入配置"
+            return "Import from Files"
         case .remote:
-            return "下载配置"
+            return "Download from URL"
         }
     }
     
     private var addressTitle: String {
         switch location {
         case .local:
-            return "位置"
+            return "File"
         case .remote:
-            return "地址"
-        }
-    }
-    
-    private var addressPrompt: String {
-        switch location {
-        case .local:
-            return "请选择本地文件"
-        case .remote:
-            return "请输入配置文件地址"
+            return "URL"
         }
     }
     
@@ -123,9 +111,9 @@ struct MGConfigurationLoadView: View {
     private var buttonTitle: String {
         switch location {
         case .local:
-            return "导入"
+            return "Import"
         case .remote:
-            return "下载"
+            return "Download"
         }
     }
     

@@ -57,16 +57,17 @@ struct MGHomeView: View {
                             Label("Scan QR Code", systemImage: "qrcode.viewfinder")
                         }
                         Divider()
-                        Button {
-                            
+                        NavigationLink {
+                            MGConfigurationLoadView(location: .remote)
                         } label: {
                             Label("Download from URL", systemImage: "square.and.arrow.down.on.square")
                         }
-                        Button {
-                            
+                        NavigationLink {
+                            MGConfigurationLoadView(location: .local)
                         } label: {
                             Label("Import from Files", systemImage: "tray.and.arrow.down")
                         }
+
                     } label: {
                         Image(systemName: "plus")
                     }
